@@ -5,6 +5,7 @@ use Config;
 use Redirect;
 use Lang;
 use Input;
+use Event;
 use Cartalyst\Sentry\Facades\Laravel\Sentry;
 use Cartalyst\Sentry\Users\UserNotFoundException;
 use Cartalyst\Sentry\Users\UserExistsException;
@@ -106,6 +107,7 @@ class UsersController extends BaseController {
             {
                 //create the user
                 $user = Sentry::getUserProvider()->create($validation->getData());
+                Event::fire('users.create', array($user));
                 return Redirect::route('admin.users.index')->with('success', Lang::get('cpanel::users.create_success'));
             }
 
@@ -148,6 +150,7 @@ class UsersController extends BaseController {
                 $user = Sentry::getUserProvider()->findById($id);
                 $user->fill($validation->getData());
                 $user->save();
+                Event::fire('users.update', array($user));
                 return Redirect::route('admin.users.index')->with('success', Lang::get('cpanel::users.update_success'));
             }
 
@@ -164,6 +167,37 @@ class UsersController extends BaseController {
         catch ( LoginRequiredException $e)
         {
             return Redirect::back()->with('error', $e->getMessage());
+        }
+    }
+
+    /**
+     * Delete a user
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param  int $id
+     * @return Response
+     */
+    public function destroy($id)
+    {
+        $currentUser = Sentry::getUser();
+
+        if ($currentUser->id === (int) $id)
+        {
+            return Redirect::back()->with('error', Lang::get('users::users.delete_denied') );
+        }
+
+        try
+        {
+            $eventData = $currentUser;
+            $currentUser->delete();
+            Event::fire('users.delete', array($eventData));
+            return Redirect::route('admin.users.index')->with('success',Lang::get('users::users.delete_success'));
+        }
+        catch (UserNotFoundException $e)
+        {
+            return Redirect::route('admin.users.index')->with('error',$e->getMessage());
         }
     }
 
