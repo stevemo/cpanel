@@ -9,6 +9,17 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth.cpanel'), function()
 });
 
 
+Route::get('admin/groups/{groups}/permissions', array(
+    'as' => 'admin.groups.permissions',
+    'uses' => 'Stevemo\Cpanel\Controllers\GroupsPermissionsController@index'
+));
+
+Route::put('admin/groups/{groups}/permissions', array(
+    'uses' => 'Stevemo\Cpanel\Controllers\GroupsPermissionsController@update'
+));
+
+
+
 Route::get('admin/login', array(
     'as'   => 'admin.login',
     'uses' => 'Stevemo\Cpanel\Controllers\CpanelController@getLogin'

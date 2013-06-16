@@ -424,3 +424,6 @@ h2.form-signin-heading {
     border-color:#d6e9c6;
     color:#468847;
 }
+.tab-content {
+  overflow: visible;
+}

@@ -109,4 +109,40 @@ class PermissionProvider {
         $model->save();
         return $model;
     }
+
+    /**
+     * Merge group permission with database permission
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param  array $groupPermissions
+     * @param  array $permissions
+     * @return array
+     */
+    public function getMergePermissions(array $groupPermissions, array $permissions = array())
+    {
+        if ( count($permissions) < 1 )
+        {
+            $permissions = $this->all(array('name','permissions'))->toArray();
+        }
+        
+        foreach ($permissions as $primary_key => $perm)
+        {
+            $id = 1;
+            foreach ($perm['permissions'] as $key =>$rules )
+            {
+                $permissions[$primary_key]['permissions'][$key] = array(
+                    'name'  => "rules[$rules]",
+                    'text'  => $rules,
+                    'value' => array_key_exists( $rules, $groupPermissions ) ? $groupPermissions[$rules] : '0',
+                    'id'    => 'input_' . $perm['name'] . $id
+                );
+                $id++;
+            }
+
+        }
+
+        return $permissions;
+    }
 }
