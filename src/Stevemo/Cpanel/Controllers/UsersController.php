@@ -4,6 +4,7 @@ use View;
 use Config;
 use Redirect;
 use Lang;
+use Input;
 use Cartalyst\Sentry\Facades\Laravel\Sentry;
 use Cartalyst\Sentry\Users\UserNotFoundException;
 use Cartalyst\Sentry\Users\UserExistsException;
@@ -65,6 +66,29 @@ class UsersController extends BaseController {
     }
 
     /**
+     * Display the user edit form
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param int $id
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function edit($id)
+    {
+        try
+        {
+            $user = Sentry::getUserProvider()->findById($id);
+            return View::make(Config::get('cpanel::views.users_edit'),compact('user'));
+        }
+        catch (UserNotFoundException $e)
+        {
+            return Redirect::route('admin.users.index')->with('error',$e->getMessage());
+        }
+    }
+
+    /**
      * Create a new user
      *
      * @author Steve Montambeault
@@ -102,6 +126,48 @@ class UsersController extends BaseController {
     }
 
     /**
+     * Update user information
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param  int $id
+     * @return Response
+     */
+    public function update($id)
+    {
+        try
+        {
+            $credentials = Input::all();
+            $credentials['id'] = $id;
+
+            $validation = $this->getValidationService($credentials);
+
+            if( $validation->passes() )
+            {
+                $user = Sentry::getUserProvider()->findById($id);
+                $user->fill($validation->getData());
+                $user->save();
+                return Redirect::route('admin.users.index')->with('success', Lang::get('cpanel::users.update_success'));
+            }
+
+            return Redirect::back()->withInput()->withErrors($validation->getErrors());
+        }
+        catch ( UserExistsException $e)
+        {
+            return Redirect::back()->with('error', $e->getMessage());
+        }
+        catch ( UserNotFoundException $e)
+        {
+            return Redirect::back()->with('error', $e->getMessage());
+        }
+        catch ( LoginRequiredException $e)
+        {
+            return Redirect::back()->with('error', $e->getMessage());
+        }
+    }
+
+    /**
      * get the validation service
      *  
      * @author Steve Montambeault
@@ -109,9 +175,9 @@ class UsersController extends BaseController {
      *  
      * @return Object 
      */
-    private function getValidationService()
+    private function getValidationService(array $inputs = array())
     {
         $class = '\\'.ltrim(Config::get('cpanel::validation.user'), '\\');
-        return new $class;
+        return new $class($inputs);
     }
 }

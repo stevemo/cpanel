@@ -9,6 +9,7 @@ return array(
         // User views
         'users_show'   => 'cpanel::users.show',
         'users_create' => 'cpanel::users.create',
+        'users_edit' => 'cpanel::users.edit',
     ),
 
     'validation' => array(
