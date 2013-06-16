@@ -15,6 +15,21 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth.cpanel'), function()
     Route::resource('permissions', 'Stevemo\Cpanel\Controllers\PermissionsController',array('except' => array('show')));
 });
 
+/*
+|--------------------------------------------------------------------------
+| Cpanel Users Permissions Routes
+|--------------------------------------------------------------------------
+|
+|
+*/
+Route::get('admin/users/{users}/permissions', array(
+    'as' => 'admin.users.permissions',
+    'uses' => 'Stevemo\Cpanel\Controllers\UsersPermissionsController@index'
+));
+
+Route::put('admin/users/{users}/permissions', array(
+    'uses' => 'Stevemo\Cpanel\Controllers\UsersPermissionsController@update'
+));
 
 /*
 |--------------------------------------------------------------------------
