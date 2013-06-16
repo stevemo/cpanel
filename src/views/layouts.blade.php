@@ -10,7 +10,6 @@
     <meta name="description" content="Metis: Bootstrap Responsive Admin Theme">
     <meta name="viewport" content="width=device-width">
     {{ HTML::style('packages/stevemo/cpanel/bootstrap/css/bootstrap.min.css') }}
-    {{ HTML::style('packages/stevemo/cpanel/bootstrap/css/bootstrap-responsive.min.css') }}
     {{ HTML::style('packages/stevemo/cpanel/font-awesome/css/font-awesome.min.css') }}
     {{ HTML::style('packages/stevemo/cpanel/select2-3.3.1/select2.css') }}
     {{ HTML::style('packages/stevemo/cpanel/css/theme.css') }}
@@ -109,7 +108,7 @@
         <p>2013 © Admin Panel </p>
     </div>
 
-        {{ HTML::script('packages/stevemo/cpanel/js/vendor/jquery-1.9.1.min.js') }}
+        {{ HTML::script('packages/stevemo/cpanel/js/vendor/jquery.1.10.0.min.js') }}
         {{ HTML::script('packages/stevemo/cpanel/bootstrap/js/bootstrap.min.js') }}
         {{ HTML::script('packages/stevemo/cpanel/select2-3.3.1/select2.min.js') }}
         {{ HTML::script('packages/stevemo/cpanel/js/vendor/bootbox.min.js') }}
