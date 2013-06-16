@@ -14,7 +14,7 @@
         "php": ">=5.3.0",
         "illuminate/support": "4.0.x",
         "cartalyst/sentry": "2.0.*",
-        "anahkiasen/former": "dev-agnostic",
+        "anahkiasen/former": "dev-agnostic"
     },
     "autoload": {
         "classmap": [
