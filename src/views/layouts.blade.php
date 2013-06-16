@@ -34,35 +34,37 @@
                             <span class="icon-bar"></span>
                         </a>
                         <a class="brand" href="{{URL::to('/')}}">My Site</a> <!-- .topnav -->
-                        <div class="btn-toolbar topnav">
-                            <div class="btn-group">
-                                <a href="#helpModal" class="btn btn-inverse" rel="tooltip" data-placement="bottom"
-                                   data-original-title="Help" data-toggle="modal">
-                                    <i class="icon-question-sign"></i>
-                                </a>
-                            </div>
-                            <div class="btn-group">
-                                <a class="btn btn-inverse" data-placement="bottom" data-original-title="Logout" rel="tooltip"
-                                   href=""><i class="icon-off"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <!-- /.topnav -->
-                        <div class="nav-collapse collapse">
-                            <!-- .nav -->
-                            <ul class="nav">
-                                <li><a href="">Dashboard</a></li>
-                                <li class="dropdown ">
-                                    <a data-toggle="dropdown" class="dropdown-toggle" href="blank.html#">
-                                       Users <b class="caret"></b>
+                        @if (Sentry::check())
+                            <div class="btn-toolbar topnav">
+                                <div class="btn-group">
+                                    <a href="#helpModal" class="btn btn-inverse" rel="tooltip" data-placement="bottom"
+                                       data-original-title="Help" data-toggle="modal">
+                                        <i class="icon-question-sign"></i>
                                     </a>
-                                    <ul class="dropdown-menu">
-                                        <li></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                            <!-- /.nav -->
-                        </div>
+                                </div>
+                                <div class="btn-group">
+                                    <a class="btn btn-inverse" data-placement="bottom" data-original-title="Logout" rel="tooltip"
+                                       href=""><i class="icon-off"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- /.topnav -->
+                            <div class="nav-collapse collapse">
+                                <!-- .nav -->
+                                <ul class="nav">
+                                    <li><a href="">Dashboard</a></li>
+                                    <li class="dropdown ">
+                                        <a data-toggle="dropdown" class="dropdown-toggle" href="blank.html#">
+                                           Users <b class="caret"></b>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                <!-- /.nav -->
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

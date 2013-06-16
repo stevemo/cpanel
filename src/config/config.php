@@ -4,12 +4,13 @@ return array(
 
     'views' => array(
 
-        'dashboard' => 'cpanel::dashboard',
+        'dashboard' => 'cpanel::dashboard.index',
+        'login'     => 'cpanel::dashboard.login',
 
         // User views
         'users_show'   => 'cpanel::users.show',
         'users_create' => 'cpanel::users.create',
-        'users_edit' => 'cpanel::users.edit',
+        'users_edit'   => 'cpanel::users.edit',
     ),
 
     'validation' => array(
