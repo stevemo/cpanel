@@ -1,0 +1,23 @@
+{
+    "name": "stevemo/cpanel",
+    "description": "",
+    "authors": [
+        {
+            "name": "Steve Montambeault",
+            "email": "steve@stevemo.ca"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "illuminate/support": "4.0.x"
+    },
+    "autoload": {
+        "classmap": [
+            "src/migrations"
+        ],
+        "psr-0": {
+            "Stevemo\\Cpanel": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
