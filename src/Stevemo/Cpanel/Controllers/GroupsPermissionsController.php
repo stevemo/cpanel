@@ -51,11 +51,6 @@ class GroupsPermissionsController extends BaseController {
 
             $permissions = $this->permissions->all(array('name','permissions'));
 
-            if ( $permissions->isEmpty() )
-            {
-                return Redirect::route('admin.groups.index')->with('error', Lang::get('cpanel::permissions.no_permission'));
-            }
-
             $modulePerm = $this->permissions->getMergePermissions($groupPermissions, $permissions->toArray());
 
             $roles = array(array('name' => 'generic', 'permissions' => array('view','create','update','delete')));

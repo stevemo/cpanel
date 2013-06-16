@@ -39,16 +39,22 @@
                             @endforeach
                         </div>
                         <div class="tab-pane" id="module">
-                            @foreach( $modulePerm as $perm)
-                                <legend>{{ $perm['name'] }} Module</legend>
-                                @foreach( $perm['permissions'] as $input )
-                                    {{ Former::select($input['name'],$input['text'])
-                                        ->options(array('0' => 'Deny', '1' => 'Allow'))
-                                        ->value($input['value'])
-                                        ->class('select2')->id($input['id'])
-                                    }}
+                           @if (count($modulePerm) < 1)
+                                <div class="alert alert-info">
+                                    {{ Lang::get('cpanel::permissions.no_found') }}
+                                </div>
+                            @else
+                                @foreach( $modulePerm as $perm)
+                                    <legend>{{ $perm['name'] }} Module</legend>
+                                    @foreach( $perm['permissions'] as $input )
+                                        {{ Former::select($input['name'],$input['text'])
+                                            ->options(array('0' => 'Deny', '1' => 'Allow'))
+                                            ->value($input['value'])
+                                            ->class('select2')->id($input['id'])
+                                        }}
+                                    @endforeach
                                 @endforeach
-                            @endforeach
+                            @endif
                         </div>
                     </div>
                     <div class="form-actions">
