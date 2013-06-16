@@ -6,6 +6,7 @@ use Input;
 use Sentry;
 use Redirect;
 use Lang;
+use Event;
 use Cartalyst\Sentry\Users\UserNotFoundException;
 use Cartalyst\Sentry\Users\UserExistsException;
 use Cartalyst\Sentry\Users\LoginRequiredException;
@@ -66,7 +67,7 @@ class CpanelController extends BaseController {
             );
 
             $user = Sentry::authenticate($userdata, $remember);
-
+            Event::fire('users.login', array($user));
             return Redirect::intended('admin')->with('success', Lang::get('cpanel::users.login_success'));
         }
         catch (LoginRequiredException $e)
@@ -97,6 +98,26 @@ class CpanelController extends BaseController {
         {
             return Redirect::back()->withInput()->with('login_error',$e->getMessage());
         }
+    }
+
+    /**
+     * Logs out the current user
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function getLogout()
+    {
+        if (Sentry::check())
+        {
+            $user = Sentry::getUser();
+            Sentry::logout();
+            Event::fire('users.logout', array($user));
+            return Redirect::route('admin.login')->with('success', Lang::get('cpanel::users.logout'));
+        }
+        return Redirect::route('admin.login');
     }
     
 }
