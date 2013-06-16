@@ -1,6 +1,9 @@
 {
     "name": "stevemo/cpanel",
-    "description": "",
+    "description": "Admin Panel for Laravel 4",
+    "keywords": ["laravel", "admin", "backend", "sentry"],
+    "homepage": "http://github.com/stevemo/cpanel",
+    "license": "MIT",
     "authors": [
         {
             "name": "Steve Montambeault",
