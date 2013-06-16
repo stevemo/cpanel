@@ -15,6 +15,7 @@ return array(
     ),
 
     'validation' => array(
-        'user' => 'Stevemo\Cpanel\Services\Validators\Users\Validator',
+        'user'       => 'Stevemo\Cpanel\Services\Validators\Users\Validator',
+        'permission' => 'Stevemo\Cpanel\Services\Validators\Permissions\Validator',
     ),
 );

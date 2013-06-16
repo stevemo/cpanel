@@ -5,6 +5,7 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth.cpanel'), function()
     Route::get('/', 'Stevemo\Cpanel\Controllers\CpanelController@index');
     Route::resource('users', 'Stevemo\Cpanel\Controllers\UsersController');
     Route::resource('groups', 'Stevemo\Cpanel\Controllers\GroupsController',array('except' => array('show')));
+    Route::resource('permissions', 'Stevemo\Cpanel\Controllers\PermissionsController',array('except' => array('show')));
 });
 
 

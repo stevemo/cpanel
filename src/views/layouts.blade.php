@@ -60,6 +60,7 @@
                                         <ul class="dropdown-menu">
                                             <li>{{ HTML::linkRoute('admin.users.index', 'Manage Users') }}</li>
                                             <li>{{ HTML::linkRoute('admin.groups.index', 'Groups') }}</li>
+                                            <li>{{ HTML::linkRoute('admin.permissions.index', 'Permissions') }}</li>
                                         </ul>
                                     </li>
                                 </ul>
