@@ -5,6 +5,7 @@ use Redirect;
 use Input;
 use Lang;
 use Sentry;
+use Event;
 use Cartalyst\Sentry\Groups\NameRequiredException;
 use Cartalyst\Sentry\Groups\GroupExistsException;
 use Cartalyst\Sentry\Groups\GroupNotFoundException;
@@ -40,6 +41,28 @@ class GroupsController extends BaseController {
     }
 
     /**
+     * Show the form for editing the specified resource.
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @return Response
+     */
+    public function edit($id)
+    {
+        try
+        {
+            $group = Sentry::getGroupProvider()->findById($id);
+            return View::make('cpanel::groups.edit',compact('group'));
+        }
+        catch ( GroupNotFoundException $e)
+        {
+            return Redirect::route('admin.groups.index')->with('error', $e->getMessage());
+        }
+    }
+
+
+    /**
      * Store a newly created resource in storage.
      *
      * @author Steve Montambeault
@@ -52,6 +75,7 @@ class GroupsController extends BaseController {
         try
         {
             $group = Sentry::getGroupProvider()->create(Input::only('name'));
+            Event::fire('groups.create', array($group));
             return Redirect::route('admin.groups.index')->with('success', Lang::get('cpanel::groups.create_success'));
         }
         catch (NameRequiredException $e)
@@ -61,6 +85,58 @@ class GroupsController extends BaseController {
         catch (GroupExistsException $e)
         {
             return Redirect::back()->withInput()->with('error', $e->getMessage());
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @return Response
+     */
+    public function update($id)
+    {
+        try
+        {
+            $group = Sentry::getGroupProvider()->findById($id);
+            $group->name = Input::get('name');
+            $group->save();
+            Event::fire('groups.update', array($group));
+            return Redirect::route('admin.groups.index')->with('success', Lang::get('cpanel::groups.update_success') );
+        }
+        catch (GroupNotFoundException $e)
+        {
+            return Redirect::back()->withInput()->with('error', $e->getMessage());
+        }
+        catch (GroupExistsException $e)
+        {
+            return Redirect::back()->withInput()->with('error', $e->getMessage());
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @return Response
+     */
+    public function destroy($id)
+    {
+        try
+        {
+            $group = Sentry::getGroupProvider()->findById($id);
+            $eventData = $group;
+            $group->delete();
+            Event::fire('groups.delete', array($eventData));
+            return Redirect::route('admin.groups.index')->with('success', Lang::get('cpanel::groups.delete_success'));
+        }
+        catch (GroupNotFoundException $e)
+        {
+            return Redirect::back()->with('error', $e->getMessage());
         }
     }
 
