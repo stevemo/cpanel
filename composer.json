@@ -1,7 +1,7 @@
 {
     "name": "stevemo/cpanel",
     "description": "Admin Panel for Laravel 4 with User, Groups and Permissions management using Cartalyst Sentry as auth provider",
-    "keywords": ["laravel", "admin", "backend", "sentry", "cartalyst", "cartalyst/sentry"],
+    "keywords": ["laravel", "admin", "backend", "sentry", "cartalyst"],
     "homepage": "http://github.com/stevemo/cpanel",
     "license": "MIT",
     "authors": [
