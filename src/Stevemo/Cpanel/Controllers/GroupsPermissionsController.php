@@ -57,7 +57,9 @@ class GroupsPermissionsController extends BaseController {
             }
 
             $modulePerm = $this->permissions->getMergePermissions($groupPermissions, $permissions->toArray());
+
             $roles = array(array('name' => 'generic', 'permissions' => array('view','create','update','delete')));
+            
             $genericPerm = $this->permissions->getMergePermissions($groupPermissions, $roles);
             
             return View::make('cpanel::groups.permissions', compact('modulePerm','group','genericPerm'));

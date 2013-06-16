@@ -28,7 +28,7 @@ class UsersController extends BaseController {
      */
     public function index()
     {
-        $users = Sentry::getUserProvider()->findAll();
+        $users = Sentry::getUserProvider()->createModel()->with('groups')->get();
         return View::make('cpanel::users.index', compact('users'));
     }
 
@@ -80,8 +80,13 @@ class UsersController extends BaseController {
     {
         try
         {
-            $user = Sentry::getUserProvider()->findById($id);
-            return View::make(Config::get('cpanel::views.users_edit'),compact('user'));
+            $user   = Sentry::getUserProvider()->findById($id);
+            $groups = Sentry::getGroupProvider()->findAll();
+
+            //get only the group id the user belong to
+            $userGroupsId = array_pluck($user->getGroups()->toArray(), 'id');
+
+            return View::make(Config::get('cpanel::views.users_edit'),compact('user','groups','userGroupsId'));
         }
         catch (UserNotFoundException $e)
         {
@@ -140,9 +145,9 @@ class UsersController extends BaseController {
     {
         try
         {
-            $credentials = Input::all();
+            $credentials = Input::except('groups');
             $credentials['id'] = $id;
-
+           
             $validation = $this->getValidationService('user', $credentials);
 
             if( $validation->passes() )
@@ -150,6 +155,11 @@ class UsersController extends BaseController {
                 $user = Sentry::getUserProvider()->findById($id);
                 $user->fill($validation->getData());
                 $user->save();
+
+                //update groups
+                $user->groups()->detach();
+                $user->groups()->sync(Input::get('groups',array()));
+
                 Event::fire('users.update', array($user));
                 return Redirect::route('admin.users.index')->with('success', Lang::get('cpanel::users.update_success'));
             }

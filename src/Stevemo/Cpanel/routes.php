@@ -1,5 +1,12 @@
 <?php
 
+/*
+|--------------------------------------------------------------------------
+| Cpanel Routes
+|--------------------------------------------------------------------------
+|
+|
+*/
 Route::group(array('prefix' => 'admin', 'before' => 'auth.cpanel'), function()
 {
     Route::get('/', 'Stevemo\Cpanel\Controllers\CpanelController@index');
@@ -9,6 +16,13 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth.cpanel'), function()
 });
 
 
+/*
+|--------------------------------------------------------------------------
+| Cpanel Groups Permissions Routes
+|--------------------------------------------------------------------------
+|
+|
+*/
 Route::get('admin/groups/{groups}/permissions', array(
     'as' => 'admin.groups.permissions',
     'uses' => 'Stevemo\Cpanel\Controllers\GroupsPermissionsController@index'
@@ -19,7 +33,13 @@ Route::put('admin/groups/{groups}/permissions', array(
 ));
 
 
-
+/*
+|--------------------------------------------------------------------------
+| Cpanel Login/Logout/Register Routes
+|--------------------------------------------------------------------------
+|
+|
+*/
 Route::get('admin/login', array(
     'as'   => 'admin.login',
     'uses' => 'Stevemo\Cpanel\Controllers\CpanelController@getLogin'
@@ -40,9 +60,13 @@ Route::get('admin/register', array(
 Route::post('admin/register','Stevemo\Cpanel\Controllers\CpanelController@postRegister');
 
 
-/**
- * Filter for the admin site
- */
+/*
+|--------------------------------------------------------------------------
+| Admin auth filter
+|--------------------------------------------------------------------------
+|
+|
+*/
 Route::filter('auth.cpanel', function($route, $request, $rules = null)
 {
     if (! Sentry::check())

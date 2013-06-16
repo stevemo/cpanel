@@ -28,6 +28,22 @@
                     {{ Former::xlarge_text('first_name', 'First Name', $user->first_name)->required() }}
                     {{ Former::xlarge_text('last_name', 'Last Name', $user->last_name)->required() }}
                     {{ Former::xlarge_text('email','Email', $user->email)->required() }}
+                    
+                    <legend>Groups</legend>
+                    <div class="control-group">
+                        <label for="groups[]" class="control-label">Groups</label>
+                        <div class="controls">
+                            <select id="groups" name="groups[]" class="select2" multiple="true">
+                            @foreach($groups as $group)
+                                @if( in_array( $group->id, Input::old('groups', array())) or in_array($group->id, $userGroupsId) )
+                                    <option selected="selected" value="{{ $group->id }}">{{ $group->name }}</option>
+                                @else
+                                    <option value="{{ $group->id }}">{{ $group->name }}</option>
+                                @endif
+                            @endforeach
+                            </select>
+                        </div>
+                    </div>
 
                     <legend>Password <small>leave blank to keep the same password</small></legend>
                     {{ Former::xlarge_password('password', 'Password') }}
