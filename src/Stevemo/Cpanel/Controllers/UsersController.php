@@ -106,7 +106,7 @@ class UsersController extends BaseController {
             if( $validation->passes() )
             {
                 //create the user
-                $user = Sentry::getUserProvider()->create($validation->getData());
+                $user = Sentry::register($validation->getData(), true);
                 Event::fire('users.create', array($user));
                 return Redirect::route('admin.users.index')->with('success', Lang::get('cpanel::users.create_success'));
             }
