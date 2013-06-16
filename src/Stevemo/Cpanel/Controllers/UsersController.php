@@ -185,15 +185,16 @@ class UsersController extends BaseController {
 
         if ($currentUser->id === (int) $id)
         {
-            return Redirect::back()->with('error', Lang::get('users::users.delete_denied') );
+            return Redirect::back()->with('error', Lang::get('cpanel::users.delete_denied') );
         }
 
         try
         {
-            $eventData = $currentUser;
-            $currentUser->delete();
+            $user = Sentry::getUserProvider()->findById($id);
+            $eventData = $user;
+            $user->delete();
             Event::fire('users.delete', array($eventData));
-            return Redirect::route('admin.users.index')->with('success',Lang::get('users::users.delete_success'));
+            return Redirect::route('admin.users.index')->with('success',Lang::get('cpanel::users.delete_success'));
         }
         catch (UserNotFoundException $e)
         {

@@ -58,7 +58,7 @@
                                            Users <b class="caret"></b>
                                         </a>
                                         <ul class="dropdown-menu">
-                                            <li></li>
+                                            <li>{{ HTML::linkRoute('admin.users.index', 'Manage Users') }}</li>
                                         </ul>
                                     </li>
                                 </ul>
