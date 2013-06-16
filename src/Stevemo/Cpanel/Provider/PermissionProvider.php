@@ -145,4 +145,24 @@ class PermissionProvider {
 
         return $permissions;
     }
+
+    /**
+     * Delete the permission model
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param  int $id
+     * @return array
+     */
+    public function delete($id)
+    {
+        $model = $this->findOrFail($id);
+        $data = array(
+            'name' => $model->name,
+            'permissions' => $model->permissions
+        );
+        $model->delete();
+        return $data;
+    }
 }
