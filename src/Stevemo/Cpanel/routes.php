@@ -2,8 +2,9 @@
 
 Route::group(array('prefix' => 'admin', 'before' => 'auth.cpanel'), function()
 {
-    Route::resource('users', 'Stevemo\Cpanel\Controllers\UsersController');
     Route::get('/', 'Stevemo\Cpanel\Controllers\CpanelController@index');
+    Route::resource('users', 'Stevemo\Cpanel\Controllers\UsersController');
+    Route::resource('groups', 'Stevemo\Cpanel\Controllers\GroupsController');
 });
 
 
