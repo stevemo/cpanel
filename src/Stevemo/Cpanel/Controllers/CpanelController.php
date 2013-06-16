@@ -48,6 +48,40 @@ class CpanelController extends BaseController {
     }
 
     /**
+     * Display the registration form
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @return Response
+     */
+    public function getRegister()
+    {
+        $login_attribute = Config::get('cartalyst/sentry::users.login_attribute');
+        return View::make(Config::get('cpanel::views.register'), compact('login_attribute'));
+    }
+
+    /**
+     * Logs out the current user
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function getLogout()
+    {
+        if (Sentry::check())
+        {
+            $user = Sentry::getUser();
+            Sentry::logout();
+            Event::fire('users.logout', array($user));
+            return Redirect::route('admin.login')->with('success', Lang::get('cpanel::users.logout'));
+        }
+        return Redirect::route('admin.login');
+    }
+
+    /**
      * Authenticate the user
      *
      * @author Steve Montambeault
@@ -101,23 +135,43 @@ class CpanelController extends BaseController {
     }
 
     /**
-     * Logs out the current user
+     * Register user
      *
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return Response
      */
-    public function getLogout()
+    public function postRegister()
     {
-        if (Sentry::check())
+        try
         {
-            $user = Sentry::getUser();
-            Sentry::logout();
-            Event::fire('users.logout', array($user));
-            return Redirect::route('admin.login')->with('success', Lang::get('cpanel::users.logout'));
+            $validation = $this->getValidationService('user');
+
+            if( $validation->passes() )
+            {
+                //TODO : Do something with the activation code later on
+                //TODO : Setting to activate or not, email also
+                $user = Sentry::register($validation->getData(), true);
+                Event::fire('users.register', array($user));
+                
+                return Redirect::route('admin.login')->with('success', Lang::get('cpanel::users.register_success')); 
+            }
+           
+            return Redirect::back()->withInput()->withErrors($validation->getErrors());
         }
-        return Redirect::route('admin.login');
+        catch (LoginRequiredException $e)
+        {
+            return Redirect::back()->withInput()->with('error',$e->getMessage());
+        }
+        catch (PasswordRequiredException $e)
+        {
+            return Redirect::back()->withInput()->with('error',$e->getMessage());
+        }
+        catch (UserExistsException $e)
+        {
+            return Redirect::back()->withInput()->with('error',$e->getMessage());
+        }
     }
     
 }

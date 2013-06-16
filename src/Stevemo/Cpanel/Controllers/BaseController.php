@@ -1,7 +1,8 @@
 <?php namespace Stevemo\Cpanel\Controllers;
 
-use Illuminate\Routing\Controllers\Controller;
-use Illuminate\Support\Facades\View;
+use Controller;
+use View;
+use Config;
 
 class BaseController extends Controller {
 
@@ -16,6 +17,22 @@ class BaseController extends Controller {
         {
             $this->layout = View::make($this->layout);
         }
+    }
+
+    /**
+     * get the validation service
+     *  
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *  
+     * @param  string $service 
+     * @param  array $inputs 
+     * @return Object 
+     */
+    protected function getValidationService($service, array $inputs = array())
+    {
+        $class = '\\'.ltrim(Config::get("cpanel::validation.{$service}"), '\\');
+        return new $class($inputs);
     }
 
 }

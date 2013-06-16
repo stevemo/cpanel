@@ -8,19 +8,19 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth.cpanel'), function()
 
 
 Route::get('admin/login', array(
-    'as' => 'admin.login',
+    'as'   => 'admin.login',
     'uses' => 'Stevemo\Cpanel\Controllers\CpanelController@getLogin'
 ));
 
 Route::post('admin/login','Stevemo\Cpanel\Controllers\CpanelController@postLogin');
 
 Route::get('admin/logout', array(
-    'as' => 'admin.logout',
+    'as'   => 'admin.logout',
     'uses' => 'Stevemo\Cpanel\Controllers\CpanelController@getLogout'
 ));
 
 Route::get('admin/register', array(
-    'as' => 'admin.register',
+    'as'   => 'admin.register',
     'uses' => 'Stevemo\Cpanel\Controllers\CpanelController@getRegister'
 ));
 

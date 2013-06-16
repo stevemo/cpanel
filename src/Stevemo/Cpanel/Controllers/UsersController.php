@@ -101,7 +101,7 @@ class UsersController extends BaseController {
     {
         try
         {
-            $validation = $this->getValidationService();
+            $validation = $this->getValidationService('user');
 
             if( $validation->passes() )
             {
@@ -143,7 +143,7 @@ class UsersController extends BaseController {
             $credentials = Input::all();
             $credentials['id'] = $id;
 
-            $validation = $this->getValidationService($credentials);
+            $validation = $this->getValidationService('user', $credentials);
 
             if( $validation->passes() )
             {
@@ -202,17 +202,4 @@ class UsersController extends BaseController {
         }
     }
 
-    /**
-     * get the validation service
-     *  
-     * @author Steve Montambeault
-     * @link   http://stevemo.ca
-     *  
-     * @return Object 
-     */
-    private function getValidationService(array $inputs = array())
-    {
-        $class = '\\'.ltrim(Config::get('cpanel::validation.user'), '\\');
-        return new $class($inputs);
-    }
 }

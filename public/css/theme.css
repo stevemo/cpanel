@@ -414,12 +414,12 @@ h2.form-signin-heading {
     -moz-border-radius:4px;
     border-radius:4px;
 }
-.error {
+.alert-error {
     background-color:#f2dede;
     color:#b94a48;
     border-color:#eed3d7;
 }
-.success {
+.alert-success {
     background-color:#dff0d8;
     border-color:#d6e9c6;
     color:#468847;

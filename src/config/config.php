@@ -6,6 +6,7 @@ return array(
 
         'dashboard' => 'cpanel::dashboard.index',
         'login'     => 'cpanel::dashboard.login',
+        'register'  => 'cpanel::dashboard.register',
 
         // User views
         'users_show'   => 'cpanel::users.show',

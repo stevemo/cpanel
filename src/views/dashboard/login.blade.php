@@ -13,7 +13,7 @@
             
             <div class="margin-top-20">
                 @if ( Session::has('login_error') )
-                    <div class="alert-login error">
+                    <div class="alert-login alert-error">
                         <strong>{{ Session::get('login_error') }}</strong>        
                     </div>
                 @endif
@@ -42,7 +42,7 @@
 
             <div class="login-extra">
                 Don't have an account?
-                register
+                {{ HTML::linkRoute('admin.register', 'Register') }}
                 <!-- 
                     TODO: make link to forget password
                  -->
