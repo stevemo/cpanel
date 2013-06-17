@@ -18,7 +18,7 @@
                         <li class="active"><a href="#generic" data-toggle="tab">Generic Permissions</a></li>
                         <li><a href="#module" data-toggle="tab">Modules Permissions</a></li>
                     </ul>
-                     
+
                     <div class="tab-content">
                         <div class="tab-pane active" id="generic">
                             <legend>Super User <small>Access Everything</small></legend>
@@ -31,7 +31,7 @@
                                 <legend>Generic Permissions</legend>
                                 @foreach( $perm['permissions'] as $input )
                                     {{ Former::select($input['name'],$input['text'])
-                                        ->options(array('0' => 'Deny', '1' => 'Allow'))
+                                        ->options(array('0' => 'Inherit','1' => 'Allow','-1' => 'Deny'))
                                         ->value($input['value'])
                                         ->class('select2')->id($input['id'])
                                     }}
@@ -48,7 +48,7 @@
                                     <legend>{{ $perm['name'] }} Module</legend>
                                     @foreach( $perm['permissions'] as $input )
                                         {{ Former::select($input['name'],$input['text'])
-                                            ->options(array('0' => 'Deny', '1' => 'Allow'))
+                                            ->options(array('0' => 'Inherit','1' => 'Allow','-1' => 'Deny'))
                                             ->value($input['value'])
                                             ->class('select2')->id($input['id'])
                                         }}
