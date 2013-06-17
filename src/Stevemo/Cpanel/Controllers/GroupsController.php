@@ -6,6 +6,7 @@ use Input;
 use Lang;
 use Sentry;
 use Event;
+use Config;
 use Cartalyst\Sentry\Groups\NameRequiredException;
 use Cartalyst\Sentry\Groups\GroupExistsException;
 use Cartalyst\Sentry\Groups\GroupNotFoundException;
@@ -24,7 +25,7 @@ class GroupsController extends BaseController {
     public function index()
     {
         $groups = Sentry::getGroupProvider()->findAll();
-        return View::make('cpanel::groups.index', compact('groups'));
+        return View::make(Config::get('cpanel::views.groups_index'), compact('groups'));
     }
 
     /**
@@ -37,7 +38,7 @@ class GroupsController extends BaseController {
      */
     public function create()
     {
-        return View::make('cpanel::groups.create');
+        return View::make(Config::get('cpanel::views.groups_create'));
     }
 
     /**
@@ -53,7 +54,7 @@ class GroupsController extends BaseController {
         try
         {
             $group = Sentry::getGroupProvider()->findById($id);
-            return View::make('cpanel::groups.edit',compact('group'));
+            return View::make(Config::get('cpanel::views.groups_edit'),compact('group'));
         }
         catch ( GroupNotFoundException $e)
         {

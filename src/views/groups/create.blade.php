@@ -1,4 +1,4 @@
-@extends('cpanel::layouts')
+@extends(Config::get('cpanel::views.layout'))
 
 @section('header')
     <h3>

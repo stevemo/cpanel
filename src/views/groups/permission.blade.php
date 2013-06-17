@@ -1,4 +1,4 @@
-@extends('cpanel::layouts')
+@extends(Config::get('cpanel::views.layout'))
 
 @section('header')
     <h3>
@@ -18,7 +18,7 @@
                         <li class="active"><a href="#generic" data-toggle="tab">Generic Permissions</a></li>
                         <li><a href="#module" data-toggle="tab">Modules Permissions</a></li>
                     </ul>
-                     
+
                     <div class="tab-content">
                         <div class="tab-pane active" id="generic">
                             @foreach( $genericPerm as $perm)
