@@ -17,11 +17,16 @@ return array(
         'users_create'     => 'cpanel::users.create',
         'users_permission' => 'cpanel::users.permission',
 
-        //Groups View
+        //Groups Views
         'groups_index'      => 'cpanel::groups.index',
         'groups_create'     => 'cpanel::groups.create',
         'groups_edit'       => 'cpanel::groups.edit',
         'groups_permission' => 'cpanel::groups.permission',
+
+        //Permissions Views
+        'permissions_index'  => 'cpanel::permissions.index',
+        'permissions_edit'   => 'cpanel::permissions.edit',
+        'permissions_create' => 'cpanel::permissions.create',
     ),
 
     'validation' => array(

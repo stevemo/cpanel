@@ -1,4 +1,4 @@
-@extends('cpanel::layouts')
+@extends(Config::get('cpanel::views.layout'))
 
 @section('header')
     <h3>
@@ -15,7 +15,7 @@
                 <div class="block-body">
                     {{ Former::horizontal_open(route('admin.permissions.update', array($permission->id)))->method('PUT') }}
                     {{ Former::xlarge_text('name', 'Module Name',$permission->name) }}
-                    
+
 
                     <label class="control-label" for="permissions">
                         Permissions
@@ -23,7 +23,7 @@
                     <div class="controls">
                         @foreach ($roles['inputs'] as $key => $value)
                             <label class="checkbox">
-                                <input type="checkbox" name="permissions[{{$key}}]" 
+                                <input type="checkbox" name="permissions[{{$key}}]"
                                     value="{{$key}}" {{ in_array($key, $permission->rules) ? 'checked="checked"' : '' }}>
                                 {{ ucfirst($key) }}
                             </label>

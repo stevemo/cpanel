@@ -1,4 +1,4 @@
-@extends('cpanel::layouts')
+@extends(Config::get('cpanel::views.layout'))
 
 @section('header')
     <h3>
@@ -11,7 +11,7 @@
 
     <div class="row">
         <div class="span12">
-            
+
             <div class="block">
                 <p class="block-heading">
                     Permissions |
@@ -20,8 +20,8 @@
                 <div class="block-body">
                     <ul>
                         @foreach ($roles['inputs'] as $role => $value)
-                             <li>{{ ucfirst($role) }}</li>                       
-                        @endforeach  
+                             <li>{{ ucfirst($role) }}</li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
@@ -30,7 +30,7 @@
 
     <div class="row">
         <div class="span12">
-            
+
             <div class="block">
                 <p class="block-heading">
                     Permissions |

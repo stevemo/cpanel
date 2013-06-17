@@ -5,6 +5,7 @@ use Redirect;
 use Input;
 use Lang;
 use Event;
+use Config;
 use Stevemo\Cpanel\Provider\PermissionProvider;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -14,14 +15,14 @@ class PermissionsController extends BaseController {
      * @var PermissionProvider
      */
     protected $permissions;
-    
+
     /**
      * [__construct description]
-     *  
+     *
      * @author Steve Montambeault
      * @link   http://stevemo.ca
-     *  
-     * @param  PermissionProvider $permissions 
+     *
+     * @param  PermissionProvider $permissions
      */
     public function __construct(PermissionProvider $permissions)
     {
@@ -40,7 +41,7 @@ class PermissionsController extends BaseController {
     {
         $permissions = $this->permissions->all();
         $roles = $this->permissions->getRoles();
-        return View::make( 'cpanel::permissions.index' , compact('permissions','roles'));
+        return View::make(Config::get('cpanel::views.permissions_index') , compact('permissions','roles'));
     }
 
     /**
@@ -54,7 +55,7 @@ class PermissionsController extends BaseController {
     public function create()
     {
         $roles = $this->permissions->getRoles();
-        return View::make( 'cpanel::permissions.create', compact('roles'));
+        return View::make( Config::get('cpanel::views.permissions_create'), compact('roles'));
     }
 
     /**
@@ -73,7 +74,7 @@ class PermissionsController extends BaseController {
         {
             $permission = $this->permissions->findOrFail($id);
             $roles = $this->permissions->getRoles();
-            return View::make( 'cpanel::permissions.edit', compact('permission','roles'));
+            return View::make( Config::get('cpanel::views.permissions_edit'), compact('permission','roles'));
         }
         catch ( ModelNotFoundException $e )
         {
@@ -101,7 +102,7 @@ class PermissionsController extends BaseController {
             return Redirect::route('admin.permissions.index')->with('success', Lang::get('cpanel::permissions.create_success'));
         }
         return Redirect::back()->withInput()->withErrors($validation->getErrors());
-       
+
     }
 
     /**
