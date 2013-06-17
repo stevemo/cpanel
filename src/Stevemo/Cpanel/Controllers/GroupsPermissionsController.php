@@ -7,6 +7,7 @@ use Input;
 use Lang;
 use Sentry;
 use Event;
+use Config;
 use Cartalyst\Sentry\Groups\GroupNotFoundException;
 
 class GroupsPermissionsController extends BaseController {
@@ -19,12 +20,12 @@ class GroupsPermissionsController extends BaseController {
 
     /**
      * [__construct description]
-     *  
+     *
      * @author Steve Montambeault
      * @link   http://stevemo.ca
-     *  
-     * @param  GroupRepository $groups 
-     * @param  PermissionProvider $permissions 
+     *
+     * @param  GroupRepository $groups
+     * @param  PermissionProvider $permissions
      */
     public function __construct(PermissionProvider $permissions)
     {
@@ -33,12 +34,12 @@ class GroupsPermissionsController extends BaseController {
 
     /**
      * Display the group permissions
-     *  
+     *
      * @author Steve Montambeault
      * @link   http://stevemo.ca
-     *  
-     * @param  int $grouID 
-     * @return Response 
+     *
+     * @param  int $grouID
+     * @return Response
      */
     public function index($groupId)
     {
@@ -54,10 +55,10 @@ class GroupsPermissionsController extends BaseController {
             $modulePerm = $this->permissions->getMergePermissions($groupPermissions, $permissions->toArray());
 
             $roles = array(array('name' => 'generic', 'permissions' => array('view','create','update','delete')));
-            
+
             $genericPerm = $this->permissions->getMergePermissions($groupPermissions, $roles);
-            
-            return View::make('cpanel::groups.permissions', compact('modulePerm','group','genericPerm'));
+
+            return View::make(Config::get('cpanel::views.groups_permission'), compact('modulePerm','group','genericPerm'));
         }
         catch ( GroupNotFoundException $e)
         {

@@ -1,4 +1,4 @@
-@extends('cpanel::layouts')
+@extends(Config::get('cpanel::views.layout'))
 
 @section('header')
     <h3>
@@ -6,10 +6,16 @@
         Users
     </h3>
 @stop
+@section('help')
+    <p class="lead">Users</p>
+    <p>
+        From here you can create, edit or delete users. Also you can assign custom permissions to a single user.
+    </p>
+@stop
 @section('content')
     <div class="row">
         <div class="span12">
-            
+
             {{Former::horizontal_open( route('admin.users.update', [$user->id]), 'PUT' )}}
 
             <div class="block">
@@ -28,7 +34,7 @@
                     {{ Former::xlarge_text('first_name', 'First Name', $user->first_name)->required() }}
                     {{ Former::xlarge_text('last_name', 'Last Name', $user->last_name)->required() }}
                     {{ Former::xlarge_text('email','Email', $user->email)->required() }}
-                    
+
                     <legend>Groups</legend>
                     <div class="control-group">
                         <label for="groups[]" class="control-label">Groups</label>

@@ -1,10 +1,24 @@
-@extends('cpanel::layouts')
+@extends(Config::get('cpanel::views.layout'))
 
 @section('header')
     <h3>
         <i class="icon-group"></i>
         Groups
     </h3>
+@stop
+@section('help')
+    <p class="lead">Permission Inheritance</p>
+    <p>
+        Just as permissions are defined for groups and individual users, the permission inheritance model depends on a user's group.
+        An Administrator can assign different permissions to a user that is assigned to a group, and if that group has different access permissions, the user's access is always determined by the group access.
+    </p>
+    <br>
+    <p class="text-warning">
+        Permission Inheritance only works for users permissions.
+    </p>
+     <p class="text-info">
+        For more info visit <a href="http://docs.cartalyst.com/sentry-2/permissions" target="_blank">Sentry website</a>
+    </p>
 @stop
 @section('content')
     <div class="row">
@@ -18,7 +32,7 @@
                         <li class="active"><a href="#generic" data-toggle="tab">Generic Permissions</a></li>
                         <li><a href="#module" data-toggle="tab">Modules Permissions</a></li>
                     </ul>
-                     
+
                     <div class="tab-content">
                         <div class="tab-pane active" id="generic">
                             @foreach( $genericPerm as $perm)

@@ -1,4 +1,4 @@
-@extends('cpanel::layouts')
+@extends(Config::get('cpanel::views.layout'))
 
 @section('header')
     <h3>
@@ -6,11 +6,16 @@
         Users
     </h3>
 @stop
-
+@section('help')
+    <p class="lead">Users</p>
+    <p>
+        From here you can create, edit or delete users. Also you can assign custom permissions to a single user.
+    </p>
+@stop
 @section('content')
     <div class="row">
         <div class="span12">
-            
+
             <div class="block">
                 <p class="block-heading">{{ $user->first_name }} {{ $user->last_name }} Profile</p>
 
@@ -56,7 +61,7 @@
                             <tr>
                                 <td><strong>Last Login</strong></td>
                                 <td>{{ is_null($user->last_login) ? 'Never Visited' : $user->last_login }}</td>
-                            </tr>                
+                            </tr>
                         </tbody>
                     </table>
                 </div>

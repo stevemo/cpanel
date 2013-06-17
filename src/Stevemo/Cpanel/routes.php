@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Cpanel Routes
@@ -8,6 +7,7 @@
 |
 */
 Route::get('admin', array(
+    'as'     => 'admin.home',
     'uses'   => 'Stevemo\Cpanel\Controllers\CpanelController@index',
     'before' => 'auth.cpanel:admin.view'
 ));

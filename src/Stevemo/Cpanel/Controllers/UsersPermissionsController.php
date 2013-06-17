@@ -6,6 +6,7 @@ use Input;
 use Lang;
 use Event;
 use Sentry;
+use Config;
 use Stevemo\Cpanel\Provider\PermissionProvider;
 use Cartalyst\Sentry\Users\UserNotFoundException;
 
@@ -24,12 +25,12 @@ class UsersPermissionsController extends BaseController {
 
     /**
      * Display the user permissins
-     *  
+     *
      * @author Steve Montambeault
      * @link   http://stevemo.ca
-     *  
-     * @param  int $userId 
-     * @return Response 
+     *
+     * @param  int $userId
+     * @return Response
      */
     public function index($userId)
     {
@@ -38,10 +39,10 @@ class UsersPermissionsController extends BaseController {
             $user       = Sentry::getUserProvider()->findById($userId);
             $modulePerm = $this->permissions->getMergePermissions($user->getPermissions());
 
-            $roles = array(array('name' => 'generic', 'permissions' => array('view','create','update','delete')));         
+            $roles = array(array('name' => 'generic', 'permissions' => array('view','create','update','delete')));
             $genericPerm = $this->permissions->getMergePermissions($user->getPermissions(), $roles);
 
-            return View::make('cpanel::users.permission',compact('user','modulePerm','genericPerm'));
+            return View::make(Config::get('cpanel::views.users_permission'),compact('user','modulePerm','genericPerm'));
         }
         catch ( UserNotFoundException $e)
         {
@@ -51,12 +52,12 @@ class UsersPermissionsController extends BaseController {
 
     /**
      * Update user permissions
-     *  
+     *
      * @author Steve Montambeault
      * @link   http://stevemo.ca
-     *  
-     * @param  int $userId 
-     * @return Response 
+     *
+     * @param  int $userId
+     * @return Response
      */
     public function update($userId)
     {
@@ -75,7 +76,7 @@ class UsersPermissionsController extends BaseController {
         {
             return Redirect::route('admin.users.permissions')->with('error', $e->getMessage());
         }
-        
+
     }
 
 }
