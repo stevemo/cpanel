@@ -1,4 +1,4 @@
-## Laravel Starter template
+## Laravel Admin Panel
 Laravel 4 package used to cprovide a admin panel with user, groups and permissions management.
 This package is currently under active development.
 
@@ -50,3 +50,4 @@ Done! Just go to [http://localhost/admin](http://localhost/admin) to access the 
 * Send Activation code by email when user register
 * Password reset/reminder
 * unit test… started reading Laravel Testing decoded ;-)
+* Documentation
