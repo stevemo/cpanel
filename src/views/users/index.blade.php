@@ -1,4 +1,4 @@
-@extends('cpanel::layouts')
+@extends(Config::get('cpanel::views.layout'))
 
 @section('header')
     <h3>
@@ -8,10 +8,10 @@
 @stop
 
 @section('content')
-    
+
     <div class="row">
         <div class="span12">
-            
+
             <div class="block">
                 <p class="block-heading">Users</p>
 

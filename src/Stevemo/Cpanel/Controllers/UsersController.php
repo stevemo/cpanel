@@ -20,26 +20,26 @@ class UsersController extends BaseController {
 
     /**
      * Show all the users
-     *  
+     *
      * @author Steve Montambeault
      * @link   http://stevemo.ca
-     *  
-     * @return Response 
+     *
+     * @return Response
      */
     public function index()
     {
         $users = Sentry::getUserProvider()->createModel()->with('groups')->get();
-        return View::make('cpanel::users.index', compact('users'));
+        return View::make(Config::get('cpanel::views.users_index'), compact('users'));
     }
 
     /**
      * Show a user profile
-     *  
+     *
      * @author Steve Montambeault
      * @link   http://stevemo.ca
-     *  
-     * @param  int $id 
-     * @return Response 
+     *
+     * @param  int $id
+     * @return Response
      */
     public function show($id)
     {
@@ -147,7 +147,7 @@ class UsersController extends BaseController {
         {
             $credentials = Input::except('groups');
             $credentials['id'] = $id;
-           
+
             $validation = $this->getValidationService('user', $credentials);
 
             if( $validation->passes() )

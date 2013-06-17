@@ -1,4 +1,4 @@
-@extends('cpanel::layouts')
+@extends(Config::get('cpanel::views.layout'))
 
 @section('header')
     <h3>
@@ -10,7 +10,7 @@
 @section('content')
     <div class="row">
         <div class="span12">
-            
+
             <div class="block">
                 <p class="block-heading">{{ $user->first_name }} {{ $user->last_name }} Profile</p>
 
@@ -56,7 +56,7 @@
                             <tr>
                                 <td><strong>Last Login</strong></td>
                                 <td>{{ is_null($user->last_login) ? 'Never Visited' : $user->last_login }}</td>
-                            </tr>                
+                            </tr>
                         </tbody>
                     </table>
                 </div>
