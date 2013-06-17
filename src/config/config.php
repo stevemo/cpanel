@@ -2,6 +2,12 @@
 
 return array(
 
+    'site_config' => array(
+        'site_name'   => 'Cpanel',
+        'title'       => 'My Admin Panel',
+        'description' => 'Laravel 4 Admin Panel'
+    ),
+
     //menu 2 type are available single or dropdown and it must be a route
     'menu' => array(
         'Dashboard' => array('type' => 'single', 'route' => 'admin.home'),

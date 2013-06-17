@@ -7,6 +7,13 @@
     </h3>
 @stop
 
+@section('help')
+    <p class="lead">Users</p>
+    <p>
+        From here you can create, edit or delete users. Also you can assign custom permissions to a single user.
+    </p>
+@stop
+
 @section('content')
 
     <div class="row">

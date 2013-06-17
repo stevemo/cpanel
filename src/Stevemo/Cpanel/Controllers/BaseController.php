@@ -17,17 +17,19 @@ class BaseController extends Controller {
         {
             $this->layout = View::make($this->layout);
         }
+        //share the config option to all the views
+        View::share('cpanel', Config::get('cpanel::site_config'));
     }
 
     /**
      * get the validation service
-     *  
+     *
      * @author Steve Montambeault
      * @link   http://stevemo.ca
-     *  
-     * @param  string $service 
-     * @param  array $inputs 
-     * @return Object 
+     *
+     * @param  string $service
+     * @param  array $inputs
+     * @return Object
      */
     protected function getValidationService($service, array $inputs = array())
     {
