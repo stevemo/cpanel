@@ -52,17 +52,22 @@
                             <div class="nav-collapse collapse">
                                 <!-- .nav -->
                                 <ul class="nav">
-                                    <li><a href="{{ URL::to('admin') }}">Dashboard</a></li>
-                                    <li class="dropdown ">
-                                        <a data-toggle="dropdown" class="dropdown-toggle" href="blank.html#">
-                                           Users <b class="caret"></b>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li>{{ HTML::linkRoute('admin.users.index', 'Manage Users') }}</li>
-                                            <li>{{ HTML::linkRoute('admin.groups.index', 'Groups') }}</li>
-                                            <li>{{ HTML::linkRoute('admin.permissions.index', 'Permissions') }}</li>
-                                        </ul>
-                                    </li>
+                                    @foreach (Config::get('cpanel::menu') as $title => $args)
+                                        @if ($args['type'] === 'single')
+                                            <li>{{ HTML::linkRoute($args['route'], $title) }}</li>
+                                        @else
+                                            <li class="dropdown">
+                                                <a data-toggle="dropdown" class="dropdown-toggle" href="blank.html#">
+                                                   {{ $title }} <b class="caret"></b>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    @foreach ($args['links'] as $title => $value)
+                                                        <li>{{ HTML::linkRoute($value['route'], $title) }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </li>
+                                        @endif
+                                    @endforeach
                                 </ul>
                                 <!-- /.nav -->
                             </div>
