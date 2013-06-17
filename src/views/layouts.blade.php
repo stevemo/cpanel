@@ -52,7 +52,7 @@
                             <div class="nav-collapse collapse">
                                 <!-- .nav -->
                                 <ul class="nav">
-                                    <li><a href="">Dashboard</a></li>
+                                    <li><a href="{{ URL::to('admin') }}">Dashboard</a></li>
                                     <li class="dropdown ">
                                         <a data-toggle="dropdown" class="dropdown-toggle" href="blank.html#">
                                            Users <b class="caret"></b>
