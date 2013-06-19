@@ -57,15 +57,15 @@
                                     <td>{{ $user->activated_at }}</td>
                                     <td>{{ is_null($user->last_login) ? 'Never Visited' : $user->last_login }}</td>
                                     <td>
-                                        <a href="{{ route('admin.users.edit', [$user->id]) }}"
+                                        <a href="{{ route('admin.users.edit', array($user->id)) }}"
                                             class="btn" rel="tooltip" title="Edit User">
                                             <i class="icon-edit"></i>
                                         </a>
-                                        <a href="{{ route('admin.users.permissions', [$user->id]) }}"
+                                        <a href="{{ route('admin.users.permissions', array($user->id)) }}"
                                             class="btn" rel="tooltip" title="Edit User Permissions">
                                             Permissions <i class="icon-arrow-right"></i>
                                         </a>
-                                        <a href="{{ route('admin.users.destroy', [$user->id]) }}"
+                                        <a href="{{ route('admin.users.destroy', array($user->id)) }}"
                                             class="btn btn-danger" rel="tooltip" title="Delete User" data-method="delete"
                                             data-modal-text="delete this User?">
                                             <i class="icon-remove"></i>
