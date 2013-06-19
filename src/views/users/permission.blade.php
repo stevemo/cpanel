@@ -23,7 +23,7 @@
 @stop
 
 @section('content')
-    {{Former::horizontal_open( route('admin.users.permissions', [$user->id]), 'PUT' )}}
+    {{Former::horizontal_open( route('admin.users.permissions', array($user->id)), 'PUT' )}}
     <div class="row">
         <div class="span12">
             <div class="block">
