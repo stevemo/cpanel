@@ -1,5 +1,5 @@
 ## Laravel Admin Panel
-Laravel 4 package used to cprovide a admin panel with user, groups and permissions management.
+Laravel 4 package used to provide an admin panel with user, groups and permissions management.
 This package is currently under active development.
 
 ##Features
