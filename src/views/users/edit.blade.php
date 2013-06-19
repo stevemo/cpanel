@@ -16,7 +16,7 @@
     <div class="row">
         <div class="span12">
 
-            {{Former::horizontal_open( route('admin.users.update', [$user->id]), 'PUT' )}}
+            {{Former::horizontal_open( route('admin.users.update', array($user->id)), 'PUT' )}}
 
             <div class="block">
                 <p class="block-heading">Edit User &quot;{{ $user->first_name }} {{ $user->last_name }}&quot;</p>

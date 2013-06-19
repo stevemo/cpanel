@@ -45,15 +45,15 @@
                             <tr>
                                 <td>{{ $group->name }}</td>
                                 <td>
-                                    <a href="{{ route('admin.groups.edit', [$group->id]) }}"
+                                    <a href="{{ route('admin.groups.edit', array($group->id)) }}"
                                         class="btn" rel="tooltip" title="Edit Group">
                                         <i class="icon-edit"></i>
                                     </a>
-                                    <a href="{{ route('admin.groups.permissions', [$group->id]) }}"
+                                    <a href="{{ route('admin.groups.permissions', array($group->id)) }}"
                                         class="btn" rel="tooltip" title="Edit Group Permissions">
                                         Permissions <i class="icon-arrow-right"></i>
                                     </a>
-                                    <a href="{{ route('admin.groups.destroy', [$group->id]) }}"
+                                    <a href="{{ route('admin.groups.destroy', array($group->id)) }}"
                                         class="btn btn-danger" rel="tooltip" title="Delete Group" data-method="delete"
                                         data-modal-text="delete this group?">
                                         <i class="icon-remove"></i>

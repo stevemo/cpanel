@@ -83,11 +83,11 @@
                                             </ul>
                                         </td>
                                         <td>
-                                            <a href="{{ route('admin.permissions.edit', [$permission->id]) }}"
+                                            <a href="{{ route('admin.permissions.edit', array($permission->id)) }}"
                                                 class="btn" rel="tooltip" title="Edit Permission">
                                                 <i class="icon-edit"></i>
                                             </a>
-                                            <a href="{{ route('admin.permissions.destroy', [$permission->id]) }}"
+                                            <a href="{{ route('admin.permissions.destroy', array($permission->id)) }}"
                                                 class="btn btn-danger" rel="tooltip" title="Delete Permission" data-method="delete"
                                                 data-modal-text="delete this Permission?">
                                                 <i class="icon-remove"></i>
