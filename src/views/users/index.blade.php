@@ -40,7 +40,7 @@
                                 <th>Active</th>
                                 <th>Joined</th>
                                 <th>Last Visit</th>
-                                <th></th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -57,19 +57,53 @@
                                     <td>{{ $user->activated_at }}</td>
                                     <td>{{ is_null($user->last_login) ? 'Never Visited' : $user->last_login }}</td>
                                     <td>
-                                        <a href="{{ route('admin.users.edit', array($user->id)) }}"
-                                            class="btn" rel="tooltip" title="Edit User">
-                                            <i class="icon-edit"></i>
-                                        </a>
-                                        <a href="{{ route('admin.users.permissions', array($user->id)) }}"
-                                            class="btn" rel="tooltip" title="Edit User Permissions">
-                                            Permissions <i class="icon-arrow-right"></i>
-                                        </a>
-                                        <a href="{{ route('admin.users.destroy', array($user->id)) }}"
-                                            class="btn btn-danger" rel="tooltip" title="Delete User" data-method="delete"
-                                            data-modal-text="delete this User?">
-                                            <i class="icon-remove"></i>
-                                        </a>
+                                        <div class="btn-group">
+                                            <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+                                                Action
+                                                <span class="caret"></span>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                               <li>
+                                                   <a href="{{ route('admin.users.edit', array($user->id)) }}">
+                                                       <i class="icon-edit"></i>&nbsp;Edit User
+                                                   </a>
+                                               </li>
+                                                <li>
+                                                    <a href="{{ route('admin.users.permissions', array($user->id)) }}">
+                                                        <i class="icon-ban-circle"></i>&nbsp;Permissions
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{ route('admin.users.destroy', array($user->id)) }}"
+                                                       data-method="delete"
+                                                       data-modal-text="delete this User?">
+                                                       <i class="icon-trash"></i>&nbsp;Delete User
+                                                    </a>
+                                                </li>
+                                                <li class="divider"></li>
+                                                <li>
+                                                    @if ($user->isActivated())
+                                                        <a href="{{ route('admin.users.deactivate', array($user->id)) }}"
+                                                           data-method="put"
+                                                           data-modal-text="Deactivate this User?">
+                                                            <i class="icon-remove"></i>&nbsp;Deactivate
+                                                        </a>
+                                                    @else
+                                                        <a href="{{ route('admin.users.activate', array($user->id)) }}"
+                                                           data-method="put"
+                                                           data-modal-text="Activate this User?">
+                                                            <i class="icon-check"></i>&nbsp;Activate
+                                                        </a>
+                                                    @endif
+                                                </li>
+                                                <li class="divider"></li>
+                                                <li>
+                                                    <a href="{{ route('admin.users.edit', array($user->id)) }}">
+                                                        <i class="icon-key"></i>&nbsp;Throttling
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

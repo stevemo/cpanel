@@ -37,6 +37,17 @@ Route::put('admin/users/{users}/permissions', array(
     'before' => 'auth.cpanel:users.update'
 ));
 
+Route::put('admin/users/{users}/activate', array(
+    'as'     => 'admin.users.activate',
+    'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@putStatus',
+    'before' => 'auth.cpanel:users.update'
+));
+
+Route::put('admin/users/{users}/deactivate', array(
+    'as'     => 'admin.users.deactivate',
+    'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@putStatus',
+    'before' => 'auth.cpanel:users.update'
+));
 /*
 |--------------------------------------------------------------------------
 | Cpanel Groups Permissions Routes

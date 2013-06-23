@@ -1,12 +1,13 @@
 <?php namespace Stevemo\Cpanel\Controllers;
 
+use Cartalyst\Sentry\Users\UserAlreadyActivatedException;
 use View;
 use Config;
 use Redirect;
 use Lang;
 use Input;
 use Event;
-use Cartalyst\Sentry\Facades\Laravel\Sentry;
+use Sentry;
 use Cartalyst\Sentry\Users\UserNotFoundException;
 use Cartalyst\Sentry\Users\UserExistsException;
 use Cartalyst\Sentry\Users\LoginRequiredException;
@@ -204,6 +205,55 @@ class UsersController extends BaseController {
             return Redirect::route('admin.users.index')->with('success',Lang::get('cpanel::users.delete_success'));
         }
         catch (UserNotFoundException $e)
+        {
+            return Redirect::route('admin.users.index')->with('error',$e->getMessage());
+        }
+    }
+
+    /**
+     * activate or deactivate a user
+     * 
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param $id
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function putStatus($id)
+    {
+        try
+        {
+            $user = Sentry::getUserProvider()->findById($id);
+
+            if ($user->isActivated())
+            {
+                $user->activated = 0;
+                $user->activated_at = null;
+                $user->save();
+                return Redirect::route('admin.users.index')->with('success',Lang::get('cpanel::users.deactivation_success'));
+            }
+            else
+            {
+                $code = $user->getActivationCode();
+
+                if ($user->attemptActivation($code))
+                {
+                    // User activation passed
+                    return Redirect::route('admin.users.index')->with('success',Lang::get('cpanel::users.activation_success'));
+                }
+                else
+                {
+                    // User activation failed
+                    return Redirect::route('admin.users.index')->with('error',Lang::get('cpanel::users.activation_fail'));
+                }
+            }
+        }
+        catch (UserNotFoundException $e)
+        {
+            return Redirect::route('admin.users.index')->with('error',$e->getMessage());
+        }
+        catch (UserAlreadyActivatedException $e)
         {
             return Redirect::route('admin.users.index')->with('error',$e->getMessage());
         }
