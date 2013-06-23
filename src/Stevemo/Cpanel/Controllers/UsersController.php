@@ -11,10 +11,7 @@ use Cartalyst\Sentry\Users\UserNotFoundException;
 use Cartalyst\Sentry\Users\UserExistsException;
 use Cartalyst\Sentry\Users\LoginRequiredException;
 use Cartalyst\Sentry\Users\PasswordRequiredException;
-use Cartalyst\Sentry\Users\WrongPasswordException;
-use Cartalyst\Sentry\Users\UserNotActivatedException;
-use Cartalyst\Sentry\Users\UserSuspendedException;
-use Cartalyst\Sentry\Users\UserBannedException;
+
 
 class UsersController extends BaseController {
 
