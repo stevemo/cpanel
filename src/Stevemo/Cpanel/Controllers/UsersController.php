@@ -212,7 +212,7 @@ class UsersController extends BaseController {
 
     /**
      * activate or deactivate a user
-     * 
+     *
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *

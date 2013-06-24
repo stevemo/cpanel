@@ -21,6 +21,25 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth.cpanel'), function()
 
 /*
 |--------------------------------------------------------------------------
+| Cpanel Extra Users Routes
+|--------------------------------------------------------------------------
+|
+|
+*/
+Route::put('admin/users/{users}/activate', array(
+    'as'     => 'admin.users.activate',
+    'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@putStatus',
+    'before' => 'auth.cpanel:users.update'
+));
+
+Route::put('admin/users/{users}/deactivate', array(
+    'as'     => 'admin.users.deactivate',
+    'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@putStatus',
+    'before' => 'auth.cpanel:users.update'
+));
+
+/*
+|--------------------------------------------------------------------------
 | Cpanel Users Permissions Routes
 |--------------------------------------------------------------------------
 |
@@ -37,17 +56,26 @@ Route::put('admin/users/{users}/permissions', array(
     'before' => 'auth.cpanel:users.update'
 ));
 
-Route::put('admin/users/{users}/activate', array(
-    'as'     => 'admin.users.activate',
-    'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@putStatus',
+
+/*
+|--------------------------------------------------------------------------
+| Cpanel Users Throttling Routes
+|--------------------------------------------------------------------------
+|
+|
+*/
+Route::get('admin/users/{user}/throttling', array(
+    'as'     => 'admin.users.throttling',
+    'uses'   => 'Stevemo\Cpanel\Controllers\UsersThrottlingController@getStatus',
+    'before' => 'auth.cpanel:users.view'
+));
+
+Route::put('admin/users/{user}/throttling/{action}', array(
+    'as'     => 'admin.users.throttling.update',
+    'uses'   => 'Stevemo\Cpanel\Controllers\UsersThrottlingController@putStatus',
     'before' => 'auth.cpanel:users.update'
 ));
 
-Route::put('admin/users/{users}/deactivate', array(
-    'as'     => 'admin.users.deactivate',
-    'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@putStatus',
-    'before' => 'auth.cpanel:users.update'
-));
 /*
 |--------------------------------------------------------------------------
 | Cpanel Groups Permissions Routes

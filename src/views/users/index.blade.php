@@ -98,7 +98,7 @@
                                                 </li>
                                                 <li class="divider"></li>
                                                 <li>
-                                                    <a href="{{ route('admin.users.edit', array($user->id)) }}">
+                                                    <a href="{{ route('admin.users.throttling', array($user->id)) }}">
                                                         <i class="icon-key"></i>&nbsp;Throttling
                                                     </a>
                                                 </li>
