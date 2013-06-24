@@ -43,6 +43,9 @@ return array(
         'permissions_index'  => 'cpanel::permissions.index',
         'permissions_edit'   => 'cpanel::permissions.edit',
         'permissions_create' => 'cpanel::permissions.create',
+
+        //Throttling Views
+        'throttle_status' => 'cpanel::throttle.index',
     ),
 
     'validation' => array(
