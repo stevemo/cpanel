@@ -39,7 +39,7 @@ Stevemo\Cpanel\CpanelServiceProvider
 
 Then add the following Class Aliases
 ```php
-'Former' => 'Former\Facades\Illuminate',
+'Former' => 'Former\Facades\Former',
 'Sentry' => 'Cartalyst\Sentry\Facades\Laravel\Sentry',
 ```
 
