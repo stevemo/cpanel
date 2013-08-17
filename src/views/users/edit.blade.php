@@ -32,7 +32,7 @@
 
                     <legend><small>items mark with * are required.</small></legend>
                     {{ Former::xlarge_text('first_name', 'First Name', $user->first_name)->required() }}
-                    {{ Former::xlarge_text('last_name', 'Last Name', $user->last_name)->required() }}
+                    {{ Former::xlarge_text('last_name', 'Last Name', $user->last_name) }}
                     {{ Former::xlarge_text('email','Email', $user->email)->required() }}
 
                     <legend>Groups</legend>

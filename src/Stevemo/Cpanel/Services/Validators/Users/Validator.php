@@ -10,7 +10,7 @@ class Validator extends ValidatorService {
      */
     public static $rules = array(
         'first_name' => 'required',
-        'last_name'  => 'required',
+        //'last_name'  => 'required',
         'password'   => 'required|confirmed',
         'email'      => 'required|email'
     );
