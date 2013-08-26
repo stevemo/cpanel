@@ -22,13 +22,13 @@
                 <div class="block-body">
 
                     <legend><small>items mark with * are required.</small></legend>
-                    {{ Former::xlarge_text('first_name', 'First Name')->requireds() }}
-                    {{ Former::xlarge_text('last_name', 'Last Name')->requireds() }}
-                    {{ Former::xlarge_text('email','Email')->requireds() }}
+                    {{ Former::xlarge_text('first_name', 'First Name')->required() }}
+                    {{ Former::xlarge_text('last_name', 'Last Name') }}
+                    {{ Former::xlarge_text('email','Email')->required() }}
 
                     <legend>Password</legend>
-                    {{ Former::xlarge_password('password', 'Password')->requireds() }}
-                    {{ Former::xlarge_password('password_confirmation', 'Confirm Password')->requireds() }}
+                    {{ Former::xlarge_password('password', 'Password')->required() }}
+                    {{ Former::xlarge_password('password_confirmation', 'Confirm Password')->required() }}
 
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">Save changes</button>
