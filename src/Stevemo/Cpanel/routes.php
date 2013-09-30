@@ -130,7 +130,7 @@ Route::filter('auth.cpanel', function($route, $request, $userRule = null)
     // no access to the request page and request page not the root admin page
     if ( ! Sentry::hasAccess($userRule) and $userRule !== 'admin.view' )
     {
-        return Redirect::to('admin')->with('error', Lang::get('cpanel::permissions.access_denied'));
+        return Redirect::rout('admin.home')->with('error', Lang::get('cpanel::permissions.access_denied'));
     }
     // no access to the request page and request page is the root admin page
     else if( ! Sentry::hasAccess($userRule) and $userRule === 'admin.view' )
