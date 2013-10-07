@@ -7,6 +7,7 @@ use Sentry;
 use Redirect;
 use Lang;
 use Event;
+use Mail;
 use Cartalyst\Sentry\Users\UserNotFoundException;
 use Cartalyst\Sentry\Users\UserExistsException;
 use Cartalyst\Sentry\Users\LoginRequiredException;
@@ -22,11 +23,11 @@ class CpanelController extends BaseController {
 
     /**
      * Show the dashboard
-     *  
+     *
      * @author Steve Montambeault
      * @link   http://stevemo.ca
-     *  
-     * @return Response 
+     *
+     * @return Response
      */
     public function index()
     {
@@ -35,11 +36,11 @@ class CpanelController extends BaseController {
 
     /**
      * Show the login form
-     *  
+     *
      * @author Steve Montambeault
      * @link   http://stevemo.ca
-     *  
-     * @return Response 
+     *
+     * @return Response
      */
     public function getLogin()
     {
@@ -79,6 +80,67 @@ class CpanelController extends BaseController {
             return Redirect::route('admin.login')->with('success', Lang::get('cpanel::users.logout'));
         }
         return Redirect::route('admin.login');
+    }
+
+    /**
+     * Display password forgot
+     *
+     * @author Pieter Beemsterboer
+     * @link   http://www.imade.nl
+     *
+     * @return Response
+     */
+    public function getPasswordForgot()
+    {
+        return View::make(Config::get('cpanel::views.password_forgot'));
+    }
+
+    /**
+     * Display password send
+     *
+     * @author Pieter Beemsterboer
+     * @link   http://www.imade.nl
+     *
+     * @return Response
+     */
+    public function getPasswordSend()
+    {
+        return View::make(Config::get('cpanel::views.password_send'));
+    }
+
+    /**
+     * Display password reset
+     *
+     * @author Pieter Beemsterboer
+     * @link   http://www.imade.nl
+     *
+     * @return Response
+     */
+    public function getPasswordReset($resetCode)
+    {
+        try
+        {
+            $user = Sentry::findUserByResetPasswordCode($resetCode);
+            return View::make(Config::get('cpanel::views.password_reset'));
+        }
+        catch (UserNotFoundException $e)
+        {
+            // redirect back to password_forgot if invalid resetCode
+            return Redirect::route('admin.password.forgot')->with('forgot_error',$e->getMessage());
+        }
+    }
+
+    /**
+     * Display password successfully changed
+     *
+     * @author Pieter Beemsterboer
+     * @link   http://www.imade.nl
+     *
+     * @return Response
+     */
+    public function getPasswordSuccess()
+    {
+        return View::make(Config::get('cpanel::views.password_success'));
     }
 
     /**
@@ -154,10 +216,10 @@ class CpanelController extends BaseController {
                 //TODO : Setting to activate or not, email also
                 $user = Sentry::register($validation->getData(), true);
                 Event::fire('users.register', array($user));
-                
-                return Redirect::route('admin.login')->with('success', Lang::get('cpanel::users.register_success')); 
+
+                return Redirect::route('admin.login')->with('success', Lang::get('cpanel::users.register_success'));
             }
-           
+
             return Redirect::back()->withInput()->withErrors($validation->getErrors());
         }
         catch (LoginRequiredException $e)
@@ -173,5 +235,80 @@ class CpanelController extends BaseController {
             return Redirect::back()->withInput()->with('error',$e->getMessage());
         }
     }
-    
+
+    /**
+     * Validate Forgot password email
+     *
+     * @author Pieter Beemsterboer
+     * @link   http://www.imade.nl
+     *
+     *
+     * @return Response
+     */
+    public function postPasswordForgot()
+    {
+        try
+        {
+            $email = Input::get('email');
+            $user = Sentry::findUserByLogin($email);
+            $resetCode = $user->getResetPasswordCode();
+            $mail_view = Config::get('cpanel::views.email_password_forgot');
+
+            Mail::send($mail_view, compact('resetCode'), function($message) use ($email)
+            {
+                $message->to($email)->subject('Account Password Reset');
+            });
+
+            Event::fire('users.password.forgot', array($user));
+            return Redirect::route('admin.password.send')->with('email', $email);
+        }
+        catch (UserNotFoundException $e)
+        {
+            return Redirect::back()->withInput()->with('forgot_error',$e->getMessage());
+        }
+    }
+
+    /**
+     * Validate reset password
+     *
+     * @author Pieter Beemsterboer
+     * @link   http://www.imade.nl
+     *
+     * @return Response
+     */
+    public function postPasswordReset($resetCode)
+    {
+        try
+        {
+            $user = Sentry::findUserByResetPasswordCode($resetCode);
+
+            // validate passwords
+            $validation = $this->getValidationService('password');
+
+            if( $validation->passes() )
+            {
+                if ($user->attemptResetPassword($resetCode, Input::get('password')))
+                {
+                    // Password reset passed
+                    return Redirect::route('admin.password.success');
+                }
+                else
+                {
+                    // Password reset failed (don't know what happened here)
+                    return Redirect::back()->withInput()->with('reset_error', 'Password reset failed. Please try again.');
+                }
+            }
+            else
+            {
+                // password incorrect
+                return Redirect::back()->withInput()->with('reset_error', $validation->getErrors()->first());
+            }
+        }
+        catch (UserNotFoundException $e)
+        {
+            // reset code incorrect
+            return Redirect::route('admin.password.forgot')->with('forgot_error',$e->getMessage());
+        }
+    }
+
 }
