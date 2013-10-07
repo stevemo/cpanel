@@ -22,9 +22,13 @@ return array(
 
         'layout' => 'cpanel::layouts',
 
-        'dashboard' => 'cpanel::dashboard.index',
-        'login'     => 'cpanel::dashboard.login',
-        'register'  => 'cpanel::dashboard.register',
+        'dashboard'        => 'cpanel::dashboard.index',
+        'login'            => 'cpanel::dashboard.login',
+        'register'         => 'cpanel::dashboard.register',
+        'password_forgot'  => 'cpanel::dashboard.password_forgot',
+        'password_send'    => 'cpanel::dashboard.password_send',
+        'password_reset'   => 'cpanel::dashboard.password_reset',
+        'password_success' => 'cpanel::dashboard.password_success',
 
         // Users views
         'users_index'      => 'cpanel::users.index',
@@ -43,10 +47,14 @@ return array(
         'permissions_index'  => 'cpanel::permissions.index',
         'permissions_edit'   => 'cpanel::permissions.edit',
         'permissions_create' => 'cpanel::permissions.create',
+
+        //Email Views
+        'email_password_forgot'  => 'cpanel::emails.password_forgot',
     ),
 
     'validation' => array(
         'user'       => 'Stevemo\Cpanel\Services\Validators\Users\Validator',
         'permission' => 'Stevemo\Cpanel\Services\Validators\Permissions\Validator',
+        'password'   => 'Stevemo\Cpanel\Services\Validators\PasswordReset\Validator',
     ),
 );

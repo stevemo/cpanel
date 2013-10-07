@@ -82,6 +82,30 @@ Route::get('admin/register', array(
 
 Route::post('admin/register','Stevemo\Cpanel\Controllers\CpanelController@postRegister');
 
+Route::get('admin/password/forgot', array(
+    'as'   => 'admin.password.forgot',
+    'uses' => 'Stevemo\Cpanel\Controllers\CpanelController@getPasswordForgot'
+));
+
+Route::post('admin/password/forgot','Stevemo\Cpanel\Controllers\CpanelController@postPasswordForgot');
+
+Route::get('admin/password/send', array(
+    'as'   => 'admin.password.send',
+    'uses' => 'Stevemo\Cpanel\Controllers\CpanelController@getPasswordSend'
+));
+
+Route::get('admin/password/reset/{code}', array(
+    'as'   => 'admin.password.reset',
+    'uses' => 'Stevemo\Cpanel\Controllers\CpanelController@getPasswordReset'
+));
+
+Route::post('admin/password/reset/{code}','Stevemo\Cpanel\Controllers\CpanelController@postPasswordReset');
+
+Route::get('admin/password/success', array(
+    'as'   => 'admin.password.success',
+    'uses' => 'Stevemo\Cpanel\Controllers\CpanelController@getPasswordSuccess'
+));
+
 
 /*
 |--------------------------------------------------------------------------
