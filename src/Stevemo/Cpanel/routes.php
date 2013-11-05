@@ -41,6 +41,44 @@ Route::group(array('prefix' => $prefix), function()
         'uses'   => 'Stevemo\Cpanel\Controllers\PermissionsController@destroy',
         'before' => 'auth.cpanel'
     ));
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cpanel Groups Routes
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    Route::get('groups', array(
+        'as'     => 'cpanel.groups.index',
+        'uses'   => 'Stevemo\Cpanel\Controllers\GroupsController@index',
+        'before' => 'auth.cpanel'
+    ));
+    Route::post('groups', array(
+        'as'     => 'cpanel.groups.store',
+        'uses'   => 'Stevemo\Cpanel\Controllers\GroupsController@store',
+        'before' => 'auth.cpanel'
+    ));
+    Route::get('groups/create', array(
+        'as'     => 'cpanel.groups.create',
+        'uses'   => 'Stevemo\Cpanel\Controllers\GroupsController@create',
+        'before' => 'auth.cpanel'
+    ));
+    Route::get('groups/{id}/edit', array(
+        'as'     => 'cpanel.groups.edit',
+        'uses'   => 'Stevemo\Cpanel\Controllers\GroupsController@edit',
+        'before' => 'auth.cpanel'
+    ));
+    Route::put('groups/{id}', array(
+        'as'     => 'cpanel.groups.update',
+        'uses'   => 'Stevemo\Cpanel\Controllers\GroupsController@update',
+        'before' => 'auth.cpanel'
+    ));
+    Route::delete('groups/{id}', array(
+        'as'     => 'cpanel.groups.destroy',
+        'uses'   => 'Stevemo\Cpanel\Controllers\GroupsController@destroy',
+        'before' => 'auth.cpanel'
+    ));
 });
 
 /*
@@ -59,7 +97,6 @@ Route::get('admin', array(
 Route::group(array('prefix' => 'admin', 'before' => 'auth.cpanel'), function()
 {
     Route::resource('users', 'Stevemo\Cpanel\Controllers\UsersController');
-    Route::resource('groups', 'Stevemo\Cpanel\Controllers\GroupsController',array('except' => array('show')));
 });
 
 /*
