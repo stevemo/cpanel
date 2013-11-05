@@ -29,27 +29,7 @@
 
             <div class="block">
                 <p class="block-heading">
-                    Permissions |
-                    <em>Generic permissions</em>
-                </p>
-                <div class="block-body">
-                    <ul>
-                        @foreach ($roles['inputs'] as $role => $value)
-                             <li>{{ ucfirst($role) }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="span12">
-
-            <div class="block">
-                <p class="block-heading">
-                    Permissions |
-                    <em>Modules Permissions</em>
+                    Modules Permissions
                 </p>
                 <div class="block-body">
                     <p></p>

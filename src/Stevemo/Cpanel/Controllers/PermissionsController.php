@@ -1,30 +1,20 @@
 <?php namespace Stevemo\Cpanel\Controllers;
 
-use View;
-use Redirect;
-use Input;
-use Lang;
-use Event;
-use Config;
-use Stevemo\Cpanel\Provider\PermissionProvider;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use View, Redirect, Input, Lang, Config;
+use Stevemo\Cpanel\Permission\Repo\PermissionInterface;
+
 
 class PermissionsController extends BaseController {
 
     /**
-     * @var PermissionProvider
+     * @var PermissionInterface
      */
     protected $permissions;
 
     /**
-     * [__construct description]
-     *
-     * @author Steve Montambeault
-     * @link   http://stevemo.ca
-     *
-     * @param  PermissionProvider $permissions
+     * @param PermissionInterface $permissions
      */
-    public function __construct(PermissionProvider $permissions)
+    public function __construct(PermissionInterface $permissions)
     {
         $this->permissions = $permissions;
     }
@@ -35,13 +25,14 @@ class PermissionsController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {
         $permissions = $this->permissions->all();
-        $roles = $this->permissions->getRoles();
-        return View::make(Config::get('cpanel::views.permissions_index') , compact('permissions','roles'));
+
+        return View::make(Config::get('cpanel::views.permissions_index'))
+            ->with('permissions', $permissions);
     }
 
     /**
