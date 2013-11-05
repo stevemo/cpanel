@@ -59,6 +59,27 @@ class Permission extends Model {
     }
 
     /**
+     * convert permissions into a comma separated string and remove the prefix
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @return string
+     */
+    public function getRules()
+    {
+        $perm = $this->permissions;
+        $data = array();
+
+        foreach ($perm as $val)
+        {
+            list($prefix,$data[]) = explode('.', $val);
+        }
+
+        return implode(',',$data);
+    }
+
+    /**
      * Mutator for Module name
      *
      * @author Steve Montambeault

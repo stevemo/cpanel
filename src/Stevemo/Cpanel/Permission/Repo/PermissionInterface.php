@@ -39,6 +39,34 @@ interface PermissionInterface {
     public function delete($id);
 
     /**
+     *
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param       $id
+     * @param array $columns
+     *
+     * @return null|\StdClass
+     */
+    public function find($id, $columns = array('*'));
+
+    /**
+     *
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param       $id
+     * @param array $columns
+     *
+     * @throws PermissionNotFoundException
+     *
+     * @return mixed
+     */
+    public function findOrFail($id, $columns = array('*'));
+
+    /**
      * Update a permission into storage
      *
      * @author Steve Montambeault

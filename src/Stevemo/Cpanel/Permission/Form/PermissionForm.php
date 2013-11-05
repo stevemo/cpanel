@@ -61,7 +61,16 @@ class PermissionForm implements PermissionFormInterface {
      */
     public function update(array $data)
     {
-        // TODO-Stevemo: Implement update() method.
+        if ( $this->validator->with($data)->validForUpdate() )
+        {
+            $data['permissions'] = explode(',', $data['permissions']);
+            $this->permission->update($data);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     /**

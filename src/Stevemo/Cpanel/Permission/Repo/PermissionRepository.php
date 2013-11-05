@@ -96,6 +96,48 @@ class PermissionRepository implements PermissionInterface {
     }
 
     /**
+     * Get a Permission model by it's primary key
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param       $id
+     * @param array $columns
+     *
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null|\StdClass|static
+     */
+    public function find($id, $columns = array('*'))
+    {
+        return $this->model->find($id,$columns);
+    }
+
+    /**
+     *
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param       $id
+     * @param array $columns
+     *
+     * @throws PermissionNotFoundException
+     *
+     * @return mixed
+     */
+    public function findOrFail($id, $columns = array('*'))
+    {
+        try
+        {
+            return $this->model->findOrFail($id,$columns);
+        }
+        catch ( ModelNotFoundException $e )
+        {
+            throw new PermissionNotFoundException;
+        }
+    }
+
+    /**
      * Update a permission into storage
      *
      * @author Steve Montambeault
@@ -107,7 +149,14 @@ class PermissionRepository implements PermissionInterface {
      */
     public function update(array $data)
     {
-        // TODO-Stevemo: Implement update() method.
-    }
+        $perm = $this->findOrFail($data['id']);
 
+        $perm->name = $data['name'];
+        $perm->permissions = $data['permissions'];
+        $perm->save();
+
+        $this->event->fire('permissions.update',array($perm));
+
+        return true;
+    }
 }

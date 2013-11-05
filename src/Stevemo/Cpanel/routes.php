@@ -31,6 +31,11 @@ Route::group(array('prefix' => $prefix), function()
         'uses'   => 'Stevemo\Cpanel\Controllers\PermissionsController@edit',
         'before' => 'auth.cpanel'
     ));
+    Route::put('permissions/{id}', array(
+        'as'     => 'cpanel.permissions.update',
+        'uses'   => 'Stevemo\Cpanel\Controllers\PermissionsController@update',
+        'before' => 'auth.cpanel'
+    ));
     Route::delete('permissions/{id}', array(
         'as'     => 'cpanel.permissions.destroy',
         'uses'   => 'Stevemo\Cpanel\Controllers\PermissionsController@destroy',
