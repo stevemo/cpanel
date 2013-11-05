@@ -138,27 +138,27 @@ class PermissionsController extends BaseController {
         }
     }
 
-   /**
-     * Delete a permission
+    /**
+     * Delete a permission module
      *
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @param  int $id
+     * @param $id
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
-        // TODO-Stevemo: change me
-        try
+        if ( $this->permissions->delete($id) )
         {
-            $eventData = $this->permissions->delete($id);
-            Event::fire('permission.delete', array($eventData));
-            return Redirect::route('admin.permissions.index')->with('success', Lang::get('cpanel::permissions.delete_success'));
+            return Redirect::route('cpanel.permissions.index')
+                ->with('success', Lang::get('cpanel::permissions.delete_success'));
         }
-        catch ( ModelNotFoundException $e)
+        else
         {
-            return Redirect::route('admin.permissions.index')->with('error', Lang::get('cpanel::permissions.model_not_found'));
+            return Redirect::route('cpanel.permissions.index')
+                ->with('error', Lang::get('cpanel::permissions.model_not_found'));
         }
     }
 

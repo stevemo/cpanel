@@ -46,7 +46,7 @@ interface PermissionInterface {
      *
      * @param $id
      *
-     * @return void
+     * @return bool
      */
     public function delete($id);
 

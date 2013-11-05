@@ -1,6 +1,7 @@
 <?php  namespace Stevemo\Cpanel\Permission\Repo;
 
 use Illuminate\Events\Dispatcher;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class PermissionRepository implements PermissionInterface {
 
@@ -90,10 +91,22 @@ class PermissionRepository implements PermissionInterface {
      *
      * @param $id
      *
-     * @return void
+     * @return bool
      */
     public function delete($id)
     {
-        // TODO-Stevemo: Implement delete() method.
+        try
+        {
+            $perm = $this->model->findOrFail($id);
+            $oldData = $perm;
+            $perm->delete();
+            $this->event->fire('permissions.delete', array($oldData));
+
+            return true;
+        }
+        catch ( ModelNotFoundException $e)
+        {
+            return false;
+        }
     }
 }
