@@ -1,4 +1,48 @@
 <?php
+
+$prefix = Config::get('cpanel::prefix');
+
+Route::group(array('prefix' => $prefix), function()
+{
+    /*
+    |--------------------------------------------------------------------------
+    | Cpanel Permissions Routes
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    Route::get('permissions', array(
+        'as'     => 'cpanel.permissions.index',
+        'uses'   => 'Stevemo\Cpanel\Controllers\PermissionsController@index',
+        'before' => 'auth.cpanel'
+    ));
+    Route::post('permissions', array(
+        'as'     => 'cpanel.permissions.store',
+        'uses'   => 'Stevemo\Cpanel\Controllers\PermissionsController@store',
+        'before' => 'auth.cpanel'
+    ));
+    Route::get('permissions/create', array(
+        'as'     => 'cpanel.permissions.create',
+        'uses'   => 'Stevemo\Cpanel\Controllers\PermissionsController@create',
+        'before' => 'auth.cpanel'
+    ));
+    Route::get('permissions/{id}/edit', array(
+        'as'     => 'cpanel.permissions.edit',
+        'uses'   => 'Stevemo\Cpanel\Controllers\PermissionsController@edit',
+        'before' => 'auth.cpanel'
+    ));
+    Route::put('permissions/{id}', array(
+        'as'     => 'cpanel.permissions.update',
+        'uses'   => 'Stevemo\Cpanel\Controllers\PermissionsController@update',
+        'before' => 'auth.cpanel'
+    ));
+    Route::delete('permissions/{id}', array(
+        'as'     => 'cpanel.permissions.destroy',
+        'uses'   => 'Stevemo\Cpanel\Controllers\PermissionsController@destroy',
+        'before' => 'auth.cpanel'
+    ));
+});
+
 /*
 |--------------------------------------------------------------------------
 | Cpanel Routes
@@ -16,7 +60,6 @@ Route::group(array('prefix' => 'admin', 'before' => 'auth.cpanel'), function()
 {
     Route::resource('users', 'Stevemo\Cpanel\Controllers\UsersController');
     Route::resource('groups', 'Stevemo\Cpanel\Controllers\GroupsController',array('except' => array('show')));
-    Route::resource('permissions', 'Stevemo\Cpanel\Controllers\PermissionsController',array('except' => array('show')));
 });
 
 /*

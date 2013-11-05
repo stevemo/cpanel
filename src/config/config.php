@@ -2,6 +2,9 @@
 
 return array(
 
+    // route prefix
+    'prefix' => 'admin',
+
     'site_config' => array(
         'site_name'   => 'Cpanel',
         'title'       => 'My Admin Panel',
@@ -14,7 +17,7 @@ return array(
         'Users'     => array('type' => 'dropdown', 'links' => array(
             'Manage Users' => array('route' => 'admin.users.index'),
             'Groups'       => array('route' => 'admin.groups.index'),
-            'Permissions'  => array('route' => 'admin.permissions.index')
+            'Permissions'  => array('route' => 'cpanel.permissions.index')
         )),
     ),
 

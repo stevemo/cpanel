@@ -1,8 +1,13 @@
 <?php namespace Stevemo\Cpanel;
 
+use Illuminate\Support\MessageBag;
 use Illuminate\Support\ServiceProvider;
 use Stevemo\Cpanel\Console\InstallCommand;
 use Stevemo\Cpanel\Console\UserSeedCommand;
+use Stevemo\Cpanel\Permission\Repo\PermissionRepository;
+use Stevemo\Cpanel\Permission\Repo\Permission;
+use Stevemo\Cpanel\Permission\Form\PermissionForm;
+use Stevemo\Cpanel\Permission\Form\PermissionValidator;
 
 class CpanelServiceProvider extends ServiceProvider {
 
@@ -21,6 +26,7 @@ class CpanelServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		$this->package('stevemo/cpanel');
+        include __DIR__ .'/routes.php';
 	}
 
 	/**
@@ -30,29 +36,12 @@ class CpanelServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		include __DIR__ .'/routes.php';
-        $this->registerInstallCommands();
-        $this->registerUserSeedCommands();
-        $this->commands('command.cpanel.install','command.cpanel.user');
+		$this->registerCommands();
+        $this->registerPermission();
 	}
 
-        /**
+     /**
      * Register console commands cpanel:install
-     *
-     * @author Steve Montambeault
-     * @link   http://stevemo.ca
-     *
-     * @return void
-     */
-    public function registerInstallCommands()
-    {
-        $this->app['command.cpanel.install'] = $this->app->share(function($app)
-        {
-            return new InstallCommand();
-        });
-    }
-
-    /**
      * Register console commands cpanel:user
      *
      * @author Steve Montambeault
@@ -60,11 +49,43 @@ class CpanelServiceProvider extends ServiceProvider {
      *
      * @return void
      */
-    public function registerUserSeedCommands()
+    public function registerCommands()
     {
-        $this->app['command.cpanel.user'] = $this->app->share(function($app)
+        $this->app['command.cpanel.install'] = $this->app->share(function()
+        {
+            return new InstallCommand();
+        });
+
+        $this->app['command.cpanel.user'] = $this->app->share(function()
         {
             return new UserSeedCommand();
+        });
+
+        $this->commands('command.cpanel.install','command.cpanel.user');
+    }
+
+    /**
+     * Register Permission module component
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     */
+    public function registerPermission()
+    {
+        $app = $this->app;
+
+        $app->bind('Stevemo\Cpanel\Permission\Repo\PermissionInterface', function($app)
+        {
+            return new PermissionRepository(new Permission, $app['events']);
+        });
+
+        $app->bind('Stevemo\Cpanel\Permission\Form\PermissionFormInterface', function($app)
+        {
+            return new PermissionForm(
+                new PermissionValidator($app['validator'], new MessageBag),
+                $app->make('Stevemo\Cpanel\Permission\Repo\PermissionInterface')
+            );
         });
     }
 
