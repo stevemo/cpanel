@@ -8,6 +8,7 @@ use Stevemo\Cpanel\Permission\Repo\PermissionRepository;
 use Stevemo\Cpanel\Permission\Repo\Permission;
 use Stevemo\Cpanel\Permission\Form\PermissionForm;
 use Stevemo\Cpanel\Permission\Form\PermissionValidator;
+use Stevemo\Cpanel\Group\Repo\GroupRepository;
 
 class CpanelServiceProvider extends ServiceProvider {
 
@@ -38,6 +39,7 @@ class CpanelServiceProvider extends ServiceProvider {
 	{
 		$this->registerCommands();
         $this->registerPermission();
+        $this->registerGroup();
 	}
 
      /**
@@ -86,6 +88,23 @@ class CpanelServiceProvider extends ServiceProvider {
                 new PermissionValidator($app['validator'], new MessageBag),
                 $app->make('Stevemo\Cpanel\Permission\Repo\PermissionInterface')
             );
+        });
+    }
+
+    /**
+     * Register Group binding
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     */
+    public function registerGroup()
+    {
+        $app = $this->app;
+
+        $app->bind('Stevemo\Cpanel\Group\Repo\GroupInterface', function($app)
+        {
+            return new GroupRepository($app['sentry']);
         });
     }
 
