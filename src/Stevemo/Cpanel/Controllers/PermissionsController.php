@@ -41,12 +41,11 @@ class PermissionsController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     *@return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\View\View
      */
     public function create()
     {
-        $roles = $this->permissions->getRoles();
-        return View::make( Config::get('cpanel::views.permissions_create'), compact('roles'));
+        return View::make( Config::get('cpanel::views.permissions_create'));
     }
 
     /**
@@ -61,6 +60,7 @@ class PermissionsController extends BaseController {
      */
     public function edit($id)
     {
+        // TODO-Stevemo: change me
         try
         {
             $permission = $this->permissions->findOrFail($id);
@@ -84,6 +84,7 @@ class PermissionsController extends BaseController {
      */
     public function store()
     {
+        // TODO-Stevemo: change me
         $validation = $this->getValidationService('permission');
 
         if( $validation->passes() )
@@ -107,6 +108,7 @@ class PermissionsController extends BaseController {
      */
     public function update($id)
     {
+        // TODO-Stevemo: change me
         try
         {
             $data = Input::all();
@@ -139,6 +141,7 @@ class PermissionsController extends BaseController {
      */
     public function destroy($id)
     {
+        // TODO-Stevemo: change me
         try
         {
             $eventData = $this->permissions->delete($id);

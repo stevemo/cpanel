@@ -4,8 +4,14 @@ $(function() {
 
         //Apply twitter bootstrap alike style to select element
     $('.select2').select2({
-        'width':'element',
-        'placeholder' : 'Select'
+        width :'element',
+        placeholder : 'Select'
+    });
+
+    // Convert text input in create permission view into tags mode
+    $('#permission-tags').select2({
+        tags: ['view','create','update','delete'],
+        width: 'element'
     });
 
 });
