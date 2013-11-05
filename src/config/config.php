@@ -2,6 +2,9 @@
 
 return array(
 
+    // route prefix
+    'prefix' => 'admin',
+
     'site_config' => array(
         'site_name'   => 'Cpanel',
         'title'       => 'My Admin Panel',
