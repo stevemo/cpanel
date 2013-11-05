@@ -6,6 +6,7 @@
         Groups
     </h3>
 @stop
+
 @section('help')
     <p class="lead">Groups</p>
     <p>
@@ -16,6 +17,7 @@
         For more info visit <a href="http://docs.cartalyst.com/sentry-2/permissions" target="_blank">Sentry website</a>
     </p>
 @stop
+
 @section('content')
     <div class="row">
         <div class="span12">
@@ -23,7 +25,7 @@
                 <p class="block-heading">Groups</p>
                 <div class="block-body">
                     <div class="btn-toolbar">
-                        <a href="{{ URL::route('admin.groups.create') }}" class="btn btn-primary" rel="tooltip" title="Create New Group">
+                        <a href="{{ URL::route('cpanel.groups.create') }}" class="btn btn-primary" rel="tooltip" title="Create New Group">
                             <i class="icon-plus"></i>
                             New group
                         </a>
@@ -45,15 +47,15 @@
                             <tr>
                                 <td>{{ $group->name }}</td>
                                 <td>
-                                    <a href="{{ route('admin.groups.edit', array($group->id)) }}"
+                                    <a href="{{ route('cpanel.groups.edit', array($group->id)) }}"
                                         class="btn" rel="tooltip" title="Edit Group">
                                         <i class="icon-edit"></i>
                                     </a>
-                                    <a href="{{ route('admin.groups.permissions', array($group->id)) }}"
+                                    <a href="{{ route('cpanel.groups.permissions', array($group->id)) }}"
                                         class="btn" rel="tooltip" title="Edit Group Permissions">
                                         Permissions <i class="icon-arrow-right"></i>
                                     </a>
-                                    <a href="{{ route('admin.groups.destroy', array($group->id)) }}"
+                                    <a href="{{ route('cpanel.groups.destroy', array($group->id)) }}"
                                         class="btn btn-danger" rel="tooltip" title="Delete Group" data-method="delete"
                                         data-modal-text="delete this group?">
                                         <i class="icon-remove"></i>

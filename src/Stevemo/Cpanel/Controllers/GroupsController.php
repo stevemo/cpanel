@@ -1,17 +1,25 @@
 <?php namespace Stevemo\Cpanel\Controllers;
 
-use View;
-use Redirect;
-use Input;
-use Lang;
-use Sentry;
-use Event;
-use Config;
+use View, Redirect, Input, Lang, Config;
+use Stevemo\Cpanel\Group\Repo\GroupInterface;
 use Cartalyst\Sentry\Groups\NameRequiredException;
 use Cartalyst\Sentry\Groups\GroupExistsException;
 use Cartalyst\Sentry\Groups\GroupNotFoundException;
 
 class GroupsController extends BaseController {
+
+    /**
+     * @var \Stevemo\Cpanel\Group\Repo\GroupInterface
+     */
+    protected $groups;
+
+    /**
+     * @param GroupInterface $groups
+     */
+    public function __construct(GroupInterface $groups)
+    {
+        $this->groups = $groups;
+    }
 
 
     /**
@@ -20,11 +28,11 @@ class GroupsController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {
-        $groups = Sentry::getGroupProvider()->findAll();
+        $groups = $this->groups->findAll();
         return View::make(Config::get('cpanel::views.groups_index'), compact('groups'));
     }
 
