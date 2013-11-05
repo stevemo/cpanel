@@ -69,21 +69,6 @@ class PermissionRepository implements PermissionInterface {
     }
 
     /**
-     * Update a permission into storage
-     *
-     * @author Steve Montambeault
-     * @link   http://stevemo.ca
-     *
-     * @param array $data
-     *
-     * @return bool
-     */
-    public function update(array $data)
-    {
-        // TODO-Stevemo: Implement update() method.
-    }
-
-    /**
      * Delete a permission from storage
      *
      * @author Steve Montambeault
@@ -109,4 +94,20 @@ class PermissionRepository implements PermissionInterface {
             return false;
         }
     }
+
+    /**
+     * Update a permission into storage
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param array $data
+     *
+     * @return bool
+     */
+    public function update(array $data)
+    {
+        // TODO-Stevemo: Implement update() method.
+    }
+
 }

@@ -27,18 +27,6 @@ interface PermissionInterface {
     public function create(array $data);
 
     /**
-     * Update a permission into storage
-     *
-     * @author Steve Montambeault
-     * @link   http://stevemo.ca
-     *
-     * @param array $data
-     *
-     * @return bool
-     */
-    public function update(array $data);
-
-    /**
      * Delete a permission from storage
      *
      * @author Steve Montambeault
@@ -49,5 +37,17 @@ interface PermissionInterface {
      * @return bool
      */
     public function delete($id);
+
+    /**
+     * Update a permission into storage
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param array $data
+     *
+     * @return bool
+     */
+    public function update(array $data);
 
 } 
