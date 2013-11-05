@@ -21,6 +21,7 @@ class CpanelServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		$this->package('stevemo/cpanel');
+        include __DIR__ .'/routes.php';
 	}
 
 	/**
@@ -30,29 +31,11 @@ class CpanelServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		include __DIR__ .'/routes.php';
-        $this->registerInstallCommands();
-        $this->registerUserSeedCommands();
-        $this->commands('command.cpanel.install','command.cpanel.user');
+		$this->registerCommands();
 	}
 
-        /**
+     /**
      * Register console commands cpanel:install
-     *
-     * @author Steve Montambeault
-     * @link   http://stevemo.ca
-     *
-     * @return void
-     */
-    public function registerInstallCommands()
-    {
-        $this->app['command.cpanel.install'] = $this->app->share(function($app)
-        {
-            return new InstallCommand();
-        });
-    }
-
-    /**
      * Register console commands cpanel:user
      *
      * @author Steve Montambeault
@@ -60,12 +43,19 @@ class CpanelServiceProvider extends ServiceProvider {
      *
      * @return void
      */
-    public function registerUserSeedCommands()
+    public function registerCommands()
     {
-        $this->app['command.cpanel.user'] = $this->app->share(function($app)
+        $this->app['command.cpanel.install'] = $this->app->share(function()
+        {
+            return new InstallCommand();
+        });
+
+        $this->app['command.cpanel.user'] = $this->app->share(function()
         {
             return new UserSeedCommand();
         });
+
+        $this->commands('command.cpanel.install','command.cpanel.user');
     }
 
 	/**
