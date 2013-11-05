@@ -3,6 +3,8 @@
 use Illuminate\Support\ServiceProvider;
 use Stevemo\Cpanel\Console\InstallCommand;
 use Stevemo\Cpanel\Console\UserSeedCommand;
+use Stevemo\Cpanel\Permission\Repo\PermissionRepository;
+use Stevemo\Cpanel\Permission\Repo\Permission;
 
 class CpanelServiceProvider extends ServiceProvider {
 
@@ -32,6 +34,7 @@ class CpanelServiceProvider extends ServiceProvider {
 	public function register()
 	{
 		$this->registerCommands();
+        $this->registerPermission();
 	}
 
      /**
@@ -56,6 +59,23 @@ class CpanelServiceProvider extends ServiceProvider {
         });
 
         $this->commands('command.cpanel.install','command.cpanel.user');
+    }
+
+    /**
+     * Register Permission module component
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     */
+    public function registerPermission()
+    {
+        $app = $this->app;
+
+        $app->bind('Stevemo\Cpanel\Permission\Repo\PermissionInterface', function($app)
+        {
+            return new PermissionRepository(new Permission, $app['events']);
+        });
     }
 
 	/**
