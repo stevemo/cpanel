@@ -8,17 +8,21 @@
 @stop
 
 @section('help')
-    <p class="lead">Permission Inheritance</p>
+    <p class="lead">Module Permission</p>
     <p>
-        Just as permissions are defined for groups and individual users, the permission inheritance model depends on a user's group.
-        An Administrator can assign different permissions to a user that is assigned to a group, and if that group has different access permissions, the user's access is always determined by the group access.
+        Every keywords enter in the <strong>Permissions field</strong> will be prefixed with the
+        <strong>Module name Field</strong>.
     </p>
-    <br>
-    <p class="text-warning">
-        Permission Inheritance only works for users permissions.
+    <br/>
+    <p class="lead">Example</p>
+    <p>
+        <strong>Module name: </strong> blog
     </p>
-     <p class="text-info">
-        For more info visit <a href="http://docs.cartalyst.com/sentry-2/permissions" target="_blank">Sentry website</a>
+    <p>
+        <strong>Permissions: </strong> view, create, delete and publish
+    </p>
+    <p>
+        <strong>Result:</strong> blog.view, blog.create, blog.delete and blog.publish
     </p>
 @stop
 
@@ -30,7 +34,7 @@
                 <div class="block-body">
                     {{ Former::horizontal_open(route('cpanel.permissions.store')) }}
                     {{ Former::xlarge_text('name', 'Module Name')->required() }}
-                    {{ Former::xlarge_text('premissions')->id('permission-tags')->required() }}
+                    {{ Former::xlarge_text('permissions')->id('permission-tags')->required() }}
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">Create</button>
                         <a href="{{ route('cpanel.permissions.index') }}" class="btn">Cancel</a>
