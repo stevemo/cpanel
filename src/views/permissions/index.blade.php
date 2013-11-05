@@ -9,8 +9,10 @@
 @section('help')
     <p class="lead">Permission Inheritance</p>
     <p>
-        Just as permissions are defined for groups and individual users, the permission inheritance model depends on a user's group.
-        An Administrator can assign different permissions to a user that is assigned to a group, and if that group has different access permissions, the user's access is always determined by the group access.
+        Just as permissions are defined for groups and individual users,
+        the permission inheritance model depends on a user's group.
+        An Administrator can assign different permissions to a user that is assigned to a group,
+        and if that group has different access permissions, the user's access is always determined by the group access.
     </p>
     <br>
     <p class="text-warning">
@@ -52,7 +54,8 @@
                 <div class="block-body">
                     <p></p>
                     <div class="btn-toolbar">
-                        <a href="{{ URL::route('admin.permissions.create') }}" class="btn btn-primary" rel="tooltip" title="Create New Permission">
+                        <a href="{{ URL::route('cpanel.permissions.create') }}" class="btn btn-primary"
+                           rel="tooltip" title="Create New Permission">
                             <i class="icon-plus"></i>
                             New Permission
                         </a>
@@ -83,11 +86,11 @@
                                             </ul>
                                         </td>
                                         <td>
-                                            <a href="{{ route('admin.permissions.edit', array($permission->id)) }}"
+                                            <a href="{{ route('cpanel.permissions.edit', array($permission->id)) }}"
                                                 class="btn" rel="tooltip" title="Edit Permission">
                                                 <i class="icon-edit"></i>
                                             </a>
-                                            <a href="{{ route('admin.permissions.destroy', array($permission->id)) }}"
+                                            <a href="{{ route('cpanel.permissions.destroy', array($permission->id)) }}"
                                                 class="btn btn-danger" rel="tooltip" title="Delete Permission" data-method="delete"
                                                 data-modal-text="delete this Permission?">
                                                 <i class="icon-remove"></i>
