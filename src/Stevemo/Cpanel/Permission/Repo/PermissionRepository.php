@@ -47,11 +47,24 @@ class PermissionRepository implements PermissionInterface {
      *
      * @param array $data
      *
-     * @return bool
+     * @return bool|\Illuminate\Database\Eloquent\Model|\StdClass|static
      */
     public function create(array $data)
     {
-        // TODO-Stevemo: Implement create() method.
+        $perm = $this->model->create(array(
+            'name'        => $data['name'],
+            'permissions' => $data['permissions']
+        ));
+
+        if ( ! $perm )
+        {
+            return false;
+        }
+        else
+        {
+            $this->event->fire('permissions.create', array($perm));
+            return $perm;
+        }
     }
 
     /**

@@ -57,4 +57,43 @@ class Permission extends Model {
 
         return $_permissions;
     }
+
+    /**
+     * Mutator for Module name
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param  string $value
+     * @return void
+     */
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = ucfirst($value);
+    }
+
+    /**
+     * Mutator for taking permissions.
+     *
+     * @author   Steve Montambeault
+     * @link     http://stevemo.ca
+     *
+     * @param $permissions
+     *
+     * @return void
+     */
+    public function setPermissionsAttribute($permissions)
+    {
+        $module = lcfirst($this->attributes['name']);
+
+        $roles = array();
+
+        //prefix the permission with the module name ex: user.create
+        foreach ($permissions as $key => $value)
+        {
+            $roles[] = $module . '.' . $value;
+        }
+
+        $this->attributes['permissions'] = ( ! empty($roles)) ? json_encode($roles) : '';
+    }
 } 

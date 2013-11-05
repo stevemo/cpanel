@@ -22,7 +22,7 @@ interface PermissionInterface {
      *
      * @param array $data
      *
-     * @return bool
+     * @return \StdClass
      */
     public function create(array $data);
 

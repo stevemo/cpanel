@@ -1,10 +1,13 @@
 <?php namespace Stevemo\Cpanel;
 
+use Illuminate\Support\MessageBag;
 use Illuminate\Support\ServiceProvider;
 use Stevemo\Cpanel\Console\InstallCommand;
 use Stevemo\Cpanel\Console\UserSeedCommand;
 use Stevemo\Cpanel\Permission\Repo\PermissionRepository;
 use Stevemo\Cpanel\Permission\Repo\Permission;
+use Stevemo\Cpanel\Permission\Form\PermissionForm;
+use Stevemo\Cpanel\Permission\Form\PermissionValidator;
 
 class CpanelServiceProvider extends ServiceProvider {
 
@@ -75,6 +78,14 @@ class CpanelServiceProvider extends ServiceProvider {
         $app->bind('Stevemo\Cpanel\Permission\Repo\PermissionInterface', function($app)
         {
             return new PermissionRepository(new Permission, $app['events']);
+        });
+
+        $app->bind('Stevemo\Cpanel\Permission\Form\PermissionFormInterface', function($app)
+        {
+            return new PermissionForm(
+                new PermissionValidator($app['validator'], new MessageBag),
+                $app->make('Stevemo\Cpanel\Permission\Repo\PermissionInterface')
+            );
         });
     }
 

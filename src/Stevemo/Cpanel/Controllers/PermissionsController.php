@@ -2,6 +2,7 @@
 
 use View, Redirect, Input, Lang, Config;
 use Stevemo\Cpanel\Permission\Repo\PermissionInterface;
+use Stevemo\Cpanel\Permission\Form\PermissionFormInterface;
 
 
 class PermissionsController extends BaseController {
@@ -12,11 +13,18 @@ class PermissionsController extends BaseController {
     protected $permissions;
 
     /**
-     * @param PermissionInterface $permissions
+     * @var \Stevemo\Cpanel\Permission\Form\PermissionFormInterface
      */
-    public function __construct(PermissionInterface $permissions)
+    protected $form;
+
+    /**
+     * @param PermissionInterface     $permissions
+     * @param PermissionFormInterface $form
+     */
+    public function __construct(PermissionInterface $permissions, PermissionFormInterface $form)
     {
         $this->permissions = $permissions;
+        $this->form = $form;
     }
 
     /**
@@ -84,17 +92,17 @@ class PermissionsController extends BaseController {
      */
     public function store()
     {
-        // TODO-Stevemo: change me
-        $validation = $this->getValidationService('permission');
+        $inputs = Input::all();
 
-        if( $validation->passes() )
+        if ( $this->form->create($inputs) )
         {
-            $perm = $this->permissions->create($validation->getData());
-            Event::fire('permissions.create', array($perm));
-            return Redirect::route('admin.permissions.index')->with('success', Lang::get('cpanel::permissions.create_success'));
+            return Redirect::route('cpanel.permissions.index')
+                ->with('success', Lang::get('cpanel::permissions.create_success'));
         }
-        return Redirect::back()->withInput()->withErrors($validation->getErrors());
 
+        return Redirect::back()
+            ->withInput()
+            ->withErrors($this->form->getErrors());
     }
 
     /**
