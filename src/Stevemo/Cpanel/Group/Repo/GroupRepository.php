@@ -115,4 +115,24 @@ class GroupRepository implements GroupInterface {
         $this->event->fire('groups.update',array($group));
         return true;
     }
+
+    /**
+     * Delete a group
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param $id
+     *
+     * @return void
+     *
+     * @throws \Cartalyst\Sentry\Groups\GroupNotFoundException
+     */
+    public function delete($id)
+    {
+        $group = $this->findById($id);
+        $old = $group;
+        $group->delete();
+        $this->event->fire('groups.delete', array($old));
+    }
 }

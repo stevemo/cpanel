@@ -62,4 +62,18 @@ interface GroupInterface {
      */
     public function update(array $attributes);
 
+    /**
+     * Delete a group
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param $id
+     *
+     * @return void
+     *
+     * @throws \Cartalyst\Sentry\Groups\GroupNotFoundException
+     */
+    public function delete($id);
+
 } 

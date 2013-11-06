@@ -140,17 +140,18 @@ class GroupsController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return Response
+     * @param $id
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
         try
         {
-            $group = Sentry::getGroupProvider()->findById($id);
-            $eventData = $group;
-            $group->delete();
-            Event::fire('groups.delete', array($eventData));
-            return Redirect::route('admin.groups.index')->with('success', Lang::get('cpanel::groups.delete_success'));
+            $this->groups->delete($id);
+
+            return Redirect::route('cpanel.groups.index')
+                ->with('success', Lang::get('cpanel::groups.delete_success'));
         }
         catch (GroupNotFoundException $e)
         {
