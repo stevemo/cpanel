@@ -1,5 +1,6 @@
 <?php namespace Stevemo\Cpanel\Group\Repo;
 
+use Cartalyst\Sentry\Groups\GroupNotFoundException as SentryGroupNotFoundException;
 use Cartalyst\Sentry\Sentry;
 use Illuminate\Events\Dispatcher;
 
@@ -35,11 +36,18 @@ class GroupRepository implements GroupInterface {
      *
      * @return \Cartalyst\Sentry\Groups\GroupInterface  $group
      *
-     * @throws \Cartalyst\Sentry\Groups\GroupNotFoundException
+     * @throws GroupNotFoundException
      */
     public function findById($id)
     {
-        return $this->sentry->getGroupProvider()->findById($id);
+        try
+        {
+            return $this->sentry->getGroupProvider()->findById($id);
+        }
+        catch (SentryGroupNotFoundException $e)
+        {
+            throw new GroupNotFoundException($e->getMessage());
+        }
     }
 
     /**
@@ -52,7 +60,7 @@ class GroupRepository implements GroupInterface {
      *
      * @return \Cartalyst\Sentry\Groups\GroupInterface  $group
      *
-     * @throws \Cartalyst\Sentry\Groups\GroupNotFoundException
+     * @throws GroupNotFoundException
      */
     public function findByName($name)
     {

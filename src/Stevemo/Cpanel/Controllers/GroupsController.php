@@ -3,7 +3,7 @@
 use View, Redirect, Input, Lang, Config;
 use Stevemo\Cpanel\Group\Repo\GroupInterface;
 use Stevemo\Cpanel\Group\Form\GroupFormInterface;
-
+use Stevemo\Cpanel\Group\Repo\GroupNotFoundException;
 
 class GroupsController extends BaseController {
 
@@ -61,13 +61,15 @@ class GroupsController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return Response
+     * @param $id
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function edit($id)
     {
         try
         {
-            $group = Sentry::getGroupProvider()->findById($id);
+            $group = $this->groups->findById($id);
             return View::make(Config::get('cpanel::views.groups_edit'),compact('group'));
         }
         catch ( GroupNotFoundException $e)
