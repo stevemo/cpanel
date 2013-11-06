@@ -6,6 +6,7 @@
         Groups
     </h3>
 @stop
+
 @section('help')
     <p class="lead">Permission Inheritance</p>
     <p>
@@ -20,10 +21,11 @@
         For more info visit <a href="http://docs.cartalyst.com/sentry-2/permissions" target="_blank">Sentry website</a>
     </p>
 @stop
+
 @section('content')
     <div class="row">
         <div class="span12">
-            {{ Former::horizontal_open(route('admin.groups.permissions', array($group->id)))->method('PUT') }}
+            {{ Former::horizontal_open(route('cpanel.groups.permissions.update', array($group->id)))->method('PUT') }}
             <div class="block">
                 <p class="block-heading">{{$group->name}} Group Permissions</p>
                 <div class="block-body">
@@ -35,30 +37,30 @@
 
                     <div class="tab-content">
                         <div class="tab-pane active" id="generic">
-                            @foreach( $genericPerm as $perm)
+                            @foreach( $genericPermissions as $perm)
                                 <legend>Generic Permissions</legend>
                                 @foreach( $perm['permissions'] as $input )
                                     {{ Former::select($input['name'],$input['text'])
                                         ->options(array('0' => 'Deny', '1' => 'Allow'))
                                         ->value($input['value'])
-                                        ->class('select2')->id($input['id'])
+                                        ->class('select2')
                                     }}
                                 @endforeach
                             @endforeach
                         </div>
                         <div class="tab-pane" id="module">
-                            @if (count($modulePerm) < 1)
+                            @if (count($modulePermissions) < 1)
                                 <div class="alert alert-info">
                                     {{ Lang::get('cpanel::permissions.no_found') }}
                                 </div>
                             @else
-                                @foreach( $modulePerm as $perm)
+                                @foreach( $modulePermissions as $perm)
                                     <legend>{{ $perm['name'] }} Module</legend>
                                     @foreach( $perm['permissions'] as $input )
                                         {{ Former::select($input['name'],$input['text'])
                                             ->options(array('0' => 'Deny', '1' => 'Allow'))
                                             ->value($input['value'])
-                                            ->class('select2')->id($input['id'])
+                                            ->class('select2')
                                         }}
                                     @endforeach
                                 @endforeach
@@ -67,7 +69,7 @@
                     </div>
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">Save changes</button>
-                        <a href="{{route('admin.groups.index')}}" class="btn">Cancel</a>
+                        <a href="{{route('cpanel.groups.index')}}" class="btn">Cancel</a>
                     </div>
                 </div>
             </div>

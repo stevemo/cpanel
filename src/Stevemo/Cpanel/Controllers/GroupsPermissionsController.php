@@ -1,22 +1,22 @@
 <?php namespace Stevemo\Cpanel\Controllers;
 
-use Stevemo\Cpanel\Provider\PermissionProvider;
-use View;
-use Redirect;
-use Input;
-use Lang;
-use Sentry;
-use Event;
-use Config;
-use Cartalyst\Sentry\Groups\GroupNotFoundException;
+use View, Redirect, Input, Lang, Config;
+use Stevemo\Cpanel\Group\Repo\GroupInterface;
+use Stevemo\Cpanel\Permission\Repo\PermissionInterface;
+use Stevemo\Cpanel\Group\Repo\GroupNotFoundException;
 
 class GroupsPermissionsController extends BaseController {
 
-
     /**
-     * @var PermissionProvider
+     * @var \Stevemo\Cpanel\Permission\Repo\PermissionInterface
      */
     protected $permissions;
+
+    /**
+     * @var \Stevemo\Cpanel\Group\Repo\GroupInterface
+     */
+    protected $groups;
+
 
     /**
      * [__construct description]
@@ -24,41 +24,47 @@ class GroupsPermissionsController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @param  GroupRepository $groups
-     * @param  PermissionProvider $permissions
+     * @param \Stevemo\Cpanel\Permission\Repo\PermissionInterface $permissions
+     * @param \Stevemo\Cpanel\Group\Repo\GroupInterface           $groups
      */
-    public function __construct(PermissionProvider $permissions)
+    public function __construct(PermissionInterface $permissions, GroupInterface $groups)
     {
         $this->permissions = $permissions;
+        $this->groups = $groups;
     }
 
     /**
      * Display the group permissions
      *
-     * @author Steve Montambeault
-     * @link   http://stevemo.ca
+     * @author   Steve Montambeault
+     * @link     http://stevemo.ca
      *
-     * @param  int $grouID
-     * @return Response
+     * @param $groupId
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function index($groupId)
+    public function edit($groupId)
     {
         try
         {
-            $group = Sentry::getGroupProvider()->findById($groupId);
-
-            // Get the group permissions
+            $group = $this->groups->findById($groupId);
             $groupPermissions = $group->getPermissions();
 
-            $permissions = $this->permissions->all(array('name','permissions'));
+            $roles = array(
+                array(
+                    'name' => 'generic',
+                    'permissions' => array('view','create','update','delete')
+                )
+            );
 
-            $modulePerm = $this->permissions->getMergePermissions($groupPermissions, $permissions->toArray());
+            $genericPermissions = $this->permissions->mergePermissions($groupPermissions,$roles);
+            $modulePermissions = $this->permissions->mergePermissions($groupPermissions);
 
-            $roles = array(array('name' => 'generic', 'permissions' => array('view','create','update','delete')));
+            return View::make(Config::get('cpanel::views.groups_permission'))
+                ->with('group',$group)
+                ->with('genericPermissions',$genericPermissions)
+                ->with('modulePermissions',$modulePermissions);
 
-            $genericPerm = $this->permissions->getMergePermissions($groupPermissions, $roles);
-
-            return View::make(Config::get('cpanel::views.groups_permission'), compact('modulePerm','group','genericPerm'));
         }
         catch ( GroupNotFoundException $e)
         {

@@ -87,13 +87,14 @@ Route::group(array('prefix' => $prefix), function()
     |
     |
     */
-    Route::get('groups/{groups}/permissions', array(
-        'as'     => 'cpanel.groups.permissions',
-        'uses'   => 'Stevemo\Cpanel\Controllers\GroupsPermissionsController@index',
+    Route::get('groups/{groups}/permissions/edit', array(
+        'as'     => 'cpanel.groups.permissions.edit',
+        'uses'   => 'Stevemo\Cpanel\Controllers\GroupsPermissionsController@edit',
         'before' => 'auth.cpanel:groups.update'
     ));
 
     Route::put('groups/{groups}/permissions', array(
+        'as'     => 'cpanel.groups.permissions.update',
         'uses'   => 'Stevemo\Cpanel\Controllers\GroupsPermissionsController@update',
         'before' => 'auth.cpanel:groups.update'
     ));

@@ -51,7 +51,7 @@
                                         class="btn" rel="tooltip" title="Edit Group">
                                         <i class="icon-edit"></i>
                                     </a>
-                                    <a href="{{ route('cpanel.groups.permissions', array($group->id)) }}"
+                                    <a href="{{ route('cpanel.groups.permissions.edit', array($group->id)) }}"
                                         class="btn" rel="tooltip" title="Edit Group Permissions">
                                         Permissions <i class="icon-arrow-right"></i>
                                     </a>

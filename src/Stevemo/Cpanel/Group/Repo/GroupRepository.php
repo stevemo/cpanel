@@ -135,4 +135,5 @@ class GroupRepository implements GroupInterface {
         $group->delete();
         $this->event->fire('groups.delete', array($old));
     }
+
 }
