@@ -80,24 +80,7 @@ Route::group(array('prefix' => $prefix), function()
         'before' => 'auth.cpanel'
     ));
 
-    /*
-    |--------------------------------------------------------------------------
-    | Cpanel Groups Permissions Routes
-    |--------------------------------------------------------------------------
-    |
-    |
-    */
-    Route::get('groups/{groups}/permissions/edit', array(
-        'as'     => 'cpanel.groups.permissions.edit',
-        'uses'   => 'Stevemo\Cpanel\Controllers\GroupsPermissionsController@edit',
-        'before' => 'auth.cpanel:groups.update'
-    ));
 
-    Route::put('groups/{groups}/permissions', array(
-        'as'     => 'cpanel.groups.permissions.update',
-        'uses'   => 'Stevemo\Cpanel\Controllers\GroupsPermissionsController@update',
-        'before' => 'auth.cpanel:groups.update'
-    ));
 });
 
 /*

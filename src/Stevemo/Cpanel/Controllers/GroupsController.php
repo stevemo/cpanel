@@ -3,6 +3,7 @@
 use View, Redirect, Input, Lang, Config;
 use Stevemo\Cpanel\Group\Repo\GroupInterface;
 use Stevemo\Cpanel\Group\Form\GroupFormInterface;
+use Stevemo\Cpanel\Permission\Repo\PermissionInterface;
 use Stevemo\Cpanel\Group\Repo\GroupNotFoundException;
 
 class GroupsController extends BaseController {
@@ -18,13 +19,24 @@ class GroupsController extends BaseController {
     protected $form;
 
     /**
-     * @param GroupInterface                                $groups
-     * @param \Stevemo\Cpanel\Group\Form\GroupFormInterface $form
+     * @var \Stevemo\Cpanel\Permission\Repo\PermissionInterface
      */
-    public function __construct(GroupInterface $groups, GroupFormInterface $form)
+    protected $permissions;
+
+    /**
+     * @param \Stevemo\Cpanel\Group\Repo\GroupInterface           $groups
+     * @param \Stevemo\Cpanel\Group\Form\GroupFormInterface       $form
+     * @param \Stevemo\Cpanel\Permission\Repo\PermissionInterface $permissions
+     */
+    public function __construct(
+        GroupInterface $groups,
+        GroupFormInterface $form,
+        PermissionInterface $permissions
+    )
     {
         $this->groups = $groups;
         $this->form = $form;
+        $this->permissions = $permissions;
     }
 
 
@@ -52,7 +64,19 @@ class GroupsController extends BaseController {
      */
     public function create()
     {
-        return View::make(Config::get('cpanel::views.groups_create'));
+        $roles = array(
+            array(
+                'name' => 'generic',
+                'permissions' => array('view','create','update','delete')
+            )
+        );
+
+        $genericPermissions = $this->permissions->mergePermissions(array(),$roles);
+        $modulePermissions = $this->permissions->mergePermissions(array());
+
+        return View::make(Config::get('cpanel::views.groups_create'))
+            ->with('genericPermissions',$genericPermissions)
+            ->with('modulePermissions',$modulePermissions);
     }
 
     /**
@@ -70,7 +94,23 @@ class GroupsController extends BaseController {
         try
         {
             $group = $this->groups->findById($id);
-            return View::make(Config::get('cpanel::views.groups_edit'),compact('group'));
+
+            $groupPermissions = $group->getPermissions();
+
+            $roles = array(
+                array(
+                    'name' => 'generic',
+                    'permissions' => array('view','create','update','delete')
+                )
+            );
+
+            $genericPermissions = $this->permissions->mergePermissions($groupPermissions,$roles);
+            $modulePermissions = $this->permissions->mergePermissions($groupPermissions);
+
+            return View::make(Config::get('cpanel::views.groups_edit'))
+                ->with('group',$group)
+                ->with('genericPermissions',$genericPermissions)
+                ->with('modulePermissions',$modulePermissions);
         }
         catch ( GroupNotFoundException $e)
         {

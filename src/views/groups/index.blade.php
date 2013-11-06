@@ -51,10 +51,6 @@
                                         class="btn" rel="tooltip" title="Edit Group">
                                         <i class="icon-edit"></i>
                                     </a>
-                                    <a href="{{ route('cpanel.groups.permissions.edit', array($group->id)) }}"
-                                        class="btn" rel="tooltip" title="Edit Group Permissions">
-                                        Permissions <i class="icon-arrow-right"></i>
-                                    </a>
                                     <a href="{{ route('cpanel.groups.destroy', array($group->id)) }}"
                                         class="btn btn-danger" rel="tooltip" title="Delete Group" data-method="delete"
                                         data-modal-text="delete this group?">

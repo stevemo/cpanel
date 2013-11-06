@@ -160,7 +160,7 @@ class PermissionRepository implements PermissionInterface {
             foreach ($rules['permissions'] as $title => $rule)
             {
                 $merge[$pk]['permissions'][$title] = array(
-                    'name' => "rules[$rule]",
+                    'name' => "permissions[$rule]",
                     'text' => $rule,
                     'value' => array_key_exists($rule, $groupPermissions) ? $groupPermissions[$rule] : 0
                 );
