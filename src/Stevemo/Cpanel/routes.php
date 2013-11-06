@@ -79,6 +79,24 @@ Route::group(array('prefix' => $prefix), function()
         'uses'   => 'Stevemo\Cpanel\Controllers\GroupsController@destroy',
         'before' => 'auth.cpanel'
     ));
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cpanel Groups Permissions Routes
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    Route::get('groups/{groups}/permissions', array(
+        'as'     => 'cpanel.groups.permissions',
+        'uses'   => 'Stevemo\Cpanel\Controllers\GroupsPermissionsController@index',
+        'before' => 'auth.cpanel:groups.update'
+    ));
+
+    Route::put('groups/{groups}/permissions', array(
+        'uses'   => 'Stevemo\Cpanel\Controllers\GroupsPermissionsController@update',
+        'before' => 'auth.cpanel:groups.update'
+    ));
 });
 
 /*
@@ -154,24 +172,6 @@ Route::put('admin/users/{user}/throttling/{action}', array(
     'as'     => 'admin.users.throttling.update',
     'uses'   => 'Stevemo\Cpanel\Controllers\UsersThrottlingController@putStatus',
     'before' => 'auth.cpanel:users.update'
-));
-
-/*
-|--------------------------------------------------------------------------
-| Cpanel Groups Permissions Routes
-|--------------------------------------------------------------------------
-|
-|
-*/
-Route::get('admin/groups/{groups}/permissions', array(
-    'as'     => 'admin.groups.permissions',
-    'uses'   => 'Stevemo\Cpanel\Controllers\GroupsPermissionsController@index',
-    'before' => 'auth.cpanel:groups.update'
-));
-
-Route::put('admin/groups/{groups}/permissions', array(
-    'uses'   => 'Stevemo\Cpanel\Controllers\GroupsPermissionsController@update',
-    'before' => 'auth.cpanel:groups.update'
 ));
 
 

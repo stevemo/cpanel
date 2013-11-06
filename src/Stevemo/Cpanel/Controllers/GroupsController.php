@@ -106,25 +106,31 @@ class GroupsController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return Response
+     * @param $id
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update($id)
     {
         try
         {
-            $group = Sentry::getGroupProvider()->findById($id);
-            $group->name = Input::get('name');
-            $group->save();
-            Event::fire('groups.update', array($group));
-            return Redirect::route('admin.groups.index')->with('success', Lang::get('cpanel::groups.update_success') );
+            $inputs = Input::all();
+            $inputs['id'] = $id;
+
+            if ( $this->form->update($inputs) )
+            {
+                return Redirect::route('cpanel.groups.index')
+                    ->with('success', Lang::get('cpanel::groups.update_success') );
+            }
+
+            return Redirect::back()
+                ->withInput()
+                ->withErrors($this->form->getErrors());
         }
         catch (GroupNotFoundException $e)
         {
-            return Redirect::back()->withInput()->with('error', $e->getMessage());
-        }
-        catch (GroupExistsException $e)
-        {
-            return Redirect::back()->withInput()->with('error', $e->getMessage());
+            return Redirect::route('cpanel.groups.index')
+                ->with('error', $e->getMessage());
         }
     }
 

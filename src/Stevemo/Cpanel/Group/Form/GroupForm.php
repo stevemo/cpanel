@@ -2,6 +2,7 @@
 
 use Stevemo\Cpanel\Services\Validation\ValidableInterface;
 use Stevemo\Cpanel\Group\Repo\GroupInterface;
+use Stevemo\Cpanel\Group\Repo\GroupNotFoundException;
 use Cartalyst\Sentry\Groups\NameRequiredException;
 use Cartalyst\Sentry\Groups\GroupExistsException;
 
@@ -72,7 +73,24 @@ class GroupForm implements GroupFormInterface {
      */
     public function update(array $data)
     {
-        // TODO-Stevemo: Implement update() method.
+        try
+        {
+            if ($this->validator->with($data)->validForUpdate())
+            {
+                $this->groups->update($data);
+                return true;
+            }
+        }
+        catch (GroupExistsException $e)
+        {
+            $this->validator->add('GroupExistsException', $e->getMessage());
+        }
+        catch (NameRequiredException $e)
+        {
+            $this->validator->add('NameRequiredException', $e->getMessage());
+        }
+
+        return false;
     }
 
     /**

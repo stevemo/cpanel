@@ -6,6 +6,7 @@
         Groups
     </h3>
 @stop
+
 @section('help')
     <p class="lead">Groups</p>
     <p>
@@ -16,10 +17,11 @@
         For more info visit <a href="http://docs.cartalyst.com/sentry-2/permissions" target="_blank">Sentry website</a>
     </p>
 @stop
+
 @section('content')
     <div class="row">
         <div class="span12">
-            {{ Former::horizontal_open(route('admin.groups.update', array($group->id)))->method('PUT') }}
+            {{ Former::horizontal_open(route('cpanel.groups.update', array($group->id)))->method('PUT') }}
             <div class="block">
                 <p class="block-heading">Edit "{{ $group->name }}" Group</p>
                 <div class="block-body">
@@ -29,7 +31,7 @@
 
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">Save changes</button>
-                        <a href="{{route('admin.groups.index')}}" class="btn">Cancel</a>
+                        <a href="{{route('cpanel.groups.index')}}" class="btn">Cancel</a>
                     </div>
                 </div>
             </div>

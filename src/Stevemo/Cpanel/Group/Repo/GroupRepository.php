@@ -96,4 +96,23 @@ class GroupRepository implements GroupInterface {
         $this->event->fire('groups.create', array($group));
         return $group;
     }
+
+    /**
+     * Update a group
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param array $attributes
+     *
+     * @return bool
+     */
+    public function update(array $attributes)
+    {
+        $group = $this->findById($attributes['id']);
+        $group->fill($attributes);
+        $group->save();
+        $this->event->fire('groups.update',array($group));
+        return true;
+    }
 }

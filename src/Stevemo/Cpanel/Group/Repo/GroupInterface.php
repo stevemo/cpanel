@@ -50,4 +50,16 @@ interface GroupInterface {
      */
     public function create(array $attributes);
 
+    /**
+     * Update a group
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param array $attributes
+     *
+     * @return bool
+     */
+    public function update(array $attributes);
+
 } 
