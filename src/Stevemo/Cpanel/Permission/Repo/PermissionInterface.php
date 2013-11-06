@@ -67,6 +67,19 @@ interface PermissionInterface {
     public function findOrFail($id, $columns = array('*'));
 
     /**
+     * Merge group permission with database permission
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param array $groupPermissions
+     * @param array $merge
+     *
+     * @return array
+     */
+    public function mergePermissions(array $groupPermissions, array $merge = array());
+
+    /**
      * Update a permission into storage
      *
      * @author Steve Montambeault

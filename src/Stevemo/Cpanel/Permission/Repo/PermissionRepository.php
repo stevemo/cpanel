@@ -138,6 +138,39 @@ class PermissionRepository implements PermissionInterface {
     }
 
     /**
+     * Merge group permission with database permission
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param array $groupPermissions
+     * @param array $merge
+     *
+     * @return array
+     */
+    public function mergePermissions(array $groupPermissions, array $merge = array())
+    {
+        if ( count($merge) == 0 )
+        {
+            $merge = $this->all(array('name','permissions'))->toArray();
+        }
+
+        foreach ($merge as $pk => $rules)
+        {
+            foreach ($rules['permissions'] as $title => $rule)
+            {
+                $merge[$pk]['permissions'][$title] = array(
+                    'name' => "permissions[$rule]",
+                    'text' => $rule,
+                    'value' => array_key_exists($rule, $groupPermissions) ? $groupPermissions[$rule] : 0
+                );
+            }
+        }
+
+        return $merge;
+    }
+
+    /**
      * Update a permission into storage
      *
      * @author Steve Montambeault
