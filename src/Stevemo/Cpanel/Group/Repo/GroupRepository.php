@@ -110,7 +110,8 @@ class GroupRepository implements GroupInterface {
     public function update(array $attributes)
     {
         $group = $this->findById($attributes['id']);
-        $group->fill($attributes);
+        $group->name = $attributes['name'];
+        $group->permissions = $attributes['permissions'];
         $group->save();
         $this->event->fire('groups.update',array($group));
         return true;
