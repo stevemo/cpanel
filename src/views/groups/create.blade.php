@@ -26,7 +26,7 @@
                 <p class="block-heading">Add New Group</p>
                 <div class="block-body">
 
-                    {{ Former::xlarge_text('name','Name') }}
+                    {{ Former::xlarge_text('name','Name')->required() }}
 
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">Create</button>
