@@ -9,6 +9,8 @@ use Stevemo\Cpanel\Permission\Repo\Permission;
 use Stevemo\Cpanel\Permission\Form\PermissionForm;
 use Stevemo\Cpanel\Permission\Form\PermissionValidator;
 use Stevemo\Cpanel\Group\Repo\GroupRepository;
+use Stevemo\Cpanel\Group\Form\GroupForm;
+use Stevemo\Cpanel\Group\Form\GroupValidator;
 
 class CpanelServiceProvider extends ServiceProvider {
 
@@ -104,7 +106,15 @@ class CpanelServiceProvider extends ServiceProvider {
 
         $app->bind('Stevemo\Cpanel\Group\Repo\GroupInterface', function($app)
         {
-            return new GroupRepository($app['sentry']);
+            return new GroupRepository($app['sentry'], $app['events']);
+        });
+
+        $app->bind('Stevemo\Cpanel\Group\Form\GroupFormInterface', function($app)
+        {
+            return new GroupForm(
+                new GroupValidator($app['validator'], new MessageBag),
+                $app->make('Stevemo\Cpanel\Group\Repo\GroupInterface')
+            );
         });
     }
 

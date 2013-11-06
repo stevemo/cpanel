@@ -2,9 +2,8 @@
 
 use View, Redirect, Input, Lang, Config;
 use Stevemo\Cpanel\Group\Repo\GroupInterface;
-use Cartalyst\Sentry\Groups\NameRequiredException;
-use Cartalyst\Sentry\Groups\GroupExistsException;
-use Cartalyst\Sentry\Groups\GroupNotFoundException;
+use Stevemo\Cpanel\Group\Form\GroupFormInterface;
+
 
 class GroupsController extends BaseController {
 
@@ -14,11 +13,18 @@ class GroupsController extends BaseController {
     protected $groups;
 
     /**
-     * @param GroupInterface $groups
+     * @var \Stevemo\Cpanel\Group\Form\GroupFormInterface
      */
-    public function __construct(GroupInterface $groups)
+    protected $form;
+
+    /**
+     * @param GroupInterface                                $groups
+     * @param \Stevemo\Cpanel\Group\Form\GroupFormInterface $form
+     */
+    public function __construct(GroupInterface $groups, GroupFormInterface $form)
     {
         $this->groups = $groups;
+        $this->form = $form;
     }
 
 
@@ -42,7 +48,7 @@ class GroupsController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function create()
     {
@@ -77,24 +83,19 @@ class GroupsController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store()
     {
-        try
+        if ( $this->form->create(Input::all()) )
         {
-            $group = Sentry::getGroupProvider()->create(Input::only('name'));
-            Event::fire('groups.create', array($group));
-            return Redirect::route('admin.groups.index')->with('success', Lang::get('cpanel::groups.create_success'));
+            return Redirect::route('cpanel.groups.index')
+                ->with('success', Lang::get('cpanel::groups.create_success'));
         }
-        catch (NameRequiredException $e)
-        {
-            return Redirect::back()->withInput()->with('error', $e->getMessage());
-        }
-        catch (GroupExistsException $e)
-        {
-            return Redirect::back()->withInput()->with('error', $e->getMessage());
-        }
+
+        return Redirect::back()
+            ->withInput()
+            ->withErrors($this->form->getErrors());
     }
 
     /**

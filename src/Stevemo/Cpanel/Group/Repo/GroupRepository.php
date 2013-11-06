@@ -1,6 +1,7 @@
 <?php namespace Stevemo\Cpanel\Group\Repo;
 
 use Cartalyst\Sentry\Sentry;
+use Illuminate\Events\Dispatcher;
 
 class GroupRepository implements GroupInterface {
 
@@ -10,11 +11,18 @@ class GroupRepository implements GroupInterface {
     protected $sentry;
 
     /**
-     * @param Sentry $sentry
+     * @var \Illuminate\Events\Dispatcher
      */
-    public function __construct(Sentry $sentry)
+    protected  $event;
+
+    /**
+     * @param Sentry                        $sentry
+     * @param \Illuminate\Events\Dispatcher $event
+     */
+    public function __construct(Sentry $sentry, Dispatcher $event)
     {
         $this->sentry = $sentry;
+        $this->event = $event;
     }
 
     /**
@@ -76,6 +84,8 @@ class GroupRepository implements GroupInterface {
      */
     public function create(array $attributes)
     {
-        return $this->sentry->getGroupProvider()->create($attributes);
+        $group = $this->sentry->getGroupProvider()->create($attributes);
+        $this->event->fire('groups.create', array($group));
+        return $group;
     }
 }
