@@ -15,7 +15,7 @@ return array(
     'menu' => array(
         'Dashboard' => array('type' => 'single', 'route' => 'admin.home'),
         'Users'     => array('type' => 'dropdown', 'links' => array(
-            'Manage Users' => array('route' => 'admin.users.index'),
+            'Manage Users' => array('route' => 'cpanel.users.index'),
             'Groups'       => array('route' => 'cpanel.groups.index'),
             'Permissions'  => array('route' => 'cpanel.permissions.index')
         )),

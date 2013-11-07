@@ -12,6 +12,8 @@ use Stevemo\Cpanel\Group\Repo\GroupRepository;
 use Stevemo\Cpanel\Group\Form\GroupForm;
 use Stevemo\Cpanel\Group\Form\GroupValidator;
 use Stevemo\Cpanel\User\Repo\UserRepository;
+use Stevemo\Cpanel\User\Form\UserForm;
+use Stevemo\Cpanel\User\Form\UserValidator;
 
 class CpanelServiceProvider extends ServiceProvider {
 
@@ -133,7 +135,15 @@ class CpanelServiceProvider extends ServiceProvider {
 
         $app->bind('Stevemo\Cpanel\User\Repo\UserInterface', function($app)
         {
-            return new UserRepository($app['sentry']);
+            return new UserRepository($app['sentry'], $app['events']);
+        });
+
+        $app->bind('Stevemo\Cpanel\User\Form\UserFormInterface', function($app)
+        {
+            return new UserForm(
+                new UserValidator($app['validator'], new MessageBag),
+                $app->make('Stevemo\Cpanel\User\Repo\UserInterface')
+            );
         });
     }
 

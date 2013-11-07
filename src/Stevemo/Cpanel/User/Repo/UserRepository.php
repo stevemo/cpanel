@@ -1,6 +1,7 @@
 <?php namespace Stevemo\Cpanel\User\Repo;
 
 use Cartalyst\Sentry\Sentry;
+use Illuminate\Events\Dispatcher;
 
 class UserRepository implements UserInterface {
 
@@ -10,11 +11,18 @@ class UserRepository implements UserInterface {
     protected  $sentry;
 
     /**
-     * @param Sentry $sentry
+     * @var \Illuminate\Events\Dispatcher
      */
-    public function __construct(Sentry $sentry)
+    protected $event;
+
+    /**
+     * @param Sentry                        $sentry
+     * @param \Illuminate\Events\Dispatcher $event
+     */
+    public function __construct(Sentry $sentry, Dispatcher $event)
     {
         $this->sentry = $sentry;
+        $this->event = $event;
     }
 
     /**
@@ -115,16 +123,16 @@ class UserRepository implements UserInterface {
     }
 
     /**
-     * Gets the user provider for Sentry.
+     * Returns an empty user object.
      *
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return \Cartalyst\Sentry\Users\ProviderInterface
+     * @return \StdClass
      */
-    protected function getUserProvider()
+    public function getEmptyUser()
     {
-        return $this->sentry->getUserProvider();
+        return $this->sentry->getEmptyUser();
     }
 
     /**
@@ -157,6 +165,21 @@ class UserRepository implements UserInterface {
      */
     public function register(array $credentials, $activate = false)
     {
-        // TODO-Stevemo: Implement register() method.
+        $cred = array(
+            'first_name'  => $credentials['first_name'],
+            'last_name'   => $credentials['last_name'],
+            'email'       => $credentials['email'],
+            'password'    => $credentials['password'],
+            'permissions' => $credentials['permissions']
+        );
+
+        $user = $this->sentry->register($cred,$activate);
+
+        //attach groups
+        $user->groups()->sync($credentials['groups']);
+
+        $this->event->fire('users.create',array($user));
+
+        return $user;
     }
 }

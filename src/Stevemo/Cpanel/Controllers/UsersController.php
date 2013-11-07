@@ -2,11 +2,11 @@
 
 use View, Config, Redirect, Lang, Input;
 use Stevemo\Cpanel\User\Repo\UserInterface;
+use Stevemo\Cpanel\User\Form\UserFormInterface;
+use Stevemo\Cpanel\Permission\Repo\PermissionInterface;
+use Stevemo\Cpanel\Group\Repo\GroupInterface;
 
 use Cartalyst\Sentry\Users\UserNotFoundException;
-use Cartalyst\Sentry\Users\UserExistsException;
-use Cartalyst\Sentry\Users\LoginRequiredException;
-use Cartalyst\Sentry\Users\PasswordRequiredException;
 use Cartalyst\Sentry\Users\UserAlreadyActivatedException;
 
 class UsersController extends BaseController {
@@ -17,11 +17,37 @@ class UsersController extends BaseController {
     protected $users;
 
     /**
-     * @param UserInterface $users
+     * @var \Stevemo\Cpanel\Permission\Form\PermissionFormInterface
      */
-    public function __construct(UserInterface $users)
+    protected $permissions;
+
+    /**
+     * @var \Stevemo\Cpanel\Group\Repo\GroupInterface
+     */
+    protected $groups;
+
+    /**
+     * @var \Stevemo\Cpanel\User\Form\UserFormInterface
+     */
+    protected $userForm;
+
+    /**
+     * @param UserInterface                                       $users
+     * @param \Stevemo\Cpanel\Permission\Repo\PermissionInterface $permissions
+     * @param \Stevemo\Cpanel\Group\Repo\GroupInterface           $groups
+     * @param \Stevemo\Cpanel\User\Form\UserFormInterface         $userForm
+     */
+    public function __construct(
+        UserInterface $users,
+        PermissionInterface $permissions,
+        GroupInterface $groups,
+        UserFormInterface $userForm
+    )
     {
         $this->users = $users;
+        $this->permissions = $permissions;
+        $this->groups = $groups;
+        $this->userForm = $userForm;
     }
 
     /**
@@ -67,10 +93,31 @@ class UsersController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
+     * @return \Illuminate\View\View
      */
     public function create()
     {
-        return View::make(Config::get('cpanel::views.users_create'));
+        $user = $this->users->getEmptyUser();
+
+        // Get Permissions
+        $roles = array(
+            array(
+                'name' => 'generic',
+                'permissions' => array('view','create','update','delete')
+            )
+        );
+
+        $genericPermissions = $this->permissions->mergePermissions(array(),$roles);
+        $modulePermissions = $this->permissions->mergePermissions(array());
+
+        //Get Groups
+        $groups = $this->groups->findAll();
+
+        return View::make(Config::get('cpanel::views.users_create'))
+            ->with('user',$user)
+            ->with('genericPermissions',$genericPermissions)
+            ->with('modulePermissions',$modulePermissions)
+            ->with('groups',$groups);
     }
 
     /**
@@ -111,32 +158,19 @@ class UsersController extends BaseController {
      */
     public function store()
     {
-        try
-        {
-            $validation = $this->getValidationService('user');
+        $inputs = Input::except('groups', 'activate');
+        $inputs['groups'] = Input::get('groups', array());
+        $inputs['activate'] = Input::get('activate', false);
 
-            if( $validation->passes() )
-            {
-                //create the user
-                $user = Sentry::register($validation->getData(), true);
-                Event::fire('users.create', array($user));
-                return Redirect::route('admin.users.index')->with('success', Lang::get('cpanel::users.create_success'));
-            }
+        if ( $this->userForm->create($inputs) )
+        {
+            return Redirect::route('cpanel.users.index')
+                ->with('success', Lang::get('cpanel::users.create_success'));
+        }
 
-            return Redirect::back()->withInput()->withErrors($validation->getErrors());
-        }
-        catch (LoginRequiredException $e)
-        {
-            return Redirect::back()->withInput()->with('error',$e->getMessage());
-        }
-        catch (PasswordRequiredException $e)
-        {
-            return Redirect::back()->withInput()->with('error',$e->getMessage());
-        }
-        catch (UserExistsException $e)
-        {
-            return Redirect::back()->withInput()->with('error',$e->getMessage());
-        }
+        return Redirect::back()
+            ->withInput()
+            ->withErrors($this->userForm->getErrors());
     }
 
     /**

@@ -69,6 +69,16 @@ interface UserInterface {
     public function logout();
 
     /**
+     * Returns an empty user object.
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @return \StdClass
+     */
+    public function getEmptyUser();
+
+    /**
      * Returns the current user being used by Sentry, if any.
      *
      * @author Steve Montambeault

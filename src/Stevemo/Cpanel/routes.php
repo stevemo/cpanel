@@ -80,6 +80,49 @@ Route::group(array('prefix' => $prefix), function()
         'before' => 'auth.cpanel'
     ));
 
+    /*
+    |--------------------------------------------------------------------------
+    | Cpanel Extra Users Routes
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    Route::get('users', array(
+        'as'     => 'cpanel.users.index',
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@index',
+        'before' => 'auth.cpanel'
+    ));
+    Route::post('users', array(
+        'as'     => 'cpanel.users.store',
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@store',
+        'before' => 'auth.cpanel'
+    ));
+    Route::get('users/create', array(
+        'as'     => 'cpanel.users.create',
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@create',
+        'before' => 'auth.cpanel'
+    ));
+    Route::get('users/{id}', array(
+        'as'     => 'cpanel.users.show',
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@show',
+        'before' => 'auth.cpanel'
+    ));
+    Route::get('users/{id}/edit', array(
+        'as'     => 'cpanel.users.edit',
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@edit',
+        'before' => 'auth.cpanel'
+    ));
+    Route::put('users/{id}', array(
+        'as'     => 'cpanel.users.update',
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@update',
+        'before' => 'auth.cpanel'
+    ));
+    Route::delete('users/{id}', array(
+        'as'     => 'cpanel.users.destroy',
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@destroy',
+        'before' => 'auth.cpanel'
+    ));
+
 
 });
 
@@ -96,10 +139,6 @@ Route::get('admin', array(
     'before' => 'auth.cpanel:admin.view'
 ));
 
-Route::group(array('prefix' => 'admin', 'before' => 'auth.cpanel'), function()
-{
-    Route::resource('users', 'Stevemo\Cpanel\Controllers\UsersController');
-});
 
 /*
 |--------------------------------------------------------------------------

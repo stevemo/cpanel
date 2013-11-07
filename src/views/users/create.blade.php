@@ -6,33 +6,77 @@
         Users
     </h3>
 @stop
+
 @section('help')
     <p class="lead">Users</p>
     <p>
         From here you can create, edit or delete users. Also you can assign custom permissions to a single user.
     </p>
 @stop
+
 @section('content')
     <div class="row">
         <div class="span12">
-            {{Former::horizontal_open( route('admin.users.store') )}}
+            {{Former::horizontal_open( route('cpanel.users.store') )}}
 
             <div class="block">
-                <p class="block-heading">Add User</p>
+                <p class="block-heading">Create a new user</p>
                 <div class="block-body">
 
-                    <legend><small>items mark with * are required.</small></legend>
-                    {{ Former::xlarge_text('first_name', 'First Name')->required() }}
-                    {{ Former::xlarge_text('last_name', 'Last Name')->required() }}
-                    {{ Former::xlarge_text('email','Email')->required() }}
+                    <div class="tabbable">
 
-                    <legend>Password</legend>
-                    {{ Former::xlarge_password('password', 'Password')->required() }}
-                    {{ Former::xlarge_password('password_confirmation', 'Confirm Password')->required() }}
+                        <ul class="nav nav-tabs" id="myTab">
+                            <li class="active">
+                                <a href="#credentials" data-toggle="tab">User Credentials</a>
+                            </li>
+                            <li>
+                                <a href="#permissions" data-toggle="tab">User Permissions</a>
+                            </li>
+                        </ul>
 
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                        <a href="{{route('admin.users.index')}}" class="btn">Cancel</a>
+                        <div class="tab-content">
+
+                            <div class="tab-pane active" id="credentials">
+                                <legend>User Informations</legend>
+                                {{ Former::xlarge_text('first_name', 'First Name')->required() }}
+                                {{ Former::xlarge_text('last_name', 'Last Name')->required() }}
+                                {{ Former::xlarge_text('email','Email')->required() }}
+
+                                <legend>Password</legend>
+                                {{ Former::xlarge_password('password', 'Password')->required() }}
+                                {{ Former::xlarge_password('password_confirmation', 'Confirm Password')->required() }}
+
+                                <legend>Groups</legend>
+                                <div class="control-group">
+                                    <label for="groups[]" class="control-label">Groups</label>
+                                    <div class="controls">
+                                        <select id="groups" name="groups[]" class="select2" multiple="true">
+                                            @foreach($groups as $group)
+                                                <option value="{{ $group->id }}">{{ $group->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <legend>Options</legend>
+                                {{
+                                    Former::select('activate')
+                                        ->options(array('0' => 'No','1' => 'Yes'))
+                                        ->class('select2')
+                                }}
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Create</button>
+                                    <a href="{{route('cpanel.users.index')}}" class="btn">Cancel</a>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane" id="permissions">
+                                @include('cpanel::users.permission')
+                            </div>
+
+                        </div>
+
                     </div>
 
                 </div>

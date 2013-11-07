@@ -25,7 +25,7 @@
                 <div class="block-body">
 
                     <div class="btn-toolbar">
-                        <a href="{{ route('admin.users.create') }}" class="btn btn-primary" rel="tooltip" title="Create New User">
+                        <a href="{{ route('cpanel.users.create') }}" class="btn btn-primary" rel="tooltip" title="Create New User">
                             <i class="icon-plus"></i>
                             New User
                         </a>
@@ -45,7 +45,7 @@
                         <tbody>
                             @foreach ($users as $user)
                                 <tr>
-                                    <td>{{ HTML::linkRoute('admin.users.show',$user->first_name.' '.$user->last_name, array($user->id)) }}</td>
+                                    <td>{{ HTML::linkRoute('cpanel.users.show',$user->first_name.' '.$user->last_name, array($user->id)) }}</td>
                                     <td>{{ $user->email }}</td>
                                     <td>{{ ($user->activated) ? 'yes' : 'no' }}</td>
                                     <td>{{ $user->activated_at }}</td>
@@ -58,7 +58,7 @@
                                             </a>
                                             <ul class="dropdown-menu">
                                                <li>
-                                                   <a href="{{ route('admin.users.edit', array($user->id)) }}">
+                                                   <a href="{{ route('cpanel.users.edit', array($user->id)) }}">
                                                        <i class="icon-edit"></i>&nbsp;Edit User
                                                    </a>
                                                </li>
@@ -68,7 +68,7 @@
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a href="{{ route('admin.users.destroy', array($user->id)) }}"
+                                                    <a href="{{ route('cpanel.users.destroy', array($user->id)) }}"
                                                        data-method="delete"
                                                        data-modal-text="delete this User?">
                                                        <i class="icon-trash"></i>&nbsp;Delete User
