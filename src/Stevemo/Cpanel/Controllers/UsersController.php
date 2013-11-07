@@ -98,16 +98,7 @@ class UsersController extends BaseController {
     public function create()
     {
         $user = $this->users->getEmptyUser();
-
-        // Get Permissions
-        $roles = array(
-            array(
-                'name' => 'generic',
-                'permissions' => array('view','create','update','delete')
-            )
-        );
-
-        $genericPermissions = $this->permissions->mergePermissions(array(),$roles);
+        $genericPermissions = $this->permissions->mergePermissions(array(),Config::get('cpanel::generic_permission'));
         $modulePermissions = $this->permissions->mergePermissions(array());
 
         //Get Groups

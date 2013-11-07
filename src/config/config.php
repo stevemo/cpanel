@@ -5,6 +5,14 @@ return array(
     // route prefix
     'prefix' => 'admin',
 
+    //Generic Permissions
+    'generic_permission' => array(
+        array(
+            'name' => 'generic',
+            'permissions' => array('view','create','update','delete')
+        )
+    ),
+
     'site_config' => array(
         'site_name'   => 'Cpanel',
         'title'       => 'My Admin Panel',
