@@ -1,20 +1,28 @@
 <?php namespace Stevemo\Cpanel\Controllers;
 
-use Cartalyst\Sentry\Users\UserAlreadyActivatedException;
-use View;
-use Config;
-use Redirect;
-use Lang;
-use Input;
-use Event;
-use Sentry;
+use View, Config, Redirect, Lang, Input;
+use Stevemo\Cpanel\User\Repo\UserInterface;
+
 use Cartalyst\Sentry\Users\UserNotFoundException;
 use Cartalyst\Sentry\Users\UserExistsException;
 use Cartalyst\Sentry\Users\LoginRequiredException;
 use Cartalyst\Sentry\Users\PasswordRequiredException;
-
+use Cartalyst\Sentry\Users\UserAlreadyActivatedException;
 
 class UsersController extends BaseController {
+
+    /**
+     * @var \Stevemo\Cpanel\User\Repo\UserInterface
+     */
+    protected $users;
+
+    /**
+     * @param UserInterface $users
+     */
+    public function __construct(UserInterface $users)
+    {
+        $this->users = $users;
+    }
 
     /**
      * Show all the users
@@ -22,12 +30,13 @@ class UsersController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {
-        $users = Sentry::getUserProvider()->createModel()->with('groups')->get();
-        return View::make(Config::get('cpanel::views.users_index'), compact('users'));
+        $users = $this->users->findAll();
+        return View::make(Config::get('cpanel::views.users_index'))
+            ->with('users',$users);
     }
 
     /**

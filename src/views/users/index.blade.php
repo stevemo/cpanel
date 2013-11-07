@@ -36,7 +36,6 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Email</th>
-                                <th>Groups</th>
                                 <th>Active</th>
                                 <th>Joined</th>
                                 <th>Last Visit</th>
@@ -48,11 +47,6 @@
                                 <tr>
                                     <td>{{ HTML::linkRoute('admin.users.show',$user->first_name.' '.$user->last_name, array($user->id)) }}</td>
                                     <td>{{ $user->email }}</td>
-                                    <td>
-                                        @foreach($user->groups as $group)
-                                            <span class="label">{{ $group->getName() }}</span>
-                                        @endforeach
-                                    </td>
                                     <td>{{ ($user->activated) ? 'yes' : 'no' }}</td>
                                     <td>{{ $user->activated_at }}</td>
                                     <td>{{ is_null($user->last_login) ? 'Never Visited' : $user->last_login }}</td>
