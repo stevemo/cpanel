@@ -5,8 +5,7 @@ use Stevemo\Cpanel\User\Repo\UserInterface;
 use Stevemo\Cpanel\User\Form\UserFormInterface;
 use Stevemo\Cpanel\Permission\Repo\PermissionInterface;
 use Stevemo\Cpanel\Group\Repo\GroupInterface;
-
-use Cartalyst\Sentry\Users\UserNotFoundException;
+use Stevemo\Cpanel\User\Repo\UserNotFoundException;
 use Cartalyst\Sentry\Users\UserAlreadyActivatedException;
 
 class UsersController extends BaseController {
@@ -83,7 +82,8 @@ class UsersController extends BaseController {
         }
         catch ( UserNotFoundException $e)
         {
-            return Redirect::route('admin.users.index')->with('error', $e->getMessage());
+            return Redirect::route('cpanel.users.index')
+                ->with('error', $e->getMessage());
         }
     }
 
@@ -125,17 +125,28 @@ class UsersController extends BaseController {
     {
         try
         {
-            $user   = Sentry::getUserProvider()->findById($id);
-            $groups = Sentry::getGroupProvider()->findAll();
+            $user = $this->users->findById($id);
+            $groups = $this->groups->findAll();
 
             //get only the group id the user belong to
             $userGroupsId = array_pluck($user->getGroups()->toArray(), 'id');
 
-            return View::make(Config::get('cpanel::views.users_edit'),compact('user','groups','userGroupsId'));
+            $rules = Config::get('cpanel::generic_permission');
+
+            $genericPermissions = $this->permissions->mergePermissions($user->getPermissions(),$rules);
+            $modulePermissions = $this->permissions->mergePermissions($user->getPermissions());
+
+            return View::make(Config::get('cpanel::views.users_edit'))
+                ->with('user',$user)
+                ->with('groups',$groups)
+                ->with('userGroupsId',$userGroupsId)
+                ->with('genericPermissions',$genericPermissions)
+                ->with('modulePermissions',$modulePermissions);
         }
         catch (UserNotFoundException $e)
         {
-            return Redirect::route('admin.users.index')->with('error',$e->getMessage());
+            return Redirect::route('cpanel.users.index')
+                ->with('error',$e->getMessage());
         }
     }
 
@@ -171,44 +182,32 @@ class UsersController extends BaseController {
      * @link   http://stevemo.ca
      *
      * @param  int $id
-     * @return Response
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update($id)
     {
         try
         {
             $credentials = Input::except('groups');
+            $credentials['groups'] = Input::get('groups', array());
             $credentials['id'] = $id;
 
-            $validation = $this->getValidationService('user', $credentials);
 
-            if( $validation->passes() )
+            if( $this->userForm->update($credentials) )
             {
-                $user = Sentry::getUserProvider()->findById($id);
-                $user->fill($validation->getData());
-                $user->save();
-
-                //update groups
-                $user->groups()->detach();
-                $user->groups()->sync(Input::get('groups',array()));
-
-                Event::fire('users.update', array($user));
-                return Redirect::route('admin.users.index')->with('success', Lang::get('cpanel::users.update_success'));
+                return Redirect::route('cpanel.users.index')
+                    ->with('success', Lang::get('cpanel::users.update_success'));
             }
 
-            return Redirect::back()->withInput()->withErrors($validation->getErrors());
-        }
-        catch ( UserExistsException $e)
-        {
-            return Redirect::back()->with('error', $e->getMessage());
+            return Redirect::back()
+                ->withInput()
+                ->withErrors($this->userForm->getErrors());
         }
         catch ( UserNotFoundException $e)
         {
-            return Redirect::back()->with('error', $e->getMessage());
-        }
-        catch ( LoginRequiredException $e)
-        {
-            return Redirect::back()->with('error', $e->getMessage());
+            return Redirect::route('cpanel.users.index')
+                    ->with('error', $e->getMessage());
         }
     }
 

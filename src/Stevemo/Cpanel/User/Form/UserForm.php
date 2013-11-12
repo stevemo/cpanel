@@ -76,7 +76,28 @@ class UserForm implements UserFormInterface {
      */
     public function update(array $data)
     {
-        // TODO-Stevemo: Implement update() method.
+        try
+        {
+            if ( $this->validator->with($data)->validForUpdate() )
+            {
+                $this->users->update($data['id'], $this->validator->getData());
+                return true;
+            }
+        }
+        catch (LoginRequiredException $e)
+        {
+            $this->validator->add('LoginRequiredException',$e->getMessage());
+        }
+        catch (PasswordRequiredException $e)
+        {
+            $this->validator->add('PasswordRequiredException',$e->getMessage());
+        }
+        catch (UserExistsException $e)
+        {
+            $this->validator->add('UserExistsException',$e->getMessage());
+        }
+
+        return false;
     }
 
     /**

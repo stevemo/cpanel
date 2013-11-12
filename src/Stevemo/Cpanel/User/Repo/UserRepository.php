@@ -1,7 +1,9 @@
 <?php namespace Stevemo\Cpanel\User\Repo;
 
 use Cartalyst\Sentry\Sentry;
+use Cartalyst\Sentry\Users\UserNotFoundException as SentryUserNotFoundException;
 use Illuminate\Events\Dispatcher;
+use Illuminate\Database\Eloquent\Model;
 
 class UserRepository implements UserInterface {
 
@@ -89,11 +91,20 @@ class UserRepository implements UserInterface {
      *
      * @param $id
      *
-     * @return \StdClass
+     * @throws UserNotFoundException
+     *
+     * @return \Cartalyst\Sentry\Users\UserInterface
      */
     public function findById($id)
     {
-        // TODO-Stevemo: Implement findById() method.
+        try
+        {
+            return $this->sentry->findUserById($id);
+        }
+        catch (SentryUserNotFoundException $e)
+        {
+            throw new UserNotFoundException($e->getMessage());
+        }
     }
 
     /**
@@ -148,7 +159,22 @@ class UserRepository implements UserInterface {
      */
     public function update($id, array $attributes)
     {
-        // TODO-Stevemo: Implement update() method.
+        $user = $this->findById($id);
+
+        $user->first_name = $attributes['first_name'];
+        $user->last_name = $attributes['last_name'];
+        $user->email = $attributes['email'];
+        $user->permissions = $attributes['permissions'];
+
+        if( array_key_exists('password', $attributes) )
+        {
+            $user->password = $attributes['password'];
+        }
+
+        $user->save();
+        $this->syncGroups($attributes['groups'], $user);
+        $this->event->fire('users.update',array($user));
+        return true;
     }
 
     /**
@@ -165,6 +191,7 @@ class UserRepository implements UserInterface {
      */
     public function register(array $credentials, $activate = false)
     {
+        // TODO-Stevemo: put this in create method
         $cred = array(
             'first_name'  => $credentials['first_name'],
             'last_name'   => $credentials['last_name'],
@@ -176,10 +203,25 @@ class UserRepository implements UserInterface {
         $user = $this->sentry->register($cred,$activate);
 
         //attach groups
-        $user->groups()->sync($credentials['groups']);
+        $this->syncGroups($credentials['groups'], $user);
 
         $this->event->fire('users.create',array($user));
 
         return $user;
+    }
+
+    /**
+     * Add groups to a user
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param array $groups
+     * @param Model $user
+     */
+    protected function syncGroups(array $groups, Model $user)
+    {
+        $user->groups()->detach();
+        $user->groups()->sync($groups);
     }
 }

@@ -54,7 +54,7 @@ interface UserInterface {
      *
      * @param $id
      *
-     * @return \StdClass
+     * @return \Cartalyst\Sentry\Users\UserInterface
      */
     public function findById($id);
 

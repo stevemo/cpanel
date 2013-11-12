@@ -15,4 +15,23 @@ class UserValidator extends AbstractValidator {
         'password'   => 'required|confirmed',
         'email'      => 'required|email'
     );
+
+    /**
+     * Test if validation passes before update
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @return bool
+     */
+    public function validForUpdate()
+    {
+        if( empty($this->data['password']) AND empty($this->data['password_confirmation']) )
+        {
+            unset($this->rules['password']);
+            unset($this->data['password']);
+        }
+
+        return parent::passes();
+    }
 } 
