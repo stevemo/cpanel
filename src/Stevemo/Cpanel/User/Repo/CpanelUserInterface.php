@@ -1,6 +1,6 @@
 <?php namespace Stevemo\Cpanel\User\Repo;
 
-interface UserInterface {
+interface CpanelUserInterface {
 
     /**
      * Attempts to authenticate the given user

@@ -5,7 +5,7 @@ use Cartalyst\Sentry\Users\UserNotFoundException as SentryUserNotFoundException;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Database\Eloquent\Model;
 
-class UserRepository implements UserInterface {
+class UserRepository implements CpanelUserInterface {
 
     /**
      * @var \Cartalyst\Sentry\Sentry

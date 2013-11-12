@@ -1,7 +1,7 @@
 <?php namespace Stevemo\Cpanel\Controllers;
 
 use View, Config, Redirect, Lang, Input;
-use Stevemo\Cpanel\User\Repo\UserInterface;
+use Stevemo\Cpanel\User\Repo\CpanelUserInterface;
 use Stevemo\Cpanel\User\Form\UserFormInterface;
 use Stevemo\Cpanel\Permission\Repo\PermissionInterface;
 use Stevemo\Cpanel\Group\Repo\GroupInterface;
@@ -11,7 +11,7 @@ use Cartalyst\Sentry\Users\UserAlreadyActivatedException;
 class UsersController extends BaseController {
 
     /**
-     * @var \Stevemo\Cpanel\User\Repo\UserInterface
+     * @var \Stevemo\Cpanel\User\Repo\CpanelUserInterface
      */
     protected $users;
 
@@ -31,13 +31,13 @@ class UsersController extends BaseController {
     protected $userForm;
 
     /**
-     * @param UserInterface                                       $users
+     * @param \Stevemo\Cpanel\User\Repo\CpanelUserInterface       $users
      * @param \Stevemo\Cpanel\Permission\Repo\PermissionInterface $permissions
      * @param \Stevemo\Cpanel\Group\Repo\GroupInterface           $groups
      * @param \Stevemo\Cpanel\User\Form\UserFormInterface         $userForm
      */
     public function __construct(
-        UserInterface $users,
+        CpanelUserInterface $users,
         PermissionInterface $permissions,
         GroupInterface $groups,
         UserFormInterface $userForm

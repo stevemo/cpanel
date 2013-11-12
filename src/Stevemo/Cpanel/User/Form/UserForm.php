@@ -1,7 +1,7 @@
 <?php  namespace Stevemo\Cpanel\User\Form;
 
 use Stevemo\Cpanel\Services\Validation\ValidableInterface;
-use Stevemo\Cpanel\User\Repo\UserInterface;
+use Stevemo\Cpanel\User\Repo\CpanelUserInterface;
 use Cartalyst\Sentry\Users\UserExistsException;
 use Cartalyst\Sentry\Users\LoginRequiredException;
 use Cartalyst\Sentry\Users\PasswordRequiredException;
@@ -14,15 +14,15 @@ class UserForm implements UserFormInterface {
     protected $validator;
 
     /**
-     * @var \Stevemo\Cpanel\User\Repo\UserInterface
+     * @var \Stevemo\Cpanel\User\Repo\CpanelUserInterface
      */
     protected $users;
 
     /**
-     * @param ValidableInterface                      $validator
-     * @param \Stevemo\Cpanel\User\Repo\UserInterface $users
+     * @param ValidableInterface                            $validator
+     * @param \Stevemo\Cpanel\User\Repo\CpanelUserInterface $users
      */
-    public function __construct(ValidableInterface $validator, UserInterface $users)
+    public function __construct(ValidableInterface $validator, CpanelUserInterface $users)
     {
         $this->validator = $validator;
         $this->users = $users;

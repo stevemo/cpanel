@@ -133,7 +133,7 @@ class CpanelServiceProvider extends ServiceProvider {
     {
         $app = $this->app;
 
-        $app->bind('Stevemo\Cpanel\User\Repo\UserInterface', function($app)
+        $app->bind('Stevemo\Cpanel\User\Repo\CpanelUserInterface', function($app)
         {
             return new UserRepository($app['sentry'], $app['events']);
         });
@@ -142,7 +142,7 @@ class CpanelServiceProvider extends ServiceProvider {
         {
             return new UserForm(
                 new UserValidator($app['validator'], new MessageBag),
-                $app->make('Stevemo\Cpanel\User\Repo\UserInterface')
+                $app->make('Stevemo\Cpanel\User\Repo\CpanelUserInterface')
             );
         });
     }
