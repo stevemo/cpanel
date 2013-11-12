@@ -97,7 +97,7 @@ interface CpanelUserInterface {
      * @param       $id
      * @param array $attributes
      *
-     * @return bool
+     * @return \Cartalyst\Sentry\Users\UserInterface
      */
     public function update($id, array $attributes);
 

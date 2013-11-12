@@ -3,7 +3,7 @@
 use Cartalyst\Sentry\Sentry;
 use Cartalyst\Sentry\Users\UserNotFoundException as SentryUserNotFoundException;
 use Illuminate\Events\Dispatcher;
-use Illuminate\Database\Eloquent\Model;
+use Cartalyst\Sentry\Users\UserInterface;
 
 class UserRepository implements CpanelUserInterface {
 
@@ -155,7 +155,7 @@ class UserRepository implements CpanelUserInterface {
      * @param       $id
      * @param array $attributes
      *
-     * @return bool
+     * @return \Cartalyst\Sentry\Users\UserInterface
      */
     public function update($id, array $attributes)
     {
@@ -172,9 +172,15 @@ class UserRepository implements CpanelUserInterface {
         }
 
         $user->save();
-        $this->syncGroups($attributes['groups'], $user);
+
+        if ( array_key_exists('groups',$attributes['groups']) )
+        {
+            $this->syncGroups($attributes['groups'], $user);
+        }
+
         $this->event->fire('users.update',array($user));
-        return true;
+
+        return $user;
     }
 
     /**
@@ -216,10 +222,10 @@ class UserRepository implements CpanelUserInterface {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @param array $groups
-     * @param Model $user
+     * @param array                                 $groups
+     * @param \Cartalyst\Sentry\Users\UserInterface $user
      */
-    protected function syncGroups(array $groups, Model $user)
+    protected function syncGroups(array $groups, UserInterface $user)
     {
         $user->groups()->detach();
         $user->groups()->sync($groups);
