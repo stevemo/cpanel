@@ -27,6 +27,19 @@ interface CpanelUserInterface {
     public function check();
 
     /**
+     * Create a new user
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param array $credentials
+     * @param bool  $activate
+     *
+     * @return \Cartalyst\Sentry\Users\UserInterface
+     */
+    public function create(array $credentials, $activate = false);
+
+    /**
      * Delete the user
      *
      * @author Steve Montambeault
@@ -84,7 +97,7 @@ interface CpanelUserInterface {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return mixed
+     * @return mixed|\Cartalyst\Sentry\Users\UserInterface
      */
     public function getUser();
 
@@ -111,7 +124,7 @@ interface CpanelUserInterface {
      * @param array $credentials
      * @param bool  $activate
      *
-     * @return \StdClass
+     * @return \Cartalyst\Sentry\Users\UserInterface
      */
     public function register(array $credentials, $activate = false);
 

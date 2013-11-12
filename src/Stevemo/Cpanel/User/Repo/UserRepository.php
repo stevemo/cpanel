@@ -58,6 +58,25 @@ class UserRepository implements CpanelUserInterface {
     }
 
     /**
+     * Create a new user
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param array $credentials
+     * @param bool  $activate
+     *
+     * @return \Cartalyst\Sentry\Users\UserInterface
+     */
+    public function create(array $credentials, $activate = false)
+    {
+        $user = $this->storeUser($credentials,$activate);
+        $this->event->fire('users.create',array($user));
+
+        return $user;
+    }
+
+    /**
      * Delete the user
      *
      * @author Steve Montambeault
@@ -193,11 +212,29 @@ class UserRepository implements CpanelUserInterface {
      * @param array $credentials
      * @param bool  $activate
      *
-     * @return \StdClass
+     * @return \Cartalyst\Sentry\Users\UserInterface
      */
     public function register(array $credentials, $activate = false)
     {
-        // TODO-Stevemo: put this in create method
+        $user = $this->storeUser($credentials,$activate);
+        $this->event->fire('users.register',array($user));
+
+        return $user;
+    }
+
+    /**
+     * Create user into storage
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param array $credentials
+     * @param bool  $activate
+     *
+     * @return \Cartalyst\Sentry\Users\UserInterface
+     */
+    protected function storeUser(array $credentials, $activate = false)
+    {
         $cred = array(
             'first_name'  => $credentials['first_name'],
             'last_name'   => $credentials['last_name'],
@@ -208,10 +245,10 @@ class UserRepository implements CpanelUserInterface {
 
         $user = $this->sentry->register($cred,$activate);
 
-        //attach groups
-        $this->syncGroups($credentials['groups'], $user);
-
-        $this->event->fire('users.create',array($user));
+        if ( array_key_exists('groups',$credentials['groups']) )
+        {
+            $this->syncGroups($credentials['groups'], $user);
+        }
 
         return $user;
     }

@@ -44,7 +44,7 @@ class UserForm implements UserFormInterface {
         {
             if ( $this->validator->with($data)->passes() )
             {
-                $this->users->register($data,$data['activate']);
+                $this->users->create($data,$data['activate']);
                 return true;
             }
         }
