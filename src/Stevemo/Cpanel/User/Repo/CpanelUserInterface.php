@@ -45,9 +45,11 @@ interface CpanelUserInterface {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return bool
+     * @param int $id
+     *
+     * @return void
      */
-    public function delete();
+    public function delete($id);
 
     /**
      * Returns an all users.

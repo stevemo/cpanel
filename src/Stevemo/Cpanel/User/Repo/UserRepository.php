@@ -82,11 +82,16 @@ class UserRepository implements CpanelUserInterface {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return bool
+     * @param int $id
+     *
+     * @return void
      */
-    public function delete()
+    public function delete($id)
     {
-        // TODO-Stevemo: Implement delete() method.
+        $user = $this->findById($id);
+        $eventData = $user;
+        $user->delete();
+        $this->event->fire('users.delete', array($eventData));
     }
 
     /**
@@ -149,7 +154,7 @@ class UserRepository implements CpanelUserInterface {
      */
     public function getUser()
     {
-        // TODO-Stevemo: Implement getUser() method.
+        return $this->sentry->getUser();
     }
 
     /**

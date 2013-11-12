@@ -222,24 +222,24 @@ class UsersController extends BaseController {
      */
     public function destroy($id)
     {
-        $currentUser = Sentry::getUser();
+        $currentUser = $this->users->getUser();
 
         if ($currentUser->id === (int) $id)
         {
-            return Redirect::back()->with('error', Lang::get('cpanel::users.delete_denied') );
+            return Redirect::back()
+                ->with('error', Lang::get('cpanel::users.delete_denied') );
         }
 
         try
         {
-            $user = Sentry::getUserProvider()->findById($id);
-            $eventData = $user;
-            $user->delete();
-            Event::fire('users.delete', array($eventData));
-            return Redirect::route('admin.users.index')->with('success',Lang::get('cpanel::users.delete_success'));
+            $this->users->delete($id);
+            return Redirect::route('cpanel.users.index')
+                ->with('success',Lang::get('cpanel::users.delete_success'));
         }
         catch (UserNotFoundException $e)
         {
-            return Redirect::route('admin.users.index')->with('error',$e->getMessage());
+            return Redirect::route('cpanel.users.index')
+                ->with('error',$e->getMessage());
         }
     }
 
