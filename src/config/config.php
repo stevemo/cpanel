@@ -5,6 +5,14 @@ return array(
     // route prefix
     'prefix' => 'admin',
 
+    //Generic Permissions
+    'generic_permission' => array(
+        array(
+            'name' => 'generic',
+            'permissions' => array('view','create','update','delete')
+        )
+    ),
+
     'site_config' => array(
         'site_name'   => 'Cpanel',
         'title'       => 'My Admin Panel',
@@ -15,7 +23,7 @@ return array(
     'menu' => array(
         'Dashboard' => array('type' => 'single', 'route' => 'admin.home'),
         'Users'     => array('type' => 'dropdown', 'links' => array(
-            'Manage Users' => array('route' => 'admin.users.index'),
+            'Manage Users' => array('route' => 'cpanel.users.index'),
             'Groups'       => array('route' => 'cpanel.groups.index'),
             'Permissions'  => array('route' => 'cpanel.permissions.index')
         )),
@@ -34,7 +42,7 @@ return array(
         'users_show'       => 'cpanel::users.show',
         'users_edit'       => 'cpanel::users.edit',
         'users_create'     => 'cpanel::users.create',
-        'users_permission' => 'cpanel::users.permission',
+        'users_permission' => 'cpanel::users.user_permission',
 
         //Groups Views
         'groups_index'      => 'cpanel::groups.index',

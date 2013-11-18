@@ -80,6 +80,97 @@ Route::group(array('prefix' => $prefix), function()
         'before' => 'auth.cpanel'
     ));
 
+    /*
+    |--------------------------------------------------------------------------
+    | Cpanel Users Routes
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    Route::get('users', array(
+        'as'     => 'cpanel.users.index',
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@index',
+        'before' => 'auth.cpanel'
+    ));
+    Route::post('users', array(
+        'as'     => 'cpanel.users.store',
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@store',
+        'before' => 'auth.cpanel'
+    ));
+    Route::get('users/create', array(
+        'as'     => 'cpanel.users.create',
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@create',
+        'before' => 'auth.cpanel'
+    ));
+    Route::get('users/{id}', array(
+        'as'     => 'cpanel.users.show',
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@show',
+        'before' => 'auth.cpanel'
+    ));
+    Route::get('users/{id}/edit', array(
+        'as'     => 'cpanel.users.edit',
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@edit',
+        'before' => 'auth.cpanel'
+    ));
+    Route::put('users/{id}', array(
+        'as'     => 'cpanel.users.update',
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@update',
+        'before' => 'auth.cpanel'
+    ));
+    Route::delete('users/{id}', array(
+        'as'     => 'cpanel.users.destroy',
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@destroy',
+        'before' => 'auth.cpanel'
+    ));
+    Route::put('users/{users}/activate', array(
+        'as'     => 'cpanel.users.activate',
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@putActivate',
+        'before' => 'auth.cpanel:users.update'
+    ));
+
+    Route::put('users/{users}/deactivate', array(
+        'as'     => 'cpanel.users.deactivate',
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@putDeactivate',
+        'before' => 'auth.cpanel:users.update'
+    ));
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cpanel Users Permissions Routes
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    Route::get('users/{users}/permissions', array(
+        'as'     => 'cpanel.users.permissions',
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersPermissionsController@index',
+        'before' => 'auth.cpanel:users.update'
+    ));
+
+    Route::put('users/{users}/permissions', array(
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersPermissionsController@update',
+        'before' => 'auth.cpanel:users.update'
+    ));
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cpanel Users Throttling Routes
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    Route::get('users/{user}/throttling', array(
+        'as'     => 'cpanel.users.throttling',
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersThrottlingController@getStatus',
+        'before' => 'auth.cpanel:users.view'
+    ));
+
+    Route::put('users/{user}/throttling/{action}', array(
+        'as'     => 'cpanel.users.throttling.update',
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersThrottlingController@putStatus',
+        'before' => 'auth.cpanel:users.update'
+    ));
 
 });
 
@@ -94,68 +185,6 @@ Route::get('admin', array(
     'as'     => 'admin.home',
     'uses'   => 'Stevemo\Cpanel\Controllers\CpanelController@index',
     'before' => 'auth.cpanel:admin.view'
-));
-
-Route::group(array('prefix' => 'admin', 'before' => 'auth.cpanel'), function()
-{
-    Route::resource('users', 'Stevemo\Cpanel\Controllers\UsersController');
-});
-
-/*
-|--------------------------------------------------------------------------
-| Cpanel Extra Users Routes
-|--------------------------------------------------------------------------
-|
-|
-*/
-Route::put('admin/users/{users}/activate', array(
-    'as'     => 'admin.users.activate',
-    'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@putStatus',
-    'before' => 'auth.cpanel:users.update'
-));
-
-Route::put('admin/users/{users}/deactivate', array(
-    'as'     => 'admin.users.deactivate',
-    'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@putStatus',
-    'before' => 'auth.cpanel:users.update'
-));
-
-/*
-|--------------------------------------------------------------------------
-| Cpanel Users Permissions Routes
-|--------------------------------------------------------------------------
-|
-|
-*/
-Route::get('admin/users/{users}/permissions', array(
-    'as'     => 'admin.users.permissions',
-    'uses'   => 'Stevemo\Cpanel\Controllers\UsersPermissionsController@index',
-    'before' => 'auth.cpanel:users.update'
-));
-
-Route::put('admin/users/{users}/permissions', array(
-    'uses'   => 'Stevemo\Cpanel\Controllers\UsersPermissionsController@update',
-    'before' => 'auth.cpanel:users.update'
-));
-
-
-/*
-|--------------------------------------------------------------------------
-| Cpanel Users Throttling Routes
-|--------------------------------------------------------------------------
-|
-|
-*/
-Route::get('admin/users/{user}/throttling', array(
-    'as'     => 'admin.users.throttling',
-    'uses'   => 'Stevemo\Cpanel\Controllers\UsersThrottlingController@getStatus',
-    'before' => 'auth.cpanel:users.view'
-));
-
-Route::put('admin/users/{user}/throttling/{action}', array(
-    'as'     => 'admin.users.throttling.update',
-    'uses'   => 'Stevemo\Cpanel\Controllers\UsersThrottlingController@putStatus',
-    'before' => 'auth.cpanel:users.update'
 ));
 
 

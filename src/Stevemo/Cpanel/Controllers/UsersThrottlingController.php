@@ -1,14 +1,23 @@
 <?php namespace Stevemo\Cpanel\Controllers;
 
-use Cartalyst\Sentry\Users\UserNotFoundException;
-use Redirect;
-use View;
-use Event;
-use Sentry;
-use Config;
-use Lang;
+use View, Config, Redirect, Lang;
+use Stevemo\Cpanel\User\Repo\CpanelUserInterface;
+use Stevemo\Cpanel\User\Repo\UserNotFoundException;
 
 class UsersThrottlingController extends BaseController {
+
+    /**
+     * @var CpanelUserInterface
+     */
+    private $users;
+
+    /**
+     * @param CpanelUserInterface $users
+     */
+    public function __construct(CpanelUserInterface $users)
+    {
+        $this->users = $users;
+    }
 
 
     /**
@@ -25,9 +34,11 @@ class UsersThrottlingController extends BaseController {
     {
         try
         {
-            $throttle = Sentry::getThrottleProvider()->findByUserId($id);
+            $throttle = $this->users->getUserThrottle($id);
             $user = $throttle->getUser();
-            return View::make(Config::get('cpanel::views.throttle_status'), compact('throttle','user'));
+            return View::make(Config::get('cpanel::views.throttle_status'))
+                ->with('user',$user)
+                ->with('throttle',$throttle);
         }
         catch (UserNotFoundException $e)
         {
@@ -35,44 +46,35 @@ class UsersThrottlingController extends BaseController {
         }
     }
 
+    /**
+     * Update the throttle status for a given user
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param $id
+     * @param $action
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function putStatus($id, $action)
     {
         try
         {
-            $throttle = Sentry::getThrottleProvider()->findByUserId($id);
-            $user = $throttle->getUser();
-
-            switch ($action)
-            {
-                case 'ban':
-                    $throttle->ban();
-                    Event::fire('users.ban',array($user));
-                    break;
-                case 'unban':
-                    $throttle->unBan();
-                    Event::fire('users.unban',array($user));
-                    break;
-                case 'suspend':
-                    $throttle->suspend();
-                    Event::fire('users.suspend',array($user));
-                    break;
-                case 'unsuspend':
-                    $throttle->unsuspend();
-                    Event::fire('users.unsuspend',array($user));
-                    break;
-                default:
-                    return Redirect::route('admin.users.index')
-                        ->with('error', Lang::get('cpanel::throttle.action_not_found', array('action' => $action)));
-                    break;
-            }
-
-            return Redirect::route('admin.users.index')
+            $this->users->updateThrottleStatus($id,$action);
+            return Redirect::route('cpanel.users.index')
                 ->with('success', Lang::get('cpanel::throttle.success',array('action' => $action)));
 
         }
         catch (UserNotFoundException $e)
         {
-            return Redirect::route('admin.users.index')->with('error', $e->getMessage());
+            return Redirect::route('cpanel.users.index')
+                ->with('error', $e->getMessage());
+        }
+        catch (\BadMethodCallException $e)
+        {
+            return Redirect::route('cpanel.users.index')
+                ->with('error', "This method is not suported [{$action}]");
         }
     }
 }

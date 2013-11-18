@@ -11,6 +11,9 @@ use Stevemo\Cpanel\Permission\Form\PermissionValidator;
 use Stevemo\Cpanel\Group\Repo\GroupRepository;
 use Stevemo\Cpanel\Group\Form\GroupForm;
 use Stevemo\Cpanel\Group\Form\GroupValidator;
+use Stevemo\Cpanel\User\Repo\UserRepository;
+use Stevemo\Cpanel\User\Form\UserForm;
+use Stevemo\Cpanel\User\Form\UserValidator;
 
 class CpanelServiceProvider extends ServiceProvider {
 
@@ -42,6 +45,7 @@ class CpanelServiceProvider extends ServiceProvider {
 		$this->registerCommands();
         $this->registerPermission();
         $this->registerGroup();
+        $this->registerUser();
 	}
 
      /**
@@ -114,6 +118,31 @@ class CpanelServiceProvider extends ServiceProvider {
             return new GroupForm(
                 new GroupValidator($app['validator'], new MessageBag),
                 $app->make('Stevemo\Cpanel\Group\Repo\GroupInterface')
+            );
+        });
+    }
+
+    /**
+     * Register User binding
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     */
+    public function registerUser()
+    {
+        $app = $this->app;
+
+        $app->bind('Stevemo\Cpanel\User\Repo\CpanelUserInterface', function($app)
+        {
+            return new UserRepository($app['sentry'], $app['events']);
+        });
+
+        $app->bind('Stevemo\Cpanel\User\Form\UserFormInterface', function($app)
+        {
+            return new UserForm(
+                new UserValidator($app['validator'], new MessageBag),
+                $app->make('Stevemo\Cpanel\User\Repo\CpanelUserInterface')
             );
         });
     }
