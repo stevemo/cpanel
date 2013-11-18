@@ -190,7 +190,9 @@ class UserRepository implements CpanelUserInterface {
      */
     public function logout()
     {
-        // TODO-Stevemo: Implement logout() method.
+        $user = $this->sentry->getUser();
+        $this->sentry->logout();
+        $this->event->fire('users.logout',array($user));
     }
 
     /**

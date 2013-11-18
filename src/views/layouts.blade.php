@@ -44,7 +44,7 @@
                                 </div>
                                 <div class="btn-group">
                                     <a class="btn btn-inverse" data-placement="bottom" data-original-title="Logout" rel="tooltip"
-                                       href="{{ route('admin.logout') }}"><i class="icon-off"></i>
+                                       href="{{ route('cpanel.logout') }}"><i class="icon-off"></i>
                                     </a>
                                 </div>
                             </div>

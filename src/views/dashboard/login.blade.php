@@ -19,7 +19,7 @@
                 @endif
             </div>
 
-            <form action="{{ URL::route('admin.login') }}" class="form-signin" method="POST">
+            <form action="{{ URL::route('cpanel.login') }}" class="form-signin" method="POST">
                 <h2 class="form-signin-heading">Sign In</h2>
                 <label for="{{ $login_attribute }}">{{ ucfirst($login_attribute) }}</label>
                 <input class="input-block-level" type="text"

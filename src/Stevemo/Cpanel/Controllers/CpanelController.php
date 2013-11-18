@@ -1,12 +1,7 @@
 <?php namespace Stevemo\Cpanel\Controllers;
 
-use View;
-use Config;
-use Input;
-use Sentry;
-use Redirect;
-use Lang;
-use Event;
+use View, Config, Input, Redirect, Lang;
+use Stevemo\Cpanel\User\Repo\CpanelUserInterface;
 use Cartalyst\Sentry\Users\UserNotFoundException;
 use Cartalyst\Sentry\Users\UserExistsException;
 use Cartalyst\Sentry\Users\LoginRequiredException;
@@ -18,6 +13,19 @@ use Cartalyst\Sentry\Throttling\UserBannedException;
 
 
 class CpanelController extends BaseController {
+
+    /**
+     * @var \Stevemo\Cpanel\User\Repo\CpanelUserInterface
+     */
+    private $users;
+
+    /**
+     * @param CpanelUserInterface $users
+     */
+    public function __construct(CpanelUserInterface $users)
+    {
+        $this->users = $users;
+    }
 
 
     /**
@@ -71,14 +79,9 @@ class CpanelController extends BaseController {
      */
     public function getLogout()
     {
-        if (Sentry::check())
-        {
-            $user = Sentry::getUser();
-            Sentry::logout();
-            Event::fire('users.logout', array($user));
-            return Redirect::route('admin.login')->with('success', Lang::get('cpanel::users.logout'));
-        }
-        return Redirect::route('admin.login');
+        $this->users->logout();
+        return Redirect::route('cpanel.login')
+            ->with('success', Lang::get('cpanel::users.logout'));
     }
 
     /**

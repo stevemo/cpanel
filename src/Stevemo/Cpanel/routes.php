@@ -183,28 +183,32 @@ Route::group(array('prefix' => Config::get('cpanel::prefix', 'admin')), function
         'before' => 'auth.cpanel:users.update'
     ));
 
+    /*
+    |--------------------------------------------------------------------------
+    | Cpanel Login/Logout/Register Routes
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    Route::get('login', array(
+        'as'   => 'cpanel.login',
+        'uses' => 'Stevemo\Cpanel\Controllers\CpanelController@getLogin'
+    ));
+
+    Route::get('logout', array(
+        'as'   => 'cpanel.logout',
+        'uses' => 'Stevemo\Cpanel\Controllers\CpanelController@getLogout'
+    ));
+
 });
 
 
 
-/*
-|--------------------------------------------------------------------------
-| Cpanel Login/Logout/Register Routes
-|--------------------------------------------------------------------------
-|
-|
-*/
-Route::get('admin/login', array(
-    'as'   => 'admin.login',
-    'uses' => 'Stevemo\Cpanel\Controllers\CpanelController@getLogin'
-));
+
 
 Route::post('admin/login','Stevemo\Cpanel\Controllers\CpanelController@postLogin');
 
-Route::get('admin/logout', array(
-    'as'   => 'admin.logout',
-    'uses' => 'Stevemo\Cpanel\Controllers\CpanelController@getLogout'
-));
+
 
 Route::get('admin/register', array(
     'as'   => 'admin.register',
@@ -229,7 +233,7 @@ Route::filter('auth.cpanel', function($route, $request, $userRule = null)
     if (! Sentry::check())
     {
         Session::put('url.intended', URL::full());
-        return Redirect::route('admin.login');
+        return Redirect::route('cpanel.login');
     }
 
     // no special route name passed, use the current name route
@@ -259,15 +263,17 @@ Route::filter('auth.cpanel', function($route, $request, $userRule = null)
         }
     }
     // no access to the request page and request page not the root admin page
-    if ( ! Sentry::hasAccess($userRule) and $userRule !== 'admin.view' )
+    if ( ! Sentry::hasAccess($userRule) and $userRule !== 'cpanel.view' )
     {
-        return Redirect::route('admin.home')->with('error', Lang::get('cpanel::permissions.access_denied'));
+        return Redirect::route('cpanel.home')
+            ->with('error', Lang::get('cpanel::permissions.access_denied'));
     }
     // no access to the request page and request page is the root admin page
-    else if( ! Sentry::hasAccess($userRule) and $userRule === 'admin.view' )
+    else if( ! Sentry::hasAccess($userRule) and $userRule === 'cpanel.view' )
     {
         //can't see the admin home page go back to home site page
-        return Redirect::to('/')->with('error', Lang::get('cpanel::permissions.access_denied'));
+        return Redirect::to('/')
+            ->with('error', Lang::get('cpanel::permissions.access_denied'));
     }
 
 });
