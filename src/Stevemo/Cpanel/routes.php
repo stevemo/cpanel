@@ -6,6 +6,19 @@ Route::group(array('prefix' => $prefix), function()
 {
     /*
     |--------------------------------------------------------------------------
+    | Cpanel Routes
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    Route::get('/', array(
+        'as'     => 'cpanel.home',
+        'uses'   => 'Stevemo\Cpanel\Controllers\CpanelController@index',
+        'before' => 'auth.cpanel:cpanel.view'
+    ));
+
+    /*
+    |--------------------------------------------------------------------------
     | Cpanel Permissions Routes
     |--------------------------------------------------------------------------
     |
@@ -174,18 +187,6 @@ Route::group(array('prefix' => $prefix), function()
 
 });
 
-/*
-|--------------------------------------------------------------------------
-| Cpanel Routes
-|--------------------------------------------------------------------------
-|
-|
-*/
-Route::get('admin', array(
-    'as'     => 'admin.home',
-    'uses'   => 'Stevemo\Cpanel\Controllers\CpanelController@index',
-    'before' => 'auth.cpanel:admin.view'
-));
 
 
 /*

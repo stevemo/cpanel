@@ -21,7 +21,7 @@ return array(
 
     //menu 2 type are available single or dropdown and it must be a route
     'menu' => array(
-        'Dashboard' => array('type' => 'single', 'route' => 'admin.home'),
+        'Dashboard' => array('type' => 'single', 'route' => 'cpanel.home'),
         'Users'     => array('type' => 'dropdown', 'links' => array(
             'Manage Users' => array('route' => 'cpanel.users.index'),
             'Groups'       => array('route' => 'cpanel.groups.index'),
