@@ -1,8 +1,6 @@
 <?php
 
-$prefix = Config::get('cpanel::prefix');
-
-Route::group(array('prefix' => $prefix), function()
+Route::group(array('prefix' => Config::get('cpanel::prefix', 'admin')), function()
 {
     /*
     |--------------------------------------------------------------------------
