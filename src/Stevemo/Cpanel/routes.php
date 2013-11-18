@@ -153,6 +153,24 @@ Route::group(array('prefix' => $prefix), function()
         'before' => 'auth.cpanel:users.update'
     ));
 
+    /*
+    |--------------------------------------------------------------------------
+    | Cpanel Users Throttling Routes
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    Route::get('users/{user}/throttling', array(
+        'as'     => 'cpanel.users.throttling',
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersThrottlingController@getStatus',
+        'before' => 'auth.cpanel:users.view'
+    ));
+
+    Route::put('users/{user}/throttling/{action}', array(
+        'as'     => 'cpanel.users.throttling.update',
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersThrottlingController@putStatus',
+        'before' => 'auth.cpanel:users.update'
+    ));
 
 });
 
@@ -167,26 +185,6 @@ Route::get('admin', array(
     'as'     => 'admin.home',
     'uses'   => 'Stevemo\Cpanel\Controllers\CpanelController@index',
     'before' => 'auth.cpanel:admin.view'
-));
-
-
-/*
-|--------------------------------------------------------------------------
-| Cpanel Users Throttling Routes
-|--------------------------------------------------------------------------
-|
-|
-*/
-Route::get('admin/users/{user}/throttling', array(
-    'as'     => 'admin.users.throttling',
-    'uses'   => 'Stevemo\Cpanel\Controllers\UsersThrottlingController@getStatus',
-    'before' => 'auth.cpanel:users.view'
-));
-
-Route::put('admin/users/{user}/throttling/{action}', array(
-    'as'     => 'admin.users.throttling.update',
-    'uses'   => 'Stevemo\Cpanel\Controllers\UsersThrottlingController@putStatus',
-    'before' => 'auth.cpanel:users.update'
 ));
 
 

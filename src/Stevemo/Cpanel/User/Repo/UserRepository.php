@@ -207,6 +207,30 @@ class UserRepository implements CpanelUserInterface {
     }
 
     /**
+     * Get the throttle provider for a given user
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param $id
+     *
+     * @throws UserNotFoundException
+     *
+     * @return \Cartalyst\Sentry\Throttling\ThrottleInterface
+     */
+    public function getUserThrottle($id)
+    {
+        try
+        {
+            return $this->sentry->findThrottlerByUserId($id);
+        }
+        catch (SentryUserNotFoundException $e)
+        {
+            throw new UserNotFoundException($e->getMessage());
+        }
+    }
+
+    /**
      * Returns an empty user object.
      *
      * @author Steve Montambeault
@@ -217,6 +241,26 @@ class UserRepository implements CpanelUserInterface {
     public function getEmptyUser()
     {
         return $this->sentry->getEmptyUser();
+    }
+
+    /**
+     * Registers a user by giving the required credentials
+     * and an optional flag for whether to activate the user.
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param array $credentials
+     * @param bool  $activate
+     *
+     * @return \Cartalyst\Sentry\Users\UserInterface
+     */
+    public function register(array $credentials, $activate = false)
+    {
+        $user = $this->storeUser($credentials,$activate);
+        $this->event->fire('users.register',array($user));
+
+        return $user;
     }
 
     /**
@@ -277,24 +321,25 @@ class UserRepository implements CpanelUserInterface {
     }
 
     /**
-     * Registers a user by giving the required credentials
-     * and an optional flag for whether to activate the user.
+     *
      *
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @param array $credentials
-     * @param bool  $activate
+     * @param $id
+     * @param $status
      *
-     * @return \Cartalyst\Sentry\Users\UserInterface
+     * @throws \BadMethodCallException
+     *
+     * @return void
      */
-    public function register(array $credentials, $activate = false)
+    public function updateThrottleStatus($id, $status)
     {
-        $user = $this->storeUser($credentials,$activate);
-        $this->event->fire('users.register',array($user));
-
-        return $user;
+        $throttle = $this->getUserThrottle($id);
+        call_user_func(array($throttle,$status));
+        $this->event->fire('users.' . $status, array($throttle));
     }
+
 
     /**
      * Create user into storage

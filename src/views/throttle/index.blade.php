@@ -10,7 +10,7 @@
 @section('help')
 <p class="lead">Users Throttling</p>
 <p>
-    From here you can Ban, unban, suspend or unsuspend a single user.
+    From here you can ban, unban, suspend or unsuspend a single user.
 </p>
 @stop
 
@@ -24,80 +24,73 @@
 
             <div class="block-body">
 
-
-
-
-                @if ($throttle->isBanned())
-                    <div class="media">
-                        <a class="pull-left" href="#">
-                            <img class="media-object" src="{{ asset('packages/stevemo/cpanel/img/not-ok-icon.png') }}" alt=""/>
-                        </a>
-                        <div class="media-body">
-                            <h4 class="media-heading">Banned</h4>
-                            <p>
-                                <a href="{{ route('admin.users.throttling.update',array($user->id,'unban')) }}"
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                   <tbody>
+                    @if ($throttle->isBanned())
+                        <tr class="error">
+                            <td><strong>Ban Status</strong></td>
+                            <td>This is user is Banned</td>
+                            <td>
+                                <a href="{{ route('cpanel.users.throttling.update',array($user->id,'unban')) }}"
                                    class="btn btn-primary" rel="tooltip" title="UnBan User"
                                    data-method="put" data-modal-text="Unban this user?">
                                     <i class="icon-check"></i>
                                     Unban User
                                 </a>
-                            </p>
-                        </div>
-                    </div>
-                @else
-                    <div class="media">
-                        <a class="pull-left" href="#">
-                            <img class="media-object" src="{{ asset('packages/stevemo/cpanel/img/ok-icon.png') }}" alt=""/>
-                        </a>
-                        <div class="media-body">
-                            <h4 class="media-heading">Not Banned</h4>
-                            <p>
-                                <a href="{{ route('admin.users.throttling.update',array($user->id,'ban')) }}"
-                                   class="btn btn-danger" rel="tooltip" title="Ban User"
-                                   data-method="put" data-modal-text="Ban this user?">
-                                    <i class="icon-ban-circle"></i>
-                                    Ban User
-                                </a>
-                            </p>
-                        </div>
-                    </div>
-                @endif
-
-                @if ($throttle->isSuspended())
-                <div class="media">
-                    <a class="pull-left" href="#">
-                        <img class="media-object" src="{{ asset('packages/stevemo/cpanel/img/not-ok-icon.png') }}" alt=""/>
-                    </a>
-                    <div class="media-body">
-                        <h4 class="media-heading">Suspended</h4>
-                        <p>
-                            <a href="{{ route('admin.users.throttling.update',array($user->id,'unsuspend')) }}"
-                               class="btn btn-primary" rel="tooltip" title="UnBan User"
-                               data-method="put" data-modal-text="Unsuspend this user?">
-                                <i class="icon-check"></i>
-                                Unsuspend User
-                            </a>
-                        </p>
-                    </div>
-                </div>
-                @else
-                <div class="media">
-                    <a class="pull-left" href="#">
-                        <img class="media-object" src="{{ asset('packages/stevemo/cpanel/img/ok-icon.png') }}" alt=""/>
-                    </a>
-                    <div class="media-body">
-                        <h4 class="media-heading">Not Suspended</h4>
-                        <p>
-                            <a href="{{ route('admin.users.throttling.update',array($user->id,'suspend')) }}"
+                            </td>
+                        </tr>
+                    @else
+                    <tr class="success">
+                        <td><strong>Ban Status</strong></td>
+                        <td>This is user is not Banned</td>
+                        <td>
+                            <a href="{{ route('cpanel.users.throttling.update',array($user->id,'ban')) }}"
                                class="btn btn-danger" rel="tooltip" title="Ban User"
-                               data-method="put" data-modal-text="Suspend this user?">
+                               data-method="put" data-modal-text="Ban this user?">
                                 <i class="icon-ban-circle"></i>
-                                Suspend User
+                                Ban User
                             </a>
-                        </p>
-                    </div>
-                </div>
-                @endif
+                        </td>
+                    </tr>
+                    @endif
+
+                    @if ($throttle->isSuspended())
+                        <tr class="error">
+                            <td><strong>Suspension status</strong></td>
+                            <td>This user is suspended</td>
+                            <td>
+                                <a href="{{ route('cpanel.users.throttling.update',array($user->id,'unsuspend')) }}"
+                                   class="btn btn-primary" rel="tooltip" title="UnBan User"
+                                   data-method="put" data-modal-text="Unsuspend this user?">
+                                    <i class="icon-check"></i>
+                                    Unsuspend User
+                                </a>
+                            </td>
+                        </tr>
+                    @else
+                        <tr class="success">
+                            <td><strong>Suspension status</strong></td>
+                            <td>This user is not suspended</td>
+                            <td>
+                                <a href="{{ route('cpanel.users.throttling.update',array($user->id,'suspend')) }}"
+                                   class="btn btn-danger" rel="tooltip" title="Ban User"
+                                   data-method="put" data-modal-text="Suspend this user?">
+                                    <i class="icon-ban-circle"></i>
+                                    Suspend User
+                                </a>
+                            </td>
+                        </tr>
+                    @endif
+
+                   </tbody>
+                </table>
 
             </div>
         </div>

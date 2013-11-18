@@ -128,6 +128,18 @@ interface CpanelUserInterface {
     public function getUser();
 
     /**
+     * Get the throttle provider for a given user
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param $id
+     *
+     * @return \Cartalyst\Sentry\Throttling\ThrottleInterface
+     */
+    public function getUserThrottle($id);
+
+    /**
      * Update user information
      *
      * @author Steve Montambeault
@@ -166,5 +178,20 @@ interface CpanelUserInterface {
      * @return \Cartalyst\Sentry\Users\UserInterface
      */
     public function updatePermissions($id, array $permissions);
+
+    /**
+     *
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param $id
+     * @param $status
+     *
+     * @throws \BadMethodCallException
+     *
+     * @return void
+     */
+    public function updateThrottleStatus($id, $status);
 
 } 
