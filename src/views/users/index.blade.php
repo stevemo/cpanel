@@ -57,6 +57,11 @@
                                                 <span class="caret"></span>
                                             </a>
                                             <ul class="dropdown-menu">
+                                                <li>
+                                                    <a href="{{ route('cpanel.users.show', array($user->id)) }}">
+                                                        <i class="icon-info-sign"></i>&nbsp;View User
+                                                    </a>
+                                                </li>
                                                <li>
                                                    <a href="{{ route('cpanel.users.edit', array($user->id)) }}">
                                                        <i class="icon-edit"></i>&nbsp;Edit User
@@ -92,7 +97,7 @@
                                                 </li>
                                                 <li class="divider"></li>
                                                 <li>
-                                                    <a href="{{ route('admin.users.throttling', array($user->id)) }}">
+                                                    <a href="{{ route('cpanel.users.throttling', array($user->id)) }}">
                                                         <i class="icon-key"></i>&nbsp;Throttling
                                                     </a>
                                                 </li>
