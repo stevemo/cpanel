@@ -4,7 +4,7 @@ use Cartalyst\Sentry\Groups\GroupNotFoundException as SentryGroupNotFoundExcepti
 use Cartalyst\Sentry\Sentry;
 use Illuminate\Events\Dispatcher;
 
-class GroupRepository implements GroupInterface {
+class GroupRepository implements CpanelGroupInterface {
 
     /**
      * @var \Cartalyst\Sentry\Sentry

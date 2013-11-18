@@ -108,7 +108,7 @@ class CpanelServiceProvider extends ServiceProvider {
     {
         $app = $this->app;
 
-        $app->bind('Stevemo\Cpanel\Group\Repo\GroupInterface', function($app)
+        $app->bind('Stevemo\Cpanel\Group\Repo\CpanelGroupInterface', function($app)
         {
             return new GroupRepository($app['sentry'], $app['events']);
         });
@@ -117,7 +117,7 @@ class CpanelServiceProvider extends ServiceProvider {
         {
             return new GroupForm(
                 new GroupValidator($app['validator'], new MessageBag),
-                $app->make('Stevemo\Cpanel\Group\Repo\GroupInterface')
+                $app->make('Stevemo\Cpanel\Group\Repo\CpanelGroupInterface')
             );
         });
     }

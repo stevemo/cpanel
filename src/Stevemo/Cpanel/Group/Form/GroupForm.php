@@ -1,8 +1,7 @@
 <?php  namespace Stevemo\Cpanel\Group\Form; 
 
 use Stevemo\Cpanel\Services\Validation\ValidableInterface;
-use Stevemo\Cpanel\Group\Repo\GroupInterface;
-use Stevemo\Cpanel\Group\Repo\GroupNotFoundException;
+use Stevemo\Cpanel\Group\Repo\CpanelGroupInterface;
 use Cartalyst\Sentry\Groups\NameRequiredException;
 use Cartalyst\Sentry\Groups\GroupExistsException;
 
@@ -15,15 +14,15 @@ class GroupForm implements GroupFormInterface {
     protected  $validator;
 
     /**
-     * @var \Stevemo\Cpanel\Group\Repo\GroupInterface
+     * @var \Stevemo\Cpanel\Group\Repo\CpanelGroupInterface
      */
     protected $groups;
 
     /**
-     * @param ValidableInterface                        $validator
-     * @param \Stevemo\Cpanel\Group\Repo\GroupInterface $groups
+     * @param ValidableInterface                              $validator
+     * @param \Stevemo\Cpanel\Group\Repo\CpanelGroupInterface $groups
      */
-    public function __construct(ValidableInterface $validator, GroupInterface $groups)
+    public function __construct(ValidableInterface $validator, CpanelGroupInterface $groups)
     {
         $this->validator = $validator;
         $this->groups = $groups;

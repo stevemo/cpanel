@@ -4,7 +4,7 @@ use View, Config, Redirect, Lang, Input;
 use Stevemo\Cpanel\User\Repo\CpanelUserInterface;
 use Stevemo\Cpanel\User\Form\UserFormInterface;
 use Stevemo\Cpanel\Permission\Repo\PermissionInterface;
-use Stevemo\Cpanel\Group\Repo\GroupInterface;
+use Stevemo\Cpanel\Group\Repo\CpanelGroupInterface;
 use Stevemo\Cpanel\User\Repo\UserNotFoundException;
 
 class UsersController extends BaseController {
@@ -20,7 +20,7 @@ class UsersController extends BaseController {
     protected $permissions;
 
     /**
-     * @var \Stevemo\Cpanel\Group\Repo\GroupInterface
+     * @var \Stevemo\Cpanel\Group\Repo\CpanelGroupInterface
      */
     protected $groups;
 
@@ -32,13 +32,13 @@ class UsersController extends BaseController {
     /**
      * @param \Stevemo\Cpanel\User\Repo\CpanelUserInterface       $users
      * @param \Stevemo\Cpanel\Permission\Repo\PermissionInterface $permissions
-     * @param \Stevemo\Cpanel\Group\Repo\GroupInterface           $groups
+     * @param \Stevemo\Cpanel\Group\Repo\CpanelGroupInterface     $groups
      * @param \Stevemo\Cpanel\User\Form\UserFormInterface         $userForm
      */
     public function __construct(
         CpanelUserInterface $users,
         PermissionInterface $permissions,
-        GroupInterface $groups,
+        CpanelGroupInterface $groups,
         UserFormInterface $userForm
     )
     {

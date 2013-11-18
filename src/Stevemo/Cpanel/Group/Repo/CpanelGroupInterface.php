@@ -1,6 +1,6 @@
 <?php namespace Stevemo\Cpanel\Group\Repo;
 
-interface GroupInterface {
+interface CpanelGroupInterface {
 
     /**
      * Find the group by ID.

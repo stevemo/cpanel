@@ -1,7 +1,7 @@
 <?php namespace Stevemo\Cpanel\Controllers;
 
 use View, Redirect, Input, Lang, Config;
-use Stevemo\Cpanel\Group\Repo\GroupInterface;
+use Stevemo\Cpanel\Group\Repo\CpanelGroupInterface;
 use Stevemo\Cpanel\Group\Form\GroupFormInterface;
 use Stevemo\Cpanel\Permission\Repo\PermissionInterface;
 use Stevemo\Cpanel\Group\Repo\GroupNotFoundException;
@@ -9,7 +9,7 @@ use Stevemo\Cpanel\Group\Repo\GroupNotFoundException;
 class GroupsController extends BaseController {
 
     /**
-     * @var \Stevemo\Cpanel\Group\Repo\GroupInterface
+     * @var \Stevemo\Cpanel\Group\Repo\CpanelGroupInterface
      */
     protected $groups;
 
@@ -24,12 +24,12 @@ class GroupsController extends BaseController {
     protected $permissions;
 
     /**
-     * @param \Stevemo\Cpanel\Group\Repo\GroupInterface           $groups
+     * @param \Stevemo\Cpanel\Group\Repo\CpanelGroupInterface     $groups
      * @param \Stevemo\Cpanel\Group\Form\GroupFormInterface       $form
      * @param \Stevemo\Cpanel\Permission\Repo\PermissionInterface $permissions
      */
     public function __construct(
-        GroupInterface $groups,
+        CpanelGroupInterface $groups,
         GroupFormInterface $form,
         PermissionInterface $permissions
     )
