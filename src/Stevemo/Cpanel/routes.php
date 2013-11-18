@@ -82,7 +82,7 @@ Route::group(array('prefix' => $prefix), function()
 
     /*
     |--------------------------------------------------------------------------
-    | Cpanel Extra Users Routes
+    | Cpanel Users Routes
     |--------------------------------------------------------------------------
     |
     |
@@ -122,6 +122,17 @@ Route::group(array('prefix' => $prefix), function()
         'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@destroy',
         'before' => 'auth.cpanel'
     ));
+    Route::put('users/{users}/activate', array(
+        'as'     => 'cpanel.users.activate',
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@putActivate',
+        'before' => 'auth.cpanel:users.update'
+    ));
+
+    Route::put('users/{users}/deactivate', array(
+        'as'     => 'cpanel.users.deactivate',
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@putDeactivate',
+        'before' => 'auth.cpanel:users.update'
+    ));
 
 
 });
@@ -139,25 +150,6 @@ Route::get('admin', array(
     'before' => 'auth.cpanel:admin.view'
 ));
 
-
-/*
-|--------------------------------------------------------------------------
-| Cpanel Extra Users Routes
-|--------------------------------------------------------------------------
-|
-|
-*/
-Route::put('admin/users/{users}/activate', array(
-    'as'     => 'admin.users.activate',
-    'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@putStatus',
-    'before' => 'auth.cpanel:users.update'
-));
-
-Route::put('admin/users/{users}/deactivate', array(
-    'as'     => 'admin.users.deactivate',
-    'uses'   => 'Stevemo\Cpanel\Controllers\UsersController@putStatus',
-    'before' => 'auth.cpanel:users.update'
-));
 
 /*
 |--------------------------------------------------------------------------

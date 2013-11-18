@@ -77,13 +77,13 @@
                                                 <li class="divider"></li>
                                                 <li>
                                                     @if ($user->isActivated())
-                                                        <a href="{{ route('admin.users.deactivate', array($user->id)) }}"
+                                                        <a href="{{ route('cpanel.users.deactivate', array($user->id)) }}"
                                                            data-method="put"
                                                            data-modal-text="Deactivate this User?">
                                                             <i class="icon-remove"></i>&nbsp;Deactivate
                                                         </a>
                                                     @else
-                                                        <a href="{{ route('admin.users.activate', array($user->id)) }}"
+                                                        <a href="{{ route('cpanel.users.activate', array($user->id)) }}"
                                                            data-method="put"
                                                            data-modal-text="Activate this User?">
                                                             <i class="icon-check"></i>&nbsp;Activate
