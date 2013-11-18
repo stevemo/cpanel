@@ -15,6 +15,19 @@ interface UserFormInterface {
     public function create(array $data);
 
     /**
+     * Validate and log in a user
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param array $credentials
+     * @param bool  $remember
+     *
+     * @return bool
+     */
+    public function login(array $credentials, $remember);
+
+    /**
      * Validate and update a existing user
      *
      * @author Steve Montambeault

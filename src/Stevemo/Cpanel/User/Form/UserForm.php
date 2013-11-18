@@ -5,6 +5,11 @@ use Stevemo\Cpanel\User\Repo\CpanelUserInterface;
 use Cartalyst\Sentry\Users\UserExistsException;
 use Cartalyst\Sentry\Users\LoginRequiredException;
 use Cartalyst\Sentry\Users\PasswordRequiredException;
+use Cartalyst\Sentry\Users\UserNotFoundException;
+use Cartalyst\Sentry\Users\WrongPasswordException;
+use Cartalyst\Sentry\Users\UserNotActivatedException;
+use Cartalyst\Sentry\Throttling\UserSuspendedException;
+use Cartalyst\Sentry\Throttling\UserBannedException;
 
 class UserForm implements UserFormInterface {
 
@@ -95,6 +100,56 @@ class UserForm implements UserFormInterface {
         catch (UserExistsException $e)
         {
             $this->validator->add('UserExistsException',$e->getMessage());
+        }
+
+        return false;
+    }
+
+    /**
+     * Validate and log in a user
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param array $credentials
+     * @param bool  $remember
+     *
+     * @return bool
+     */
+    public function login(array $credentials, $remember)
+    {
+        try
+        {
+            $this->users->authenticate($credentials,$remember);
+            return true;
+        }
+        catch (LoginRequiredException $e)
+        {
+            $this->validator->add('LoginRequiredException', $e->getMessage());
+        }
+        catch (PasswordRequiredException $e)
+        {
+            $this->validator->add('PasswordRequiredException', $e->getMessage());
+        }
+        catch (WrongPasswordException $e)
+        {
+            $this->validator->add('WrongPasswordException', $e->getMessage());
+        }
+        catch (UserNotActivatedException $e)
+        {
+            $this->validator->add('UserNotActivatedException', $e->getMessage());
+        }
+        catch (UserNotFoundException $e)
+        {
+            $this->validator->add('UserNotFoundException', $e->getMessage());
+        }
+        catch (UserSuspendedException $e)
+        {
+            $this->validator->add('UserSuspendedException', $e->getMessage());
+        }
+        catch (UserBannedException $e)
+        {
+            $this->validator->add('UserBannedException', $e->getMessage());
         }
 
         return false;

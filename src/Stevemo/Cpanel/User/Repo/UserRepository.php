@@ -66,11 +66,13 @@ class UserRepository implements CpanelUserInterface {
      * @param array $credentials
      * @param bool  $remember
      *
-     * @return \StdClass
+     * @return \Cartalyst\Sentry\Users\UserInterface
      */
     public function authenticate(array $credentials, $remember = false)
     {
-        // TODO-Stevemo: Implement authenticate() method.
+        $user = $this->sentry->authenticate($credentials,$remember);
+        $this->event->fire('users.login',array($user));
+        return $user;
     }
 
     /**

@@ -24,7 +24,7 @@ interface CpanelUserInterface {
      * @param array $credentials
      * @param bool  $remember
      *
-     * @return \StdClass
+     * @return \Cartalyst\Sentry\Users\UserInterface
      */
     public function authenticate(array $credentials, $remember = false);
 

@@ -12,9 +12,9 @@
         <div class="span12">
 
             <div class="margin-top-20">
-                @if ( Session::has('login_error') )
+                @if (  Session::has('login_error') )
                     <div class="alert-login alert-error">
-                        <strong>{{ Session::get('login_error') }}</strong>
+                        {{ Session::get('login_error') }}
                     </div>
                 @endif
             </div>

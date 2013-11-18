@@ -200,13 +200,15 @@ Route::group(array('prefix' => Config::get('cpanel::prefix', 'admin')), function
         'uses' => 'Stevemo\Cpanel\Controllers\CpanelController@getLogout'
     ));
 
+    Route::post('login','Stevemo\Cpanel\Controllers\CpanelController@postLogin');
+
 });
 
 
 
 
 
-Route::post('admin/login','Stevemo\Cpanel\Controllers\CpanelController@postLogin');
+
 
 
 
