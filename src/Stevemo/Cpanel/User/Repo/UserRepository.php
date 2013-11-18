@@ -4,6 +4,7 @@ use Cartalyst\Sentry\Sentry;
 use Cartalyst\Sentry\Users\UserNotFoundException as SentryUserNotFoundException;
 use Illuminate\Events\Dispatcher;
 use Cartalyst\Sentry\Users\UserInterface;
+use Cartalyst\Sentry\Users\UserAlreadyActivatedException;
 
 class UserRepository implements CpanelUserInterface {
 
@@ -25,6 +26,34 @@ class UserRepository implements CpanelUserInterface {
     {
         $this->sentry = $sentry;
         $this->event = $event;
+    }
+
+    /**
+     * Activate a user
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param $id
+     *
+     * @return bool
+     */
+    public function activate($id)
+    {
+        $user = $this->findById($id);
+
+        try
+        {
+            if ( $user->attemptActivation($user->getActivationCode()) )
+            {
+                $this->event->fire('users.activate',array($user));
+                return true;
+            }
+        }
+        catch (UserAlreadyActivatedException $e){}
+
+
+        return false;
     }
 
     /**
@@ -74,6 +103,26 @@ class UserRepository implements CpanelUserInterface {
         $this->event->fire('users.create',array($user));
 
         return $user;
+    }
+
+    /**
+     * De activate a user
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param $id
+     *
+     * @return bool
+     */
+    public function deactivate($id)
+    {
+        $user = $this->findById($id);
+        $user->activated = 0;
+        $user->activated_at = null;
+        $user->save();
+        $this->event->fire('users.deactivate',array($user));
+        return true;
     }
 
     /**
@@ -204,6 +253,26 @@ class UserRepository implements CpanelUserInterface {
 
         $this->event->fire('users.update',array($user));
 
+        return $user;
+    }
+
+    /**
+     * Update permissions for a given user
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param int   $id
+     * @param array $permissions
+     *
+     * @return \Cartalyst\Sentry\Users\UserInterface
+     */
+    public function updatePermissions($id, array $permissions)
+    {
+        $user = $this->findById($id);
+        $user->permissions = $permissions;
+        $user->save();
+        $this->event->fire('users.permissions.update',array($user));
         return $user;
     }
 

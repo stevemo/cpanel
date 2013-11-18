@@ -3,6 +3,18 @@
 interface CpanelUserInterface {
 
     /**
+     * Activate a user
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param $id
+     *
+     * @return bool
+     */
+    public function activate($id);
+
+    /**
      * Attempts to authenticate the given user
      * according to the passed credentials.
      *
@@ -38,6 +50,18 @@ interface CpanelUserInterface {
      * @return \Cartalyst\Sentry\Users\UserInterface
      */
     public function create(array $credentials, $activate = false);
+
+    /**
+     * De activate a user
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param $id
+     *
+     * @return bool
+     */
+    public function deactivate($id);
 
     /**
      * Delete the user
@@ -129,5 +153,18 @@ interface CpanelUserInterface {
      * @return \Cartalyst\Sentry\Users\UserInterface
      */
     public function register(array $credentials, $activate = false);
+
+    /**
+     * Update permissions for a given user
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param int   $id
+     * @param array $permissions
+     *
+     * @return \Cartalyst\Sentry\Users\UserInterface
+     */
+    public function updatePermissions($id, array $permissions);
 
 } 

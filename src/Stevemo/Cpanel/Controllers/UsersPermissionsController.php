@@ -1,26 +1,31 @@
 <?php namespace Stevemo\Cpanel\Controllers;
 
-use View;
-use Redirect;
-use Input;
-use Lang;
-use Event;
-use Sentry;
-use Config;
-use Stevemo\Cpanel\Provider\PermissionProvider;
-use Cartalyst\Sentry\Users\UserNotFoundException;
+use View, Config, Redirect, Lang, Input;
+use Stevemo\Cpanel\Permission\Repo\PermissionInterface;
+use Stevemo\Cpanel\User\Repo\CpanelUserInterface;
+use Stevemo\Cpanel\User\Repo\UserNotFoundException;
 
 class UsersPermissionsController extends BaseController {
 
 
     /**
-     * @var PermissionProvider
+     * @var \Stevemo\Cpanel\Permission\Repo\PermissionInterface
      */
-    protected $permissions;
+    private $permissions;
 
-    public function __construct( PermissionProvider $permissions)
+    /**
+     * @var \Stevemo\Cpanel\User\Repo\CpanelUserInterface
+     */
+    private $users;
+
+    /**
+     * @param \Stevemo\Cpanel\Permission\Repo\PermissionInterface $permissions
+     * @param \Stevemo\Cpanel\User\Repo\CpanelUserInterface       $users
+     */
+    public function __construct(PermissionInterface $permissions, CpanelUserInterface $users)
     {
         $this->permissions = $permissions;
+        $this->users = $users;
     }
 
     /**
@@ -36,17 +41,21 @@ class UsersPermissionsController extends BaseController {
     {
         try
         {
-            $user       = Sentry::getUserProvider()->findById($userId);
-            $modulePerm = $this->permissions->getMergePermissions($user->getPermissions());
+            $user       = $this->users->findById($userId);
+            $modulePermissions = $this->permissions->mergePermissions($user->getPermissions());
 
             $roles = array(array('name' => 'generic', 'permissions' => array('view','create','update','delete')));
-            $genericPerm = $this->permissions->getMergePermissions($user->getPermissions(), $roles);
+            $genericPermissions = $this->permissions->mergePermissions($user->getPermissions(), $roles);
 
-            return View::make(Config::get('cpanel::views.users_permission'),compact('user','modulePerm','genericPerm'));
+            return View::make(Config::get('cpanel::views.users_permission'))
+                ->with('user',$user)
+                ->with('genericPermissions',$genericPermissions)
+                ->with('modulePermissions',$modulePermissions);
         }
         catch ( UserNotFoundException $e)
         {
-            return Redirect::route('admin.users.index')->with('error', $e->getMessage());
+            return Redirect::route('cpanel.users.index')
+                ->with('error', $e->getMessage());
         }
     }
 
@@ -63,18 +72,16 @@ class UsersPermissionsController extends BaseController {
     {
         try
         {
-            $user = Sentry::getUserProvider()->findById($userId);
+            $permissions = Input::get('permissions', array());
+            $this->users->updatePermissions($userId,$permissions);
 
-            $user->permissions = Input::get('rules', array());
-            $user->save();
-
-            Event::fire('users.permissions.update', array($user));
-
-            return Redirect::route('admin.users.index')->with('success', Lang::get('cpanel::users.permissions_update_success'));
+            return Redirect::route('cpanel.users.index')
+                ->with('success', Lang::get('cpanel::users.permissions_update_success'));
         }
         catch ( UserNotFoundException $e)
         {
-            return Redirect::route('admin.users.permissions')->with('error', $e->getMessage());
+            return Redirect::route('cpanel.users.permissions')
+                ->with('error', $e->getMessage());
         }
 
     }

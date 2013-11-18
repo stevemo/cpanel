@@ -135,6 +135,25 @@ Route::group(array('prefix' => $prefix), function()
     ));
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | Cpanel Users Permissions Routes
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    Route::get('users/{users}/permissions', array(
+        'as'     => 'cpanel.users.permissions',
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersPermissionsController@index',
+        'before' => 'auth.cpanel:users.update'
+    ));
+
+    Route::put('users/{users}/permissions', array(
+        'uses'   => 'Stevemo\Cpanel\Controllers\UsersPermissionsController@update',
+        'before' => 'auth.cpanel:users.update'
+    ));
+
+
 });
 
 /*
@@ -148,25 +167,6 @@ Route::get('admin', array(
     'as'     => 'admin.home',
     'uses'   => 'Stevemo\Cpanel\Controllers\CpanelController@index',
     'before' => 'auth.cpanel:admin.view'
-));
-
-
-/*
-|--------------------------------------------------------------------------
-| Cpanel Users Permissions Routes
-|--------------------------------------------------------------------------
-|
-|
-*/
-Route::get('admin/users/{users}/permissions', array(
-    'as'     => 'admin.users.permissions',
-    'uses'   => 'Stevemo\Cpanel\Controllers\UsersPermissionsController@index',
-    'before' => 'auth.cpanel:users.update'
-));
-
-Route::put('admin/users/{users}/permissions', array(
-    'uses'   => 'Stevemo\Cpanel\Controllers\UsersPermissionsController@update',
-    'before' => 'auth.cpanel:users.update'
 ));
 
 

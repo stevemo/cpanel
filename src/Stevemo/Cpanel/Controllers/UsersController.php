@@ -6,7 +6,6 @@ use Stevemo\Cpanel\User\Form\UserFormInterface;
 use Stevemo\Cpanel\Permission\Repo\PermissionInterface;
 use Stevemo\Cpanel\Group\Repo\GroupInterface;
 use Stevemo\Cpanel\User\Repo\UserNotFoundException;
-use Cartalyst\Sentry\Users\UserAlreadyActivatedException;
 
 class UsersController extends BaseController {
 
@@ -75,6 +74,7 @@ class UsersController extends BaseController {
      */
     public function show($id)
     {
+        // TODO-Stevemo: refactor
         try
         {
             $user = Sentry::getUserProvider()->findById($id);
@@ -244,7 +244,7 @@ class UsersController extends BaseController {
     }
 
     /**
-     * activate or deactivate a user
+     * deactivate a user
      *
      * @author Steve Montambeault
      * @link   http://stevemo.ca
@@ -253,42 +253,52 @@ class UsersController extends BaseController {
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function putStatus($id)
+    public function putDeactivate($id)
     {
         try
         {
-            $user = Sentry::getUserProvider()->findById($id);
+            $this->users->deactivate($id);
+            return Redirect::route('cpanel.users.index')
+                ->with('success',Lang::get('cpanel::users.deactivation_success'));
+        }
+        catch (UserNotFoundException $e)
+        {
+            return Redirect::route('cpanel.users.index')
+                ->with('error',$e->getMessage());
+        }
+    }
 
-            if ($user->isActivated())
+    /**
+     * Activate a user
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param $id
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function putActivate($id)
+    {
+        try
+        {
+            if ($this->users->activate($id))
             {
-                $user->activated = 0;
-                $user->activated_at = null;
-                $user->save();
-                return Redirect::route('admin.users.index')->with('success',Lang::get('cpanel::users.deactivation_success'));
+                // User activation passed
+                return Redirect::route('cpanel.users.index')
+                    ->with('success',Lang::get('cpanel::users.activation_success'));
             }
             else
             {
-                $code = $user->getActivationCode();
-
-                if ($user->attemptActivation($code))
-                {
-                    // User activation passed
-                    return Redirect::route('admin.users.index')->with('success',Lang::get('cpanel::users.activation_success'));
-                }
-                else
-                {
-                    // User activation failed
-                    return Redirect::route('admin.users.index')->with('error',Lang::get('cpanel::users.activation_fail'));
-                }
+                // User activation failed
+                return Redirect::route('cpanel.users.index')
+                    ->with('error',Lang::get('cpanel::users.activation_fail'));
             }
         }
         catch (UserNotFoundException $e)
         {
-            return Redirect::route('admin.users.index')->with('error',$e->getMessage());
-        }
-        catch (UserAlreadyActivatedException $e)
-        {
-            return Redirect::route('admin.users.index')->with('error',$e->getMessage());
+            return Redirect::route('cpanel.users.index')
+                ->with('error',$e->getMessage());
         }
     }
 

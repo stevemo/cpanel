@@ -63,7 +63,7 @@
                                                    </a>
                                                </li>
                                                 <li>
-                                                    <a href="{{ route('admin.users.permissions', array($user->id)) }}">
+                                                    <a href="{{ route('cpanel.users.permissions', array($user->id)) }}">
                                                         <i class="icon-ban-circle"></i>&nbsp;Permissions
                                                     </a>
                                                 </li>

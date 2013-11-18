@@ -42,7 +42,7 @@ return array(
         'users_show'       => 'cpanel::users.show',
         'users_edit'       => 'cpanel::users.edit',
         'users_create'     => 'cpanel::users.create',
-        'users_permission' => 'cpanel::users.permission',
+        'users_permission' => 'cpanel::users.user_permission',
 
         //Groups Views
         'groups_index'      => 'cpanel::groups.index',
