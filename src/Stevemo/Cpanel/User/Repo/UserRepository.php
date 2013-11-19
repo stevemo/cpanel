@@ -363,12 +363,16 @@ class UserRepository implements CpanelUserInterface {
             'last_name'   => $credentials['last_name'],
             'email'       => $credentials['email'],
             'password'    => $credentials['password'],
-            'permissions' => $credentials['permissions']
         );
+
+        if ( array_key_exists('permissions',$credentials) )
+        {
+            $cred['permissions'] = $credentials['permissions'];
+        }
 
         $user = $this->sentry->register($cred,$activate);
 
-        if ( array_key_exists('groups',$credentials['groups']) )
+        if ( array_key_exists('groups',$credentials) )
         {
             $this->syncGroups($credentials['groups'], $user);
         }

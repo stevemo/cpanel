@@ -28,6 +28,19 @@ interface UserFormInterface {
     public function login(array $credentials, $remember);
 
     /**
+     * Register a new user
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param array $credentials
+     * @param bool  $activate
+     *
+     * @return bool
+     */
+    public function register(array $credentials, $activate);
+
+    /**
      * Validate and update a existing user
      *
      * @author Steve Montambeault

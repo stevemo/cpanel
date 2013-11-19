@@ -202,22 +202,16 @@ Route::group(array('prefix' => Config::get('cpanel::prefix', 'admin')), function
 
     Route::post('login','Stevemo\Cpanel\Controllers\CpanelController@postLogin');
 
+    Route::get('register', array(
+        'as'   => 'cpanel.register',
+        'uses' => 'Stevemo\Cpanel\Controllers\CpanelController@getRegister'
+    ));
+
+    Route::post('register','Stevemo\Cpanel\Controllers\CpanelController@postRegister');
+
 });
 
 
-
-
-
-
-
-
-
-Route::get('admin/register', array(
-    'as'   => 'admin.register',
-    'uses' => 'Stevemo\Cpanel\Controllers\CpanelController@getRegister'
-));
-
-Route::post('admin/register','Stevemo\Cpanel\Controllers\CpanelController@postRegister');
 
 
 /*

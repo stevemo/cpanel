@@ -14,7 +14,7 @@
             <div class="block">
                 <p class="block-heading">Registration</p>
                 <div class="block-body">
-                    {{ Former::horizontal_open(route('admin.register')) }}
+                    {{ Former::horizontal_open(route('cpanel.register')) }}
                         <fieldset>
                             <legend>Personal Information</legend>
                             {{ Former::xlarge_text('first_name', 'First Name') }}

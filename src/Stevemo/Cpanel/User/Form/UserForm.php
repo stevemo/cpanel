@@ -70,6 +70,43 @@ class UserForm implements UserFormInterface {
     }
 
     /**
+     * Register a new user
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param array $credentials
+     * @param bool  $activate
+     *
+     * @return bool
+     */
+    public function register(array $credentials, $activate)
+    {
+        try
+        {
+            if ( $this->validator->with($credentials)->passes() )
+            {
+                $this->users->register($credentials,$activate);
+                return true;
+            }
+        }
+        catch (LoginRequiredException $e)
+        {
+            $this->validator->add('LoginRequiredException',$e->getMessage());
+        }
+        catch (PasswordRequiredException $e)
+        {
+            $this->validator->add('PasswordRequiredException',$e->getMessage());
+        }
+        catch (UserExistsException $e)
+        {
+            $this->validator->add('UserExistsException',$e->getMessage());
+        }
+
+        return false;
+    }
+
+    /**
      * Validate and update a existing user
      *
      * @author Steve Montambeault

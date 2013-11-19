@@ -120,38 +120,20 @@ class CpanelController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function postRegister()
     {
-        try
+        if( $this->userForm->register(Input::all(),false) )
         {
-            $validation = $this->getValidationService('user');
+            return Redirect::route('cpanel.login')
+                ->with('success', Lang::get('cpanel::users.register_success'));
+        }
 
-            if( $validation->passes() )
-            {
-                //TODO : Do something with the activation code later on
-                //TODO : Setting to activate or not, email also
-                $user = Sentry::register($validation->getData(), true);
-                Event::fire('users.register', array($user));
-                
-                return Redirect::route('admin.login')->with('success', Lang::get('cpanel::users.register_success')); 
-            }
-           
-            return Redirect::back()->withInput()->withErrors($validation->getErrors());
-        }
-        catch (LoginRequiredException $e)
-        {
-            return Redirect::back()->withInput()->with('error',$e->getMessage());
-        }
-        catch (PasswordRequiredException $e)
-        {
-            return Redirect::back()->withInput()->with('error',$e->getMessage());
-        }
-        catch (UserExistsException $e)
-        {
-            return Redirect::back()->withInput()->with('error',$e->getMessage());
-        }
+        return Redirect::back()
+            ->withInput()
+            ->withErrors($this->userForm->getErrors());
+
     }
     
 }

@@ -42,7 +42,7 @@
 
             <div class="login-extra">
                 Don't have an account?
-                {{ HTML::linkRoute('admin.register', 'Register') }}
+                {{ HTML::linkRoute('cpanel.register', 'Register') }}
                 <!--
                     TODO: make link to forget password
                  -->
