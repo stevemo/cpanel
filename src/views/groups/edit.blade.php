@@ -58,6 +58,7 @@
                                         ->options(array('0' => 'Deny', '1' => 'Allow'))
                                         ->value($input['value'])
                                         ->class('select2')
+                                        ->id($input['id'])
                                     }}
                                 @endforeach
                             @endforeach
@@ -76,6 +77,7 @@
                                             ->options(array('0' => 'Deny', '1' => 'Allow'))
                                             ->value($input['value'])
                                             ->class('select2')
+                                            ->id($input['id'])
                                         }}
                                     @endforeach
                                 @endforeach

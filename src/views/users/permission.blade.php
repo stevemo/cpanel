@@ -18,6 +18,7 @@
                     ->options(array('0' => 'No','1' => 'Yes'))
                     ->value($user->isSuperUser() ? 1 : 0)
                     ->class('select2')
+                    ->id('superuser1')
             }}
             @foreach( $genericPermissions as $perm)
                 <legend>Generic Permissions</legend>
@@ -27,6 +28,7 @@
                             ->options(array('0' => 'Inherit','1' => 'Allow','-1' => 'Deny'))
                             ->value($input['value'])
                             ->class('select2')
+                            ->id($input['id'])
                     }}
                 @endforeach
             @endforeach
@@ -45,6 +47,7 @@
                                 ->options(array('0' => 'Inherit','1' => 'Allow','-1' => 'Deny'))
                                 ->value($input['value'])
                                 ->class('select2')
+                                ->id($input['id'])
                         }}
                     @endforeach
                 @endforeach
