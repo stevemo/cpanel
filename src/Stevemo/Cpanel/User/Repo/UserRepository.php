@@ -294,7 +294,7 @@ class UserRepository implements CpanelUserInterface {
 
         $user->save();
 
-        if ( array_key_exists('groups',$attributes['groups']) )
+        if ( array_key_exists('groups',$attributes) )
         {
             $this->syncGroups($attributes['groups'], $user);
         }
