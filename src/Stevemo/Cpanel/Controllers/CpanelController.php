@@ -30,11 +30,11 @@ class CpanelController extends BaseController {
 
     /**
      * Show the dashboard
-     *  
+     *
      * @author Steve Montambeault
      * @link   http://stevemo.ca
-     *  
-     * @return Response 
+     *
+     * @return \Illuminate\View\View
      */
     public function index()
     {
@@ -43,11 +43,11 @@ class CpanelController extends BaseController {
 
     /**
      * Show the login form
-     *  
+     *
      * @author Steve Montambeault
      * @link   http://stevemo.ca
-     *  
-     * @return Response 
+     *
+     * @return \Illuminate\View\View
      */
     public function getLogin()
     {
@@ -61,7 +61,7 @@ class CpanelController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function getRegister()
     {
