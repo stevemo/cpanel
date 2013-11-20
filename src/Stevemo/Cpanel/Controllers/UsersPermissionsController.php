@@ -41,14 +41,14 @@ class UsersPermissionsController extends BaseController {
     {
         try
         {
-            $user       = $this->users->findById($userId);
-            $modulePermissions = $this->permissions->mergePermissions($user->getPermissions());
-
-            $roles = array(array('name' => 'generic', 'permissions' => array('view','create','update','delete')));
-            $genericPermissions = $this->permissions->mergePermissions($user->getPermissions(), $roles);
+            $user = $this->users->findById($userId);
+            $userPermissions = $user->getPermissions();
+            $genericPermissions = $this->permissions->generic();
+            $modulePermissions = $this->permissions->module();
 
             return View::make(Config::get('cpanel::views.users_permission'))
                 ->with('user',$user)
+                ->with('userPermissions',$userPermissions)
                 ->with('genericPermissions',$genericPermissions)
                 ->with('modulePermissions',$modulePermissions);
         }

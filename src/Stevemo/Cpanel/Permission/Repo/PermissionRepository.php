@@ -1,6 +1,7 @@
 <?php  namespace Stevemo\Cpanel\Permission\Repo;
 
 use Illuminate\Events\Dispatcher;
+use Illuminate\Config\Repository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class PermissionRepository implements PermissionInterface {
@@ -16,13 +17,20 @@ class PermissionRepository implements PermissionInterface {
     protected  $model;
 
     /**
-     * @param Permission $model
-     * @param Dispatcher $event
+     * @var \Illuminate\Config\Repository
      */
-    public function __construct(Permission $model, Dispatcher $event)
+    protected $config;
+
+    /**
+     * @param Permission                    $model
+     * @param Dispatcher                    $event
+     * @param \Illuminate\Config\Repository $config
+     */
+    public function __construct(Permission $model, Dispatcher $event, Repository $config)
     {
         $this->event = $event;
         $this->model = $model;
+        $this->config = $config;
     }
 
     /**
@@ -138,39 +146,29 @@ class PermissionRepository implements PermissionInterface {
     }
 
     /**
-     * Merge group permission with database permission
+     * Get the generic permissions
      *
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @param array $groupPermissions
-     * @param array $merge
+     * @return array
+     */
+    public function generic()
+    {
+        return $this->config->get('cpanel::generic_permission',array());
+    }
+
+    /**
+     * get the module permissions
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
      *
      * @return array
      */
-    public function mergePermissions(array $groupPermissions, array $merge = array())
+    public function module()
     {
-        if ( count($merge) == 0 )
-        {
-            $merge = $this->all(array('name','permissions'))->toArray();
-        }
-
-        foreach ($merge as $pk => $rules)
-        {
-            $id = 1;
-            foreach ($rules['permissions'] as $title => $rule)
-            {
-                $merge[$pk]['permissions'][$title] = array(
-                    'name' => "permissions[$rule]",
-                    'text' => $rule,
-                    'value' => array_key_exists($rule, $groupPermissions) ? $groupPermissions[$rule] : 0,
-                    'id' => 'input' . $rules['name'] . $id,
-                );
-                $id++;
-            }
-        }
-
-        return $merge;
+        return $this->model->all(array('name','permissions'))->toArray();
     }
 
     /**

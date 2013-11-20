@@ -70,7 +70,8 @@
                             </div>
 
                             <div class="tab-pane" id="permissions">
-                                @include('cpanel::users.permission')
+                                <p class="lead">Permissions set here will override groups permissions</p>
+                                @include('cpanel::users.permissions_form')
                             </div>
 
                         </div>

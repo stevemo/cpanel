@@ -6,12 +6,7 @@ return array(
     'prefix' => 'admin',
 
     //Generic Permissions
-    'generic_permission' => array(
-        array(
-            'name' => 'generic',
-            'permissions' => array('view','create','update','delete')
-        )
-    ),
+    'generic_permission' => array('view','create','update','delete'),
 
     'site_config' => array(
         'site_name'   => 'Cpanel',
@@ -42,7 +37,7 @@ return array(
         'users_show'       => 'cpanel::users.show',
         'users_edit'       => 'cpanel::users.edit',
         'users_create'     => 'cpanel::users.create',
-        'users_permission' => 'cpanel::users.user_permission',
+        'users_permission' => 'cpanel::users.permission',
 
         //Groups Views
         'groups_index'      => 'cpanel::groups.index',

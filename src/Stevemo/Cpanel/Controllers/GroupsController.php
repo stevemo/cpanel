@@ -64,19 +64,14 @@ class GroupsController extends BaseController {
      */
     public function create()
     {
-        $roles = array(
-            array(
-                'name' => 'generic',
-                'permissions' => array('view','create','update','delete')
-            )
-        );
-
-        $genericPermissions = $this->permissions->mergePermissions(array(),$roles);
-        $modulePermissions = $this->permissions->mergePermissions(array());
+        $genericPermissions = $this->permissions->generic();
+        $modulePermissions = $this->permissions->module();
+        $groupPermissions = array();
 
         return View::make(Config::get('cpanel::views.groups_create'))
             ->with('genericPermissions',$genericPermissions)
-            ->with('modulePermissions',$modulePermissions);
+            ->with('modulePermissions',$modulePermissions)
+            ->with('groupPermissions',$groupPermissions);
     }
 
     /**
@@ -96,21 +91,15 @@ class GroupsController extends BaseController {
             $group = $this->groups->findById($id);
 
             $groupPermissions = $group->getPermissions();
+            $genericPermissions = $this->permissions->generic();
+            $modulePermissions = $this->permissions->module();
 
-            $roles = array(
-                array(
-                    'name' => 'generic',
-                    'permissions' => array('view','create','update','delete')
-                )
-            );
-
-            $genericPermissions = $this->permissions->mergePermissions($groupPermissions,$roles);
-            $modulePermissions = $this->permissions->mergePermissions($groupPermissions);
 
             return View::make(Config::get('cpanel::views.groups_edit'))
                 ->with('group',$group)
                 ->with('genericPermissions',$genericPermissions)
-                ->with('modulePermissions',$modulePermissions);
+                ->with('modulePermissions',$modulePermissions)
+                ->with('groupPermissions',$groupPermissions);
         }
         catch ( GroupNotFoundException $e)
         {

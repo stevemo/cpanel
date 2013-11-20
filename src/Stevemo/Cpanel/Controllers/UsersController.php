@@ -104,14 +104,18 @@ class UsersController extends BaseController {
     public function create()
     {
         $user = $this->users->getEmptyUser();
-        $genericPermissions = $this->permissions->mergePermissions(array(),Config::get('cpanel::generic_permission'));
-        $modulePermissions = $this->permissions->mergePermissions(array());
+
+        $userPermissions = array();
+        $genericPermissions = $this->permissions->generic();
+        $modulePermissions = $this->permissions->module();
+
 
         //Get Groups
         $groups = $this->groups->findAll();
 
         return View::make(Config::get('cpanel::views.users_create'))
             ->with('user',$user)
+            ->with('userPermissions',$userPermissions)
             ->with('genericPermissions',$genericPermissions)
             ->with('modulePermissions',$modulePermissions)
             ->with('groups',$groups);
@@ -134,20 +138,20 @@ class UsersController extends BaseController {
             $user = $this->users->findById($id);
             $groups = $this->groups->findAll();
 
+            $userPermissions = $user->getPermissions();
+            $genericPermissions = $this->permissions->generic();
+            $modulePermissions = $this->permissions->module();
+
             //get only the group id the user belong to
             $userGroupsId = array_pluck($user->getGroups()->toArray(), 'id');
-
-            $rules = Config::get('cpanel::generic_permission');
-
-            $genericPermissions = $this->permissions->mergePermissions($user->getPermissions(),$rules);
-            $modulePermissions = $this->permissions->mergePermissions($user->getPermissions());
 
             return View::make(Config::get('cpanel::views.users_edit'))
                 ->with('user',$user)
                 ->with('groups',$groups)
                 ->with('userGroupsId',$userGroupsId)
                 ->with('genericPermissions',$genericPermissions)
-                ->with('modulePermissions',$modulePermissions);
+                ->with('modulePermissions',$modulePermissions)
+                ->with('userPermissions',$userPermissions);
         }
         catch (UserNotFoundException $e)
         {

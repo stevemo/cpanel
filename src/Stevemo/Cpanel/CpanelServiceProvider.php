@@ -85,7 +85,7 @@ class CpanelServiceProvider extends ServiceProvider {
 
         $app->bind('Stevemo\Cpanel\Permission\Repo\PermissionInterface', function($app)
         {
-            return new PermissionRepository(new Permission, $app['events']);
+            return new PermissionRepository(new Permission, $app['events'], $app['config']);
         });
 
         $app->bind('Stevemo\Cpanel\Permission\Form\PermissionFormInterface', function($app)
