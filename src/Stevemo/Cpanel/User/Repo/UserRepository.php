@@ -183,6 +183,29 @@ class UserRepository implements CpanelUserInterface {
     }
 
     /**
+     * Find a given user by the login attribute
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param $login
+     *
+     * @throws UserNotFoundException
+     * @return \Cartalyst\Sentry\Users\UserInterface
+     */
+    public function findByLogin($login)
+    {
+        try
+        {
+            return $this->sentry->findUserByLogin($login);
+        }
+        catch (SentryUserNotFoundException $e)
+        {
+            throw new UserNotFoundException($e->getMessage());
+        }
+    }
+
+    /**
      * Logs the current user out.
      *
      * @author Steve Montambeault

@@ -98,6 +98,18 @@ interface CpanelUserInterface {
     public function findById($id);
 
     /**
+     * Find a given user by the login attribute
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param $login
+     *
+     * @return \Cartalyst\Sentry\Users\UserInterface
+     */
+    public function findByLogin($login);
+
+    /**
      * Logs the current user out.
      *
      * @author Steve Montambeault

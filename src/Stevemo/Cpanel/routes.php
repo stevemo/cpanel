@@ -222,6 +222,11 @@ Route::group(array('prefix' => Config::get('cpanel::prefix', 'admin')), function
     ));
 
     Route::post('password/forgot','Stevemo\Cpanel\Controllers\PasswordController@postForgot');
+
+    Route::get('password/reset/{token}', array(
+        'as'   => 'cpanel.password.reset',
+        'uses' => 'Stevemo\Cpanel\Controllers\PasswordController@getReset'
+    ));
 });
 
 
