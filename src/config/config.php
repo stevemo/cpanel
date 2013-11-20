@@ -52,6 +52,9 @@ return array(
 
         //Throttling Views
         'throttle_status' => 'cpanel::throttle.index',
+
+        //password Views
+        'password_forgot' => 'cpanel::password.forgot',
     ),
 
     'validation' => array(

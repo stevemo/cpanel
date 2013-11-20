@@ -209,6 +209,19 @@ Route::group(array('prefix' => Config::get('cpanel::prefix', 'admin')), function
 
     Route::post('register','Stevemo\Cpanel\Controllers\CpanelController@postRegister');
 
+    /*
+    |--------------------------------------------------------------------------
+    | Cpanel Password management Routes
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+    Route::get('password/forgot', array(
+        'as'   => 'cpanel.password.forgot',
+        'uses' => 'Stevemo\Cpanel\Controllers\PasswordController@getForgot'
+    ));
+
+    Route::post('password/forgot','Stevemo\Cpanel\Controllers\PasswordController@postForgot');
 });
 
 

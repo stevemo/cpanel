@@ -41,11 +41,14 @@
             </form>
 
             <div class="login-extra">
-                Don't have an account?
-                {{ HTML::linkRoute('cpanel.register', 'Register') }}
-                <!--
-                    TODO: make link to forget password
-                 -->
+               <p>
+                   Don't have an account?
+                   {{ link_to_route('cpanel.register', 'Register') }}
+               </p>
+                <p>
+                    Forgot your password?
+                    {{ link_to_route('cpanel.password.forgot', 'Reset') }}
+                </p>
             </div>
 
         </div>
