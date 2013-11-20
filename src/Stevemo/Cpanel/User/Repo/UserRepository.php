@@ -291,6 +291,36 @@ class UserRepository implements CpanelUserInterface {
     }
 
     /**
+     *  Reset a given user password
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param $code
+     * @param $password
+     *
+     * @throws UserNotFoundException
+     * @return \Cartalyst\Sentry\Users\UserInterface
+     */
+    public function resetPassword($code,$password)
+    {
+        try
+        {
+            $user =  $this->sentry->findUserByResetPasswordCode($code);
+            $user->password = $password;
+            $user->save();
+
+            $this->event->fire('users.password.reset',array($user));
+
+            return $user;
+        }
+        catch (SentryUserNotFoundException $e)
+        {
+            throw new UserNotFoundException($e->getMessage());
+        }
+    }
+
+    /**
      * Update user information
      *
      * @author Steve Montambeault

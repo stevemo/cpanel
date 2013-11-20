@@ -14,6 +14,8 @@ use Stevemo\Cpanel\Group\Form\GroupValidator;
 use Stevemo\Cpanel\User\Repo\UserRepository;
 use Stevemo\Cpanel\User\Form\UserForm;
 use Stevemo\Cpanel\User\Form\UserValidator;
+use Stevemo\Cpanel\User\Form\PasswordForm;
+use Stevemo\Cpanel\User\Form\PasswordValidator;
 
 class CpanelServiceProvider extends ServiceProvider {
 
@@ -46,6 +48,7 @@ class CpanelServiceProvider extends ServiceProvider {
         $this->registerPermission();
         $this->registerGroup();
         $this->registerUser();
+        $this->registerPassword();
 	}
 
      /**
@@ -144,6 +147,26 @@ class CpanelServiceProvider extends ServiceProvider {
                 new UserValidator($app['validator'], new MessageBag),
                 $app->make('Stevemo\Cpanel\User\Repo\CpanelUserInterface')
             );
+        });
+    }
+
+    /**
+     * Register bindings for the password reset
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     */
+    public function registerPassword()
+    {
+        $app = $this->app;
+
+        $app->bind('Stevemo\Cpanel\User\Form\PasswordFormInterface', function($app)
+        {
+           return new PasswordForm(
+               new PasswordValidator($app['validator'], new MessageBag),
+               $app->make('Stevemo\Cpanel\User\Repo\CpanelUserInterface')
+           );
         });
     }
 

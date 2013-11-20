@@ -12,4 +12,5 @@ return array(
     'activation_success'         => 'Usuario activado correctamente.',
     'activation_fail'            => 'Ha fallado la activación del usuario.',
     'deactivation_success'       => 'Usuario desactivado correctamente.',
+    'password_reset_success'     => 'Password reset successfully',
 );

@@ -54,9 +54,10 @@ return array(
         'throttle_status' => 'cpanel::throttle.index',
 
         //password Views
-        'password_forgot'       => 'cpanel::password.forgot',
-        'email_password_forgot' => 'cpanel::password.email',
-        'password_send'         => 'cpanel::password.send',
+        'password_forgot'        => 'cpanel::password.forgot',
+        'email_password_forgot'  => 'cpanel::password.email',
+        'password_send'          => 'cpanel::password.send',
+        'password_reset'         => 'cpanel::password.reset',
     ),
 
     'validation' => array(

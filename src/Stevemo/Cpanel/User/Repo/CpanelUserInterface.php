@@ -152,6 +152,19 @@ interface CpanelUserInterface {
     public function getUserThrottle($id);
 
     /**
+     *  Reset a given user password
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param $code
+     * @param $password
+     *
+     * @return \Cartalyst\Sentry\Users\UserInterface
+     */
+    public function resetPassword($code,$password);
+
+    /**
      * Update user information
      *
      * @author Steve Montambeault

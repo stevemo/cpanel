@@ -1,8 +1,9 @@
 <?php  namespace Stevemo\Cpanel\Controllers; 
 
-use View, Config, Input, Redirect, Mail, Event;
+use View, Config, Input, Redirect, Mail, Event, Lang;
 use Stevemo\Cpanel\User\Repo\CpanelUserInterface;
 use Stevemo\Cpanel\User\Repo\UserNotFoundException;
+use Stevemo\Cpanel\User\Form\PasswordFormInterface;
 
 class PasswordController extends BaseController {
 
@@ -12,11 +13,18 @@ class PasswordController extends BaseController {
     private $users;
 
     /**
-     * @param CpanelUserInterface $users
+     * @var \Stevemo\Cpanel\User\Form\PasswordFormInterface
      */
-    public function __construct(CpanelUserInterface $users)
+    private $passForm;
+
+    /**
+     * @param CpanelUserInterface                             $users
+     * @param \Stevemo\Cpanel\User\Form\PasswordFormInterface $passForm
+     */
+    public function __construct(CpanelUserInterface $users, PasswordFormInterface $passForm)
     {
         $this->users = $users;
+        $this->passForm = $passForm;
     }
 
     /**
@@ -55,7 +63,7 @@ class PasswordController extends BaseController {
             });
 
             Event::fire('users.password.forgot', array($user));
-            
+
             return View::make(Config::get('cpanel::views.password_send'))
                 ->with('email', $email);
         }
@@ -64,6 +72,50 @@ class PasswordController extends BaseController {
             return Redirect::back()
                 ->with('password_error', $e->getMessage());
         }
+    }
+
+    /**
+     * Display the password reset form
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param $code
+     *
+     * @return \Illuminate\View\View
+     */
+    public function getReset($code)
+    {
+        return View::make(Config::get('cpanel::views.password_reset'))
+            ->with('code',$code);
+    }
+
+    /**
+     *
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postReset()
+    {
+        $creds = array(
+            'password' => Input::get('password'),
+            'password_confirmation' => Input::get('password_confirmation'),
+            'code' => Input::get('code')
+
+        );
+
+        if ($this->passForm->reset($creds))
+        {
+            return Redirect::route('cpanel.login')
+                ->with('success', Lang::get('cpanel::users.password_reset_success'));
+        }
+
+        return Redirect::back()
+            ->withInput()
+            ->withErrors($this->passForm->getErrors());
     }
 
 }
