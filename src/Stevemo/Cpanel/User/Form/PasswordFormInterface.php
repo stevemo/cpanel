@@ -13,6 +13,18 @@ interface PasswordFormInterface {
     public function getErrors();
 
     /**
+     *
+     *
+     * @author   Steve Montambeault
+     * @link     http://stevemo.ca
+     *
+     * @param $email
+     *
+     * @return bool
+     */
+    public function forgot($email);
+
+    /**
      * Reset a given user password
      *
      * @author Steve Montambeault

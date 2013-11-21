@@ -53,17 +53,7 @@ class PasswordController extends BaseController {
         try
         {
             $email = Input::get('email');
-            $user = $this->users->findByLogin($email);
-            $token = $user->getResetPasswordCode();
-            $view = Config::get('cpanel::views.email_password_forgot');
-
-            Mail::queue($view, compact('token'), function($message) use ($email)
-            {
-                $message->to($email)->subject('Account Password Reset');
-            });
-
-            Event::fire('users.password.forgot', array($user));
-
+            $this->passForm->forgot($email);
             return View::make(Config::get('cpanel::views.password_send'))
                 ->with('email', $email);
         }

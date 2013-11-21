@@ -1,8 +1,10 @@
 <?php namespace Stevemo\Cpanel\User\Form;
 
+use Event;
 use Stevemo\Cpanel\User\Repo\CpanelUserInterface;
 use Stevemo\Cpanel\Services\Validation\ValidableInterface;
 use Stevemo\Cpanel\User\Repo\UserNotFoundException;
+use Stevemo\Cpanel\User\UserMailerInterface;
 
 class PasswordForm implements PasswordFormInterface {
 
@@ -17,13 +19,41 @@ class PasswordForm implements PasswordFormInterface {
     protected $validator;
 
     /**
-     * @param ValidableInterface  $validator
-     * @param CpanelUserInterface $users
+     * @var \Stevemo\Cpanel\User\UserMailerInterface
      */
-    public function __construct(ValidableInterface $validator, CpanelUserInterface $users)
+    protected $mailer;
+
+    /**
+     * @param ValidableInterface                       $validator
+     * @param CpanelUserInterface                      $users
+     * @param \Stevemo\Cpanel\User\UserMailerInterface $mailer
+     */
+    public function __construct(
+        ValidableInterface $validator,
+        CpanelUserInterface $users,
+        UserMailerInterface $mailer
+    )
     {
         $this->users = $users;
         $this->validator = $validator;
+        $this->mailer = $mailer;
+    }
+
+    /**
+     *
+     *
+     * @author   Steve Montambeault
+     * @link     http://stevemo.ca
+     *
+     * @param $email
+     *
+     * @return void
+     */
+    public function forgot($email)
+    {
+        $user = $this->users->findByLogin($email);
+        $this->mailer->sendReset($user);
+        Event::fire('users.password.forgot', array($user));
     }
 
     /**

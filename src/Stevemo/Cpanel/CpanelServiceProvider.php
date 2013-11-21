@@ -16,6 +16,7 @@ use Stevemo\Cpanel\User\Form\UserForm;
 use Stevemo\Cpanel\User\Form\UserValidator;
 use Stevemo\Cpanel\User\Form\PasswordForm;
 use Stevemo\Cpanel\User\Form\PasswordValidator;
+use Stevemo\Cpanel\User\UserMailer;
 
 class CpanelServiceProvider extends ServiceProvider {
 
@@ -165,8 +166,14 @@ class CpanelServiceProvider extends ServiceProvider {
         {
            return new PasswordForm(
                new PasswordValidator($app['validator'], new MessageBag),
-               $app->make('Stevemo\Cpanel\User\Repo\CpanelUserInterface')
+               $app->make('Stevemo\Cpanel\User\Repo\CpanelUserInterface'),
+               $app->make('Stevemo\Cpanel\User\UserMailerInterface')
            );
+        });
+
+        $app->bind('Stevemo\Cpanel\User\UserMailerInterface', function($app)
+        {
+            return new UserMailer();
         });
     }
 
