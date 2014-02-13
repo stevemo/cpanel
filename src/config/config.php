@@ -2,6 +2,12 @@
 
 return array(
 
+    // route prefix
+    'prefix' => 'admin',
+
+    //Generic Permissions
+    'generic_permission' => array('view','create','update','delete'),
+
     'site_config' => array(
         'site_name'   => 'Cpanel',
         'title'       => 'My Admin Panel',
@@ -10,11 +16,11 @@ return array(
 
     //menu 2 type are available single or dropdown and it must be a route
     'menu' => array(
-        'Dashboard' => array('type' => 'single', 'route' => 'admin.home'),
+        'Dashboard' => array('type' => 'single', 'route' => 'cpanel.home'),
         'Users'     => array('type' => 'dropdown', 'links' => array(
-            'Manage Users' => array('route' => 'admin.users.index'),
-            'Groups'       => array('route' => 'admin.groups.index'),
-            'Permissions'  => array('route' => 'admin.permissions.index')
+            'Manage Users' => array('route' => 'cpanel.users.index'),
+            'Groups'       => array('route' => 'cpanel.groups.index'),
+            'Permissions'  => array('route' => 'cpanel.permissions.index')
         )),
     ),
 
@@ -46,6 +52,12 @@ return array(
 
         //Throttling Views
         'throttle_status' => 'cpanel::throttle.index',
+
+        //password Views
+        'password_forgot'        => 'cpanel::password.forgot',
+        'email_password_forgot'  => 'cpanel::password.email',
+        'password_send'          => 'cpanel::password.send',
+        'password_reset'         => 'cpanel::password.reset',
     ),
 
     'validation' => array(

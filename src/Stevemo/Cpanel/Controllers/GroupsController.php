@@ -1,17 +1,43 @@
 <?php namespace Stevemo\Cpanel\Controllers;
 
-use View;
-use Redirect;
-use Input;
-use Lang;
-use Sentry;
-use Event;
-use Config;
-use Cartalyst\Sentry\Groups\NameRequiredException;
-use Cartalyst\Sentry\Groups\GroupExistsException;
-use Cartalyst\Sentry\Groups\GroupNotFoundException;
+use View, Redirect, Input, Lang, Config;
+use Stevemo\Cpanel\Group\Repo\CpanelGroupInterface;
+use Stevemo\Cpanel\Group\Form\GroupFormInterface;
+use Stevemo\Cpanel\Permission\Repo\PermissionInterface;
+use Stevemo\Cpanel\Group\Repo\GroupNotFoundException;
 
 class GroupsController extends BaseController {
+
+    /**
+     * @var \Stevemo\Cpanel\Group\Repo\CpanelGroupInterface
+     */
+    protected $groups;
+
+    /**
+     * @var \Stevemo\Cpanel\Group\Form\GroupFormInterface
+     */
+    protected $form;
+
+    /**
+     * @var \Stevemo\Cpanel\Permission\Repo\PermissionInterface
+     */
+    protected $permissions;
+
+    /**
+     * @param \Stevemo\Cpanel\Group\Repo\CpanelGroupInterface     $groups
+     * @param \Stevemo\Cpanel\Group\Form\GroupFormInterface       $form
+     * @param \Stevemo\Cpanel\Permission\Repo\PermissionInterface $permissions
+     */
+    public function __construct(
+        CpanelGroupInterface $groups,
+        GroupFormInterface $form,
+        PermissionInterface $permissions
+    )
+    {
+        $this->groups = $groups;
+        $this->form = $form;
+        $this->permissions = $permissions;
+    }
 
 
     /**
@@ -20,11 +46,11 @@ class GroupsController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {
-        $groups = Sentry::getGroupProvider()->findAll();
+        $groups = $this->groups->findAll();
         return View::make(Config::get('cpanel::views.groups_index'), compact('groups'));
     }
 
@@ -34,11 +60,18 @@ class GroupsController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function create()
     {
-        return View::make(Config::get('cpanel::views.groups_create'));
+        $genericPermissions = $this->permissions->generic();
+        $modulePermissions = $this->permissions->module();
+        $groupPermissions = array();
+
+        return View::make(Config::get('cpanel::views.groups_create'))
+            ->with('genericPermissions',$genericPermissions)
+            ->with('modulePermissions',$modulePermissions)
+            ->with('groupPermissions',$groupPermissions);
     }
 
     /**
@@ -47,14 +80,26 @@ class GroupsController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return Response
+     * @param $id
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function edit($id)
     {
         try
         {
-            $group = Sentry::getGroupProvider()->findById($id);
-            return View::make(Config::get('cpanel::views.groups_edit'),compact('group'));
+            $group = $this->groups->findById($id);
+
+            $groupPermissions = $group->getPermissions();
+            $genericPermissions = $this->permissions->generic();
+            $modulePermissions = $this->permissions->module();
+
+
+            return View::make(Config::get('cpanel::views.groups_edit'))
+                ->with('group',$group)
+                ->with('genericPermissions',$genericPermissions)
+                ->with('modulePermissions',$modulePermissions)
+                ->with('groupPermissions',$groupPermissions);
         }
         catch ( GroupNotFoundException $e)
         {
@@ -69,24 +114,19 @@ class GroupsController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store()
     {
-        try
+        if ( $this->form->create(Input::all()) )
         {
-            $group = Sentry::getGroupProvider()->create(Input::only('name'));
-            Event::fire('groups.create', array($group));
-            return Redirect::route('admin.groups.index')->with('success', Lang::get('cpanel::groups.create_success'));
+            return Redirect::route('cpanel.groups.index')
+                ->with('success', Lang::get('cpanel::groups.create_success'));
         }
-        catch (NameRequiredException $e)
-        {
-            return Redirect::back()->withInput()->with('error', $e->getMessage());
-        }
-        catch (GroupExistsException $e)
-        {
-            return Redirect::back()->withInput()->with('error', $e->getMessage());
-        }
+
+        return Redirect::back()
+            ->withInput()
+            ->withErrors($this->form->getErrors());
     }
 
     /**
@@ -95,25 +135,31 @@ class GroupsController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return Response
+     * @param $id
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update($id)
     {
         try
         {
-            $group = Sentry::getGroupProvider()->findById($id);
-            $group->name = Input::get('name');
-            $group->save();
-            Event::fire('groups.update', array($group));
-            return Redirect::route('admin.groups.index')->with('success', Lang::get('cpanel::groups.update_success') );
+            $inputs = Input::all();
+            $inputs['id'] = $id;
+
+            if ( $this->form->update($inputs) )
+            {
+                return Redirect::route('cpanel.groups.index')
+                    ->with('success', Lang::get('cpanel::groups.update_success') );
+            }
+
+            return Redirect::back()
+                ->withInput()
+                ->withErrors($this->form->getErrors());
         }
         catch (GroupNotFoundException $e)
         {
-            return Redirect::back()->withInput()->with('error', $e->getMessage());
-        }
-        catch (GroupExistsException $e)
-        {
-            return Redirect::back()->withInput()->with('error', $e->getMessage());
+            return Redirect::route('cpanel.groups.index')
+                ->with('error', $e->getMessage());
         }
     }
 
@@ -123,17 +169,18 @@ class GroupsController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return Response
+     * @param $id
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
         try
         {
-            $group = Sentry::getGroupProvider()->findById($id);
-            $eventData = $group;
-            $group->delete();
-            Event::fire('groups.delete', array($eventData));
-            return Redirect::route('admin.groups.index')->with('success', Lang::get('cpanel::groups.delete_success'));
+            $this->groups->delete($id);
+
+            return Redirect::route('cpanel.groups.index')
+                ->with('success', Lang::get('cpanel::groups.delete_success'));
         }
         catch (GroupNotFoundException $e)
         {

@@ -46,7 +46,7 @@ class CreatePermissionsTable extends Migration {
         DB::table('permissions')->insert(array(
             array(
                 'name' => 'Admin',
-                'permissions' => json_encode(array('admin.view')),
+                'permissions' => json_encode(array('cpanel.view')),
                 'created_at' => new \DateTime,
                 'updated_at' => new \DateTime
             ),

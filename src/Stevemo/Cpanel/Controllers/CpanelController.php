@@ -1,32 +1,40 @@
 <?php namespace Stevemo\Cpanel\Controllers;
 
-use View;
-use Config;
-use Input;
-use Sentry;
-use Redirect;
-use Lang;
-use Event;
-use Cartalyst\Sentry\Users\UserNotFoundException;
-use Cartalyst\Sentry\Users\UserExistsException;
-use Cartalyst\Sentry\Users\LoginRequiredException;
-use Cartalyst\Sentry\Users\PasswordRequiredException;
-use Cartalyst\Sentry\Users\WrongPasswordException;
-use Cartalyst\Sentry\Users\UserNotActivatedException;
-use Cartalyst\Sentry\Throttling\UserSuspendedException;
-use Cartalyst\Sentry\Throttling\UserBannedException;
+use View, Config, Input, Redirect, Lang;
+use Stevemo\Cpanel\User\Repo\CpanelUserInterface;
+use Stevemo\Cpanel\User\Form\UserFormInterface;
 
 
 class CpanelController extends BaseController {
 
+    /**
+     * @var \Stevemo\Cpanel\User\Repo\CpanelUserInterface
+     */
+    private $users;
+
+    /**
+     * @var \Stevemo\Cpanel\User\Form\UserFormInterface
+     */
+    private $userForm;
+
+    /**
+     * @param CpanelUserInterface                         $users
+     * @param \Stevemo\Cpanel\User\Form\UserFormInterface $userForm
+     */
+    public function __construct(CpanelUserInterface $users, UserFormInterface $userForm)
+    {
+        $this->users = $users;
+        $this->userForm = $userForm;
+    }
+
 
     /**
      * Show the dashboard
-     *  
+     *
      * @author Steve Montambeault
      * @link   http://stevemo.ca
-     *  
-     * @return Response 
+     *
+     * @return \Illuminate\View\View
      */
     public function index()
     {
@@ -35,11 +43,11 @@ class CpanelController extends BaseController {
 
     /**
      * Show the login form
-     *  
+     *
      * @author Steve Montambeault
      * @link   http://stevemo.ca
-     *  
-     * @return Response 
+     *
+     * @return \Illuminate\View\View
      */
     public function getLogin()
     {
@@ -53,7 +61,7 @@ class CpanelController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function getRegister()
     {
@@ -71,14 +79,9 @@ class CpanelController extends BaseController {
      */
     public function getLogout()
     {
-        if (Sentry::check())
-        {
-            $user = Sentry::getUser();
-            Sentry::logout();
-            Event::fire('users.logout', array($user));
-            return Redirect::route('admin.login')->with('success', Lang::get('cpanel::users.logout'));
-        }
-        return Redirect::route('admin.login');
+        $this->users->logout();
+        return Redirect::route('cpanel.login')
+            ->with('success', Lang::get('cpanel::users.logout'));
     }
 
     /**
@@ -88,50 +91,27 @@ class CpanelController extends BaseController {
      * @link   http://stevemo.ca
      *
      *
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function postLogin()
     {
-        try
-        {
-            $remember = Input::get('remember_me', false);
-            $userdata = array(
-                Config::get('cartalyst/sentry::users.login_attribute') => Input::get('login_attribute'),
-                'password' => Input::get('password')
-            );
+        $remember = Input::get('remember_me', false);
+        $userdata = array(
+            Config::get('cartalyst/sentry::users.login_attribute') => Input::get('login_attribute'),
+            'password' => Input::get('password')
+        );
 
-            $user = Sentry::authenticate($userdata, $remember);
-            Event::fire('users.login', array($user));
-            return Redirect::intended('admin')->with('success', Lang::get('cpanel::users.login_success'));
-        }
-        catch (LoginRequiredException $e)
+        if ( $this->userForm->login($userdata,$remember) )
         {
-            return Redirect::back()->withInput()->with('login_error',$e->getMessage());
+            return Redirect::intended(Config::get('cpanel::prefix', 'admin'))
+                ->with('success', Lang::get('cpanel::users.login_success'));
         }
-        catch (PasswordRequiredException $e)
-        {
-            return Redirect::back()->withInput()->with('login_error',$e->getMessage());
-        }
-        catch (WrongPasswordException $e)
-        {
-            return Redirect::back()->withInput()->with('login_error',$e->getMessage());
-        }
-        catch (UserNotActivatedException $e)
-        {
-            return Redirect::back()->withInput()->with('login_error',$e->getMessage());
-        }
-        catch (UserNotFoundException $e)
-        {
-            return Redirect::back()->withInput()->with('login_error',$e->getMessage());
-        }
-        catch (UserSuspendedException $e)
-        {
-            return Redirect::back()->withInput()->with('login_error',$e->getMessage());
-        }
-        catch (UserBannedException $e)
-        {
-            return Redirect::back()->withInput()->with('login_error',$e->getMessage());
-        }
+
+        return Redirect::back()
+            ->withInput()
+            ->with('login_error',$this->userForm->getErrors()->first());
+
+
     }
 
     /**
@@ -140,38 +120,20 @@ class CpanelController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function postRegister()
     {
-        try
+        if( $this->userForm->register(Input::all(),false) )
         {
-            $validation = $this->getValidationService('user');
+            return Redirect::route('cpanel.login')
+                ->with('success', Lang::get('cpanel::users.register_success'));
+        }
 
-            if( $validation->passes() )
-            {
-                //TODO : Do something with the activation code later on
-                //TODO : Setting to activate or not, email also
-                $user = Sentry::register($validation->getData(), true);
-                Event::fire('users.register', array($user));
-                
-                return Redirect::route('admin.login')->with('success', Lang::get('cpanel::users.register_success')); 
-            }
-           
-            return Redirect::back()->withInput()->withErrors($validation->getErrors());
-        }
-        catch (LoginRequiredException $e)
-        {
-            return Redirect::back()->withInput()->with('error',$e->getMessage());
-        }
-        catch (PasswordRequiredException $e)
-        {
-            return Redirect::back()->withInput()->with('error',$e->getMessage());
-        }
-        catch (UserExistsException $e)
-        {
-            return Redirect::back()->withInput()->with('error',$e->getMessage());
-        }
+        return Redirect::back()
+            ->withInput()
+            ->withErrors($this->userForm->getErrors());
+
     }
     
 }

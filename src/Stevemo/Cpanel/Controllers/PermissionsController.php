@@ -1,32 +1,30 @@
 <?php namespace Stevemo\Cpanel\Controllers;
 
-use View;
-use Redirect;
-use Input;
-use Lang;
-use Event;
-use Config;
-use Stevemo\Cpanel\Provider\PermissionProvider;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use View, Redirect, Input, Lang, Config;
+use Stevemo\Cpanel\Permission\Repo\PermissionInterface;
+use Stevemo\Cpanel\Permission\Repo\PermissionNotFoundException;
+use Stevemo\Cpanel\Permission\Form\PermissionFormInterface;
 
 class PermissionsController extends BaseController {
 
     /**
-     * @var PermissionProvider
+     * @var PermissionInterface
      */
     protected $permissions;
 
     /**
-     * [__construct description]
-     *
-     * @author Steve Montambeault
-     * @link   http://stevemo.ca
-     *
-     * @param  PermissionProvider $permissions
+     * @var \Stevemo\Cpanel\Permission\Form\PermissionFormInterface
      */
-    public function __construct(PermissionProvider $permissions)
+    protected $form;
+
+    /**
+     * @param PermissionInterface     $permissions
+     * @param PermissionFormInterface $form
+     */
+    public function __construct(PermissionInterface $permissions, PermissionFormInterface $form)
     {
         $this->permissions = $permissions;
+        $this->form = $form;
     }
 
     /**
@@ -35,13 +33,14 @@ class PermissionsController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {
         $permissions = $this->permissions->all();
-        $roles = $this->permissions->getRoles();
-        return View::make(Config::get('cpanel::views.permissions_index') , compact('permissions','roles'));
+
+        return View::make(Config::get('cpanel::views.permissions_index'))
+            ->with('permissions', $permissions);
     }
 
     /**
@@ -50,12 +49,11 @@ class PermissionsController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     *@return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\View\View
      */
     public function create()
     {
-        $roles = $this->permissions->getRoles();
-        return View::make( Config::get('cpanel::views.permissions_create'), compact('roles'));
+        return View::make( Config::get('cpanel::views.permissions_create'));
     }
 
     /**
@@ -66,19 +64,21 @@ class PermissionsController extends BaseController {
      *
      * @param $id
      *
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function edit($id)
     {
-        try
+        $permission = $this->permissions->find($id);
+
+        if ( $permission )
         {
-            $permission = $this->permissions->findOrFail($id);
-            $roles = $this->permissions->getRoles();
-            return View::make( Config::get('cpanel::views.permissions_edit'), compact('permission','roles'));
+            return View::make( Config::get('cpanel::views.permissions_edit') )
+                ->with('permission', $permission);
         }
-        catch ( ModelNotFoundException $e )
+        else
         {
-            return Redirect::route('admin.permissions.index')->with('error', Lang::get('admin::permission.model_not_found'));
+            return Redirect::route('cpanel.permissions.index')
+                ->with('error', Lang::get('cpanel::permissions.model_not_found'));
         }
     }
 
@@ -93,70 +93,74 @@ class PermissionsController extends BaseController {
      */
     public function store()
     {
-        $validation = $this->getValidationService('permission');
+        $inputs = Input::all();
 
-        if( $validation->passes() )
+        if ( $this->form->create($inputs) )
         {
-            $perm = $this->permissions->create($validation->getData());
-            Event::fire('permissions.create', array($perm));
-            return Redirect::route('admin.permissions.index')->with('success', Lang::get('cpanel::permissions.create_success'));
+            return Redirect::route('cpanel.permissions.index')
+                ->with('success', Lang::get('cpanel::permissions.create_success'));
         }
-        return Redirect::back()->withInput()->withErrors($validation->getErrors());
 
+        return Redirect::back()
+            ->withInput()
+            ->withErrors($this->form->getErrors());
     }
 
     /**
-     * Update permissions into the database
+     * Process the edit form
      *
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
+     * @param $id
      *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update($id)
     {
+        $inputs = Input::all();
+        $inputs['id'] = $id;
+
         try
         {
-            $data = Input::all();
-            $data['id'] = $id;
-            $validation = $this->getValidationService('permission',$data);
-
-            if( $validation->passes() )
+            if ( $this->form->update($inputs) )
             {
-                $perm = $this->permissions->update($id,$validation->getData());
-                Event::fire('permissions.update', array($perm));
-                return Redirect::route('admin.permissions.index')->with('success', Lang::get('cpanel::permissions.update_success'));
+                return Redirect::route('cpanel.permissions.index')
+                    ->with('success', Lang::get('cpanel::permissions.update_success'));
             }
 
-            return Redirect::back()->withInput()->withErrors($validation->getErrors());
+            return Redirect::back()
+                ->withInput()
+                ->withErrors($this->form->getErrors());
         }
-        catch ( ModelNotFoundException $e )
+        catch ( PermissionNotFoundException $e )
         {
-            return Redirect::route('admin.permissions.index')->with('error', Lang::get('cpanel::permissions.model_not_found'));
+            return Redirect::route('cpanel.permissions.index')
+                ->with('error', Lang::get('cpanel::permissions.model_not_found'));
         }
     }
 
-   /**
-     * Delete a permission
+    /**
+     * Delete a permission module
      *
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @param  int $id
+     * @param $id
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
-        try
+        if ( $this->permissions->delete($id) )
         {
-            $eventData = $this->permissions->delete($id);
-            Event::fire('permission.delete', array($eventData));
-            return Redirect::route('admin.permissions.index')->with('success', Lang::get('cpanel::permissions.delete_success'));
+            return Redirect::route('cpanel.permissions.index')
+                ->with('success', Lang::get('cpanel::permissions.delete_success'));
         }
-        catch ( ModelNotFoundException $e)
+        else
         {
-            return Redirect::route('admin.permissions.index')->with('error', Lang::get('cpanel::permissions.model_not_found'));
+            return Redirect::route('cpanel.permissions.index')
+                ->with('error', Lang::get('cpanel::permissions.model_not_found'));
         }
     }
 

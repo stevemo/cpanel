@@ -1,20 +1,52 @@
 <?php namespace Stevemo\Cpanel\Controllers;
 
-use Cartalyst\Sentry\Users\UserAlreadyActivatedException;
-use View;
-use Config;
-use Redirect;
-use Lang;
-use Input;
-use Event;
-use Sentry;
-use Cartalyst\Sentry\Users\UserNotFoundException;
-use Cartalyst\Sentry\Users\UserExistsException;
-use Cartalyst\Sentry\Users\LoginRequiredException;
-use Cartalyst\Sentry\Users\PasswordRequiredException;
-
+use View, Config, Redirect, Lang, Input;
+use Stevemo\Cpanel\User\Repo\CpanelUserInterface;
+use Stevemo\Cpanel\User\Form\UserFormInterface;
+use Stevemo\Cpanel\Permission\Repo\PermissionInterface;
+use Stevemo\Cpanel\Group\Repo\CpanelGroupInterface;
+use Stevemo\Cpanel\User\Repo\UserNotFoundException;
 
 class UsersController extends BaseController {
+
+    /**
+     * @var \Stevemo\Cpanel\User\Repo\CpanelUserInterface
+     */
+    protected $users;
+
+    /**
+     * @var \Stevemo\Cpanel\Permission\Form\PermissionFormInterface
+     */
+    protected $permissions;
+
+    /**
+     * @var \Stevemo\Cpanel\Group\Repo\CpanelGroupInterface
+     */
+    protected $groups;
+
+    /**
+     * @var \Stevemo\Cpanel\User\Form\UserFormInterface
+     */
+    protected $userForm;
+
+    /**
+     * @param \Stevemo\Cpanel\User\Repo\CpanelUserInterface       $users
+     * @param \Stevemo\Cpanel\Permission\Repo\PermissionInterface $permissions
+     * @param \Stevemo\Cpanel\Group\Repo\CpanelGroupInterface     $groups
+     * @param \Stevemo\Cpanel\User\Form\UserFormInterface         $userForm
+     */
+    public function __construct(
+        CpanelUserInterface $users,
+        PermissionInterface $permissions,
+        CpanelGroupInterface $groups,
+        UserFormInterface $userForm
+    )
+    {
+        $this->users = $users;
+        $this->permissions = $permissions;
+        $this->groups = $groups;
+        $this->userForm = $userForm;
+    }
 
     /**
      * Show all the users
@@ -22,12 +54,13 @@ class UsersController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {
-        $users = Sentry::getUserProvider()->createModel()->with('groups')->get();
-        return View::make(Config::get('cpanel::views.users_index'), compact('users'));
+        $users = $this->users->findAll();
+        return View::make(Config::get('cpanel::views.users_index'))
+            ->with('users',$users);
     }
 
     /**
@@ -43,12 +76,20 @@ class UsersController extends BaseController {
     {
         try
         {
-            $user = Sentry::getUserProvider()->findById($id);
-            return View::make(Config::get('cpanel::views.users_show'),compact('user'));
+            $throttle = $this->users->getUserThrottle($id);
+            $user = $throttle->getUser();
+            $permissions = $user->getMergedPermissions();
+
+            return View::make(Config::get('cpanel::views.users_show'))
+                ->with('user',$user)
+                ->with('groups',$user->getGroups())
+                ->with('permissions',$permissions)
+                ->with('throttle',$throttle);
         }
         catch ( UserNotFoundException $e)
         {
-            return Redirect::route('admin.users.index')->with('error', $e->getMessage());
+            return Redirect::route('cpanel.users.index')
+                ->with('error', $e->getMessage());
         }
     }
 
@@ -58,10 +99,26 @@ class UsersController extends BaseController {
      * @author Steve Montambeault
      * @link   http://stevemo.ca
      *
+     * @return \Illuminate\View\View
      */
     public function create()
     {
-        return View::make(Config::get('cpanel::views.users_create'));
+        $user = $this->users->getEmptyUser();
+
+        $userPermissions = array();
+        $genericPermissions = $this->permissions->generic();
+        $modulePermissions = $this->permissions->module();
+
+
+        //Get Groups
+        $groups = $this->groups->findAll();
+
+        return View::make(Config::get('cpanel::views.users_create'))
+            ->with('user',$user)
+            ->with('userPermissions',$userPermissions)
+            ->with('genericPermissions',$genericPermissions)
+            ->with('modulePermissions',$modulePermissions)
+            ->with('groups',$groups);
     }
 
     /**
@@ -78,17 +135,28 @@ class UsersController extends BaseController {
     {
         try
         {
-            $user   = Sentry::getUserProvider()->findById($id);
-            $groups = Sentry::getGroupProvider()->findAll();
+            $user = $this->users->findById($id);
+            $groups = $this->groups->findAll();
+
+            $userPermissions = $user->getPermissions();
+            $genericPermissions = $this->permissions->generic();
+            $modulePermissions = $this->permissions->module();
 
             //get only the group id the user belong to
             $userGroupsId = array_pluck($user->getGroups()->toArray(), 'id');
 
-            return View::make(Config::get('cpanel::views.users_edit'),compact('user','groups','userGroupsId'));
+            return View::make(Config::get('cpanel::views.users_edit'))
+                ->with('user',$user)
+                ->with('groups',$groups)
+                ->with('userGroupsId',$userGroupsId)
+                ->with('genericPermissions',$genericPermissions)
+                ->with('modulePermissions',$modulePermissions)
+                ->with('userPermissions',$userPermissions);
         }
         catch (UserNotFoundException $e)
         {
-            return Redirect::route('admin.users.index')->with('error',$e->getMessage());
+            return Redirect::route('cpanel.users.index')
+                ->with('error',$e->getMessage());
         }
     }
 
@@ -102,32 +170,19 @@ class UsersController extends BaseController {
      */
     public function store()
     {
-        try
-        {
-            $validation = $this->getValidationService('user');
+        $inputs = Input::except('groups', 'activate');
+        $inputs['groups'] = Input::get('groups', array());
+        $inputs['activate'] = Input::get('activate', false);
 
-            if( $validation->passes() )
-            {
-                //create the user
-                $user = Sentry::register($validation->getData(), true);
-                Event::fire('users.create', array($user));
-                return Redirect::route('admin.users.index')->with('success', Lang::get('cpanel::users.create_success'));
-            }
+        if ( $this->userForm->create($inputs) )
+        {
+            return Redirect::route('cpanel.users.index')
+                ->with('success', Lang::get('cpanel::users.create_success'));
+        }
 
-            return Redirect::back()->withInput()->withErrors($validation->getErrors());
-        }
-        catch (LoginRequiredException $e)
-        {
-            return Redirect::back()->withInput()->with('error',$e->getMessage());
-        }
-        catch (PasswordRequiredException $e)
-        {
-            return Redirect::back()->withInput()->with('error',$e->getMessage());
-        }
-        catch (UserExistsException $e)
-        {
-            return Redirect::back()->withInput()->with('error',$e->getMessage());
-        }
+        return Redirect::back()
+            ->withInput()
+            ->withErrors($this->userForm->getErrors());
     }
 
     /**
@@ -137,44 +192,32 @@ class UsersController extends BaseController {
      * @link   http://stevemo.ca
      *
      * @param  int $id
-     * @return Response
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update($id)
     {
         try
         {
             $credentials = Input::except('groups');
+            $credentials['groups'] = Input::get('groups', array());
             $credentials['id'] = $id;
 
-            $validation = $this->getValidationService('user', $credentials);
 
-            if( $validation->passes() )
+            if( $this->userForm->update($credentials) )
             {
-                $user = Sentry::getUserProvider()->findById($id);
-                $user->fill($validation->getData());
-                $user->save();
-
-                //update groups
-                $user->groups()->detach();
-                $user->groups()->sync(Input::get('groups',array()));
-
-                Event::fire('users.update', array($user));
-                return Redirect::route('admin.users.index')->with('success', Lang::get('cpanel::users.update_success'));
+                return Redirect::route('cpanel.users.index')
+                    ->with('success', Lang::get('cpanel::users.update_success'));
             }
 
-            return Redirect::back()->withInput()->withErrors($validation->getErrors());
-        }
-        catch ( UserExistsException $e)
-        {
-            return Redirect::back()->with('error', $e->getMessage());
+            return Redirect::back()
+                ->withInput()
+                ->withErrors($this->userForm->getErrors());
         }
         catch ( UserNotFoundException $e)
         {
-            return Redirect::back()->with('error', $e->getMessage());
-        }
-        catch ( LoginRequiredException $e)
-        {
-            return Redirect::back()->with('error', $e->getMessage());
+            return Redirect::route('cpanel.users.index')
+                    ->with('error', $e->getMessage());
         }
     }
 
@@ -189,29 +232,29 @@ class UsersController extends BaseController {
      */
     public function destroy($id)
     {
-        $currentUser = Sentry::getUser();
+        $currentUser = $this->users->getUser();
 
         if ($currentUser->id === (int) $id)
         {
-            return Redirect::back()->with('error', Lang::get('cpanel::users.delete_denied') );
+            return Redirect::back()
+                ->with('error', Lang::get('cpanel::users.delete_denied') );
         }
 
         try
         {
-            $user = Sentry::getUserProvider()->findById($id);
-            $eventData = $user;
-            $user->delete();
-            Event::fire('users.delete', array($eventData));
-            return Redirect::route('admin.users.index')->with('success',Lang::get('cpanel::users.delete_success'));
+            $this->users->delete($id);
+            return Redirect::route('cpanel.users.index')
+                ->with('success',Lang::get('cpanel::users.delete_success'));
         }
         catch (UserNotFoundException $e)
         {
-            return Redirect::route('admin.users.index')->with('error',$e->getMessage());
+            return Redirect::route('cpanel.users.index')
+                ->with('error',$e->getMessage());
         }
     }
 
     /**
-     * activate or deactivate a user
+     * deactivate a user
      *
      * @author Steve Montambeault
      * @link   http://stevemo.ca
@@ -220,42 +263,52 @@ class UsersController extends BaseController {
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function putStatus($id)
+    public function putDeactivate($id)
     {
         try
         {
-            $user = Sentry::getUserProvider()->findById($id);
+            $this->users->deactivate($id);
+            return Redirect::route('cpanel.users.index')
+                ->with('success',Lang::get('cpanel::users.deactivation_success'));
+        }
+        catch (UserNotFoundException $e)
+        {
+            return Redirect::route('cpanel.users.index')
+                ->with('error',$e->getMessage());
+        }
+    }
 
-            if ($user->isActivated())
+    /**
+     * Activate a user
+     *
+     * @author Steve Montambeault
+     * @link   http://stevemo.ca
+     *
+     * @param $id
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function putActivate($id)
+    {
+        try
+        {
+            if ($this->users->activate($id))
             {
-                $user->activated = 0;
-                $user->activated_at = null;
-                $user->save();
-                return Redirect::route('admin.users.index')->with('success',Lang::get('cpanel::users.deactivation_success'));
+                // User activation passed
+                return Redirect::route('cpanel.users.index')
+                    ->with('success',Lang::get('cpanel::users.activation_success'));
             }
             else
             {
-                $code = $user->getActivationCode();
-
-                if ($user->attemptActivation($code))
-                {
-                    // User activation passed
-                    return Redirect::route('admin.users.index')->with('success',Lang::get('cpanel::users.activation_success'));
-                }
-                else
-                {
-                    // User activation failed
-                    return Redirect::route('admin.users.index')->with('error',Lang::get('cpanel::users.activation_fail'));
-                }
+                // User activation failed
+                return Redirect::route('cpanel.users.index')
+                    ->with('error',Lang::get('cpanel::users.activation_fail'));
             }
         }
         catch (UserNotFoundException $e)
         {
-            return Redirect::route('admin.users.index')->with('error',$e->getMessage());
-        }
-        catch (UserAlreadyActivatedException $e)
-        {
-            return Redirect::route('admin.users.index')->with('error',$e->getMessage());
+            return Redirect::route('cpanel.users.index')
+                ->with('error',$e->getMessage());
         }
     }
 

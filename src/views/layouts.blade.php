@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width">
     {{ HTML::style('packages/stevemo/cpanel/bootstrap/css/bootstrap.min.css') }}
     {{ HTML::style('packages/stevemo/cpanel/font-awesome/css/font-awesome.min.css') }}
-    {{ HTML::style('packages/stevemo/cpanel/select2-3.3.1/select2.css') }}
+    {{ HTML::style('packages/stevemo/cpanel/select2-3.4.5/select2.css') }}
     {{ HTML::style('packages/stevemo/cpanel/css/theme.css') }}
     @yield('style')
 
@@ -44,7 +44,7 @@
                                 </div>
                                 <div class="btn-group">
                                     <a class="btn btn-inverse" data-placement="bottom" data-original-title="Logout" rel="tooltip"
-                                       href="{{ route('admin.logout') }}"><i class="icon-off"></i>
+                                       href="{{ route('cpanel.logout') }}"><i class="icon-off"></i>
                                     </a>
                                 </div>
                             </div>
@@ -137,7 +137,7 @@
 
         {{ HTML::script('packages/stevemo/cpanel/js/vendor/jquery.1.10.0.min.js') }}
         {{ HTML::script('packages/stevemo/cpanel/bootstrap/js/bootstrap.min.js') }}
-        {{ HTML::script('packages/stevemo/cpanel/select2-3.3.1/select2.min.js') }}
+        {{ HTML::script('packages/stevemo/cpanel/select2-3.4.5/select2.min.js') }}
         {{ HTML::script('packages/stevemo/cpanel/js/vendor/bootbox.min.js') }}
         {{ HTML::script('packages/stevemo/cpanel/js/admin.js') }}
         @yield('script')
