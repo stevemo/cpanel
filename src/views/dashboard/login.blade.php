@@ -21,9 +21,9 @@
 
             <form action="{{ URL::route('cpanel.login') }}" class="form-signin" method="POST">
                 <h2 class="form-signin-heading">Sign In</h2>
-                <label for="{{ $login_attribute }}">{{ ucfirst($login_attribute) }}</label>
+                <label for="{{ $login_attribute }}">{{{ ucfirst($login_attribute) }}}</label>
                 <input class="input-block-level" type="text"
-                    name="login_attribute" id="login_attribute" value="{{ Input::old('login_attribute') }}">
+                    name="login_attribute" id="login_attribute" value="{{{ Input::old('login_attribute') }}}">
                 <label for="password">Password</label>
                 <input class="input-block-level" type="password" name="password" id="password" >
 

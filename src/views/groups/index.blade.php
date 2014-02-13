@@ -45,7 +45,7 @@
                             <tbody>
                             @foreach ($groups as $group)
                             <tr>
-                                <td>{{ $group->name }}</td>
+                                <td>{{{ $group->name }}}</td>
                                 <td>
                                     <a href="{{ route('cpanel.groups.edit', array($group->id)) }}"
                                         class="btn" rel="tooltip" title="Edit Group">

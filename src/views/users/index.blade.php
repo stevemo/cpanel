@@ -46,10 +46,10 @@
                             @foreach ($users as $user)
                                 <tr>
                                     <td>{{ HTML::linkRoute('cpanel.users.show',$user->first_name.' '.$user->last_name, array($user->id)) }}</td>
-                                    <td>{{ $user->email }}</td>
-                                    <td>{{ ($user->activated) ? 'yes' : 'no' }}</td>
-                                    <td>{{ $user->activated_at }}</td>
-                                    <td>{{ is_null($user->last_login) ? 'Never Visited' : $user->last_login }}</td>
+                                    <td>{{{ $user->email }}}</td>
+                                    <td>{{{ ($user->activated) ? 'yes' : 'no' }}}</td>
+                                    <td>{{{ $user->activated_at }}}</td>
+                                    <td>{{{ is_null($user->last_login) ? 'Never Visited' : $user->last_login }}}</td>
                                     <td>
                                         <div class="btn-group">
                                             <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">

@@ -57,11 +57,11 @@
                             <tbody>
                                 @foreach($permissions->all() as $permission)
                                     <tr>
-                                        <td>{{ $permission->name }}</td>
+                                        <td>{{{ $permission->name }}}</td>
                                         <td>
                                             <ul class="inline">
                                                 @foreach ($permission->permissions as $role)
-                                                    <li>{{ $role }}</li>
+                                                    <li>{{{ $role }}}</li>
                                                 @endforeach
                                             </ul>
                                         </td>
