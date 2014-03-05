@@ -61,8 +61,8 @@
                                 <tr>
                                     <td><strong>Groups</strong></td>
                                     <td>
-                                        @foreach($groups as $group)
-                                        <span class="label">{{ $group->getName() }}</span>
+                                        @foreach($user->getGroups() as $group)
+                                        <span class="label label-primary">{{ $group->getName() }}</span>
                                         @endforeach
                                     </td>
                                 </tr>

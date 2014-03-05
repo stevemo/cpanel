@@ -77,9 +77,9 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label" for="confirm_password">Confirm Password</label>
+                                    <label class="col-sm-2 control-label" for="password_confirmation">Confirm Password</label>
                                     <div class="col-md-4">
-                                        {{ Form::password('confirm_password',array('class'=>'form-control','placeholder'=>'Confirm Password')) }}
+                                        {{ Form::password('password_confirmation',array('class'=>'form-control','placeholder'=>'Confirm Password')) }}
                                         <span class="help-block">leave blank to keep the same password</span>
                                     </div>
                                 </div>

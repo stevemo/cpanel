@@ -82,7 +82,6 @@ class UsersController extends BaseController {
 
             return View::make(Config::get('cpanel::views.users_show'))
                 ->with('user',$user)
-                ->with('groups',$user->getGroups())
                 ->with('permissions',$permissions)
                 ->with('throttle',$throttle);
         }
