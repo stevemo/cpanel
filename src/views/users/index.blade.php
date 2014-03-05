@@ -6,7 +6,7 @@
 
 @section('breadcrumb')
     @parent
-    <li class="active">Users</li>
+    <li class="active"><i class="fa fa-user"></i> Users</li>
 @stop
 
 @section('content')
