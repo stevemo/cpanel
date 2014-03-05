@@ -38,7 +38,7 @@ class CpanelController extends BaseController {
      */
     public function index()
     {
-        return View::make(Config::get('cpanel::views.dashboard'));
+        return View::make('cpanel::dashboard.index');
     }
 
     /**
@@ -52,7 +52,7 @@ class CpanelController extends BaseController {
     public function getLogin()
     {
         $login_attribute = Config::get('cartalyst/sentry::users.login_attribute');
-        return View::make(Config::get('cpanel::views.login'), compact('login_attribute'));
+        return View::make('cpanel::dashboard.login', compact('login_attribute'));
     }
 
     /**

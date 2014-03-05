@@ -1,5 +1,7 @@
 <?php namespace Stevemo\Cpanel;
-
+//new
+use Stevemo\Cpanel\Services\CpanelService;
+//old
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\ServiceProvider;
 use Stevemo\Cpanel\Console\InstallCommand;
@@ -45,7 +47,7 @@ class CpanelServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->registerCommands();
+        $this->registerCommands();
         $this->registerPermission();
         $this->registerGroup();
         $this->registerUser();

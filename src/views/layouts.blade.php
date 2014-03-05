@@ -1,145 +1,152 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>       <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>          <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>          <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!-->  <html class="no-js"> <!--<![endif]-->
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta charset="UTF-8">
     <title>{{ $cpanel['title'] }}</title>
-    <meta name="description" content="{{ $cpanel['description'] }}">
-    <meta name="viewport" content="width=device-width">
-    {{ HTML::style('packages/stevemo/cpanel/bootstrap/css/bootstrap.min.css') }}
-    {{ HTML::style('packages/stevemo/cpanel/font-awesome/css/font-awesome.min.css') }}
-    {{ HTML::style('packages/stevemo/cpanel/select2-3.4.5/select2.css') }}
-    {{ HTML::style('packages/stevemo/cpanel/css/theme.css') }}
-    @yield('style')
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <!-- bootstrap 3.1.0 -->
+    {{ HTML::style('packages/stevemo/cpanel/adminlte/css/bootstrap.min.css') }}
+    <!-- font Awesome -->
+    {{ HTML::style('packages/stevemo/cpanel/adminlte/css/font-awesome.min.css') }}
+    <!-- Ionicons -->
+    {{ HTML::style('packages/stevemo/cpanel/adminlte/css/ionicons.min.css') }}
+    <!-- Theme style -->
+    {{ HTML::style('packages/stevemo/cpanel/adminlte/css/adminlte.css') }}
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
 </head>
-<body>
-    <!-- #wrap -->
-    <div id="wrap">
-        <!-- #top -->
-        <div id="top">
-            <!-- .navbar -->
-            <div class="navbar navbar-inverse navbar-static-top">
-                <div class="navbar-inner">
-                    <div class="container-fluid">
-                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </a>
-                        <a class="brand" href="{{URL::to('/')}}">{{ $cpanel['site_name'] }}</a> <!-- .topnav -->
-                        @if (Sentry::check())
-                            <div class="btn-toolbar topnav">
-                                <div class="btn-group">
-                                    <a href="#helpModal" class="btn btn-inverse" rel="tooltip" data-placement="bottom"
-                                       data-original-title="Help" data-toggle="modal">
-                                        <i class="icon-question-sign"></i>
-                                    </a>
-                                </div>
-                                <div class="btn-group">
-                                    <a class="btn btn-inverse" data-placement="bottom" data-original-title="Logout" rel="tooltip"
-                                       href="{{ route('cpanel.logout') }}"><i class="icon-off"></i>
-                                    </a>
-                                </div>
+<body class="skin-blue">
+
+<header class="header">
+    <a href="index.html" class="logo">{{ $cpanel['site_name'] }}</a>
+
+    <nav class="navbar navbar-static-top" role="navigation">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </a>
+        <div class="navbar-right">
+            <ul class="nav navbar-nav">
+
+                <!-- User Account: style can be found in dropdown.less -->
+                <li class="dropdown user user-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="glyphicon glyphicon-user"></i>
+                        <span>Jane Doe <i class="caret"></i></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <!-- User image -->
+                        <li class="user-header bg-light-blue">
+                            <img src="{{asset('packages/stevemo/cpanel/adminlte/img/user.jpg')}}" class="img-circle" alt="User Image" />
+                            <p>
+                                Jane Doe - Web Developer
+                                <small>Member since Nov. 2012</small>
+                            </p>
+                        </li>
+                        <!-- Menu Body -->
+                        <li class="user-body"></li>
+                        <!-- Menu Footer-->
+                        <li class="user-footer">
+                            <div class="pull-left">
+                                <a href="#" class="btn btn-default btn-flat">Profile</a>
                             </div>
-                            <!-- /.topnav -->
-                            <div class="nav-collapse collapse">
-                                <!-- .nav -->
-                                <ul class="nav">
-                                    @foreach (Config::get('cpanel::menu') as $title => $args)
-                                        @if ($args['type'] === 'single')
-                                            <li>{{ HTML::linkRoute($args['route'], $title) }}</li>
-                                        @else
-                                            <li class="dropdown">
-                                                <a data-toggle="dropdown" class="dropdown-toggle" href="blank.html#">
-                                                   {{ $title }} <b class="caret"></b>
-                                                </a>
-                                                <ul class="dropdown-menu">
-                                                    @foreach ($args['links'] as $title => $value)
-                                                        <li>{{ HTML::linkRoute($value['route'], $title) }}</li>
-                                                    @endforeach
-                                                </ul>
-                                            </li>
-                                        @endif
-                                    @endforeach
-                                </ul>
-                                <!-- /.nav -->
+                            <div class="pull-right">
+                                <a href="{{route('cpanel.logout')}}" class="btn btn-default btn-flat">Sign out</a>
                             </div>
-                        @endif
-                    </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<!--End of header-->
+
+<div class="wrapper row-offcanvas row-offcanvas-left">
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="left-side sidebar-offcanvas">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- Sidebar user panel -->
+            <div class="user-panel">
+                <div class="pull-left image">
+                    <img src="{{asset('packages/stevemo/cpanel/adminlte/img/user.jpg')}}" class="img-circle" alt="User Image" />
+                </div>
+                <div class="pull-left info">
+                    <p>Hello, Jane</p>
                 </div>
             </div>
-            <!-- /.navbar -->
-        </div>
-        <!-- /#top -->
-        <!-- .head -->
-        <header class="head">
-            <!-- ."main-bar -->
-            <div class="main-bar">
-                <div class="container">
-                    <div class="row">
-                        <div class="span12">
-                            @yield('header')
-                        </div>
-                    </div>
-                    <!-- /.row -->
-                </div>
-                <!-- /.container -->
-            </div>
-            <!-- /.main-bar -->
-        </header>
-        <!-- /.head -->
 
-        <!-- #content -->
-        <div id="content">
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <ul class="sidebar-menu">
+                <li class="active">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa fa-user"></i>
+                        <span>Users</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa fa-group"></i>
+                        <span>Groups</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fa fa-ban"></i>
+                        <span>Permissions</span>
+                    </a>
+                </li>
 
-            <div class="container">
-                @include('cpanel::partials.alert')
-                @yield('content')
-            </div>
-            <!-- /.outer -->
-        </div>
-        <!-- /#content -->
-        <!-- #push do not remove -->
-        <div id="push"></div>
-        <!-- /#push -->
-    </div>
-    <!-- /#wrap -->
+            </ul>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
 
-    <div class="clearfix"></div>
-    <div id="footer">
-        <p>2013 © {{ $cpanel['site_name'] }} </p>
-    </div>
+    <!-- Right side column. Contains the navbar and content of the page -->
+    <aside class="right-side">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            @yield('header')
+            <ol class="breadcrumb">
+                @section('breadcrumb')
+                <li><a href="{{route('cpanel.home')}}">
+                        <i class="fa fa-dashboard"></i>
+                        Dashboard
+                    </a>
+                </li>
+                @show
+            </ol>
+        </section>
 
-    <!-- #helpModal -->
-    <div id="helpModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel"
-         aria-hidden="true">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="helpModalLabel"><i class="icon-external-link"></i> Help</h3>
-        </div>
-        <div class="modal-body">
-            @section('help')
-                <p>No Help for this section.</p>
-            @show
-        </div>
-        <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-        </div>
-    </div>
-    <!-- /#helpModal -->
+        <!-- Main content -->
+        <section class="content">
+            @include('cpanel::partials.alert')
+            @yield('content')
+        </section>
+    </aside><!-- /.right-side -->
+</div><!-- ./wrapper -->
 
-        {{ HTML::script('packages/stevemo/cpanel/js/vendor/jquery.1.10.0.min.js') }}
-        {{ HTML::script('packages/stevemo/cpanel/bootstrap/js/bootstrap.min.js') }}
-        {{ HTML::script('packages/stevemo/cpanel/select2-3.4.5/select2.min.js') }}
-        {{ HTML::script('packages/stevemo/cpanel/js/vendor/bootbox.min.js') }}
-        {{ HTML::script('packages/stevemo/cpanel/js/admin.js') }}
-        @yield('script')
+
+<!-- jQuery 1.10.2 -->
+{{ HTML::script('packages/stevemo/cpanel/adminlte/js/jquery-1.10.2.js') }}
+<!-- Bootstrap -->
+{{ HTML::script('packages/stevemo/cpanel/adminlte/js/bootstrap.min.js') }}
+<!-- AdminLTE App -->
+{{ HTML::script('packages/stevemo/cpanel/adminlte/js/app.js') }}
+
 </body>
 </html>

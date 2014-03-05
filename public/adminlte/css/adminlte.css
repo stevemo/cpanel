@@ -1973,11 +1973,11 @@ Component: timeline
     Component: alert
 ------------------------
 */
-.alert {
-  padding-left: 30px;
-  margin-left: 15px;
-  position: relative;
-}
+/*.alert {*/
+  /*padding-left: 30px;*/
+  /*margin-left: 15px;*/
+  /*position: relative;*/
+/*}*/
 .alert > .fa,
 .alert > .glyphicon {
   position: absolute;
