@@ -90,24 +90,24 @@
 
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu">
-                <li class="active">
+                <li class="{{ Request::is($cpanel['prefix']) ? 'active' : '' }}">
                     <a href="{{route('cpanel.home')}}">
                         <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                     </a>
                 </li>
-                <li>
+                <li class="{{ Request::is($cpanel['prefix'].'/users*') ? 'active' : '' }}">
                     <a href="{{route('cpanel.users.index')}}">
                         <i class="fa fa-user"></i>
                         <span>Users</span>
                     </a>
                 </li>
-                <li>
+                <li class="{{ Request::is($cpanel['prefix'].'/groups/*') ? 'active' : '' }}">
                     <a href="#">
                         <i class="fa fa-group"></i>
                         <span>Groups</span>
                     </a>
                 </li>
-                <li>
+                <li class="{{ Request::is($cpanel['prefix'].'/permissions/*') ? 'active' : '' }}">
                     <a href="#">
                         <i class="fa fa-ban"></i>
                         <span>Permissions</span>
@@ -150,6 +150,8 @@
 {{ HTML::script('packages/stevemo/cpanel/adminlte/js/bootstrap.min.js') }}
 <!-- Select2 3.4.5-->
 {{ HTML::script('packages/stevemo/cpanel/adminlte/select2-3.4.5/select2.min.js') }}
+<!-- Bootbox-->
+{{ HTML::script('packages/stevemo/cpanel/adminlte/bootbox/bootbox.min.js') }}
 <!-- AdminLTE App -->
 {{ HTML::script('packages/stevemo/cpanel/adminlte/js/app.js') }}
 

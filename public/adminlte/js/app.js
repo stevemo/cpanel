@@ -741,17 +741,15 @@ $(function() {
 
     var laravel =
     {
-        initialize: function()
+        init: function()
         {
             this.methodLinks = $('a[data-method]');
             this.registerEvents();
         },
-
         registerEvents: function()
         {
             this.methodLinks.on('click', this.handleMethod);
         },
-
         handleMethod: function(e)
         {
             e.preventDefault();
@@ -759,8 +757,8 @@ $(function() {
 
             var httpMethod = link.data('method').toUpperCase();
             var allowedMethods = ['PUT', 'DELETE'];
-            var extraMsg = link.data('modal-text');
-            var msg  = '<i class="icon-warning-sign modal-icon"></i>&nbsp;Are you sure you want to&nbsp;' + extraMsg;
+            var msg = link.data('message');
+            var title = link.data('title');
 
             // If the data-method attribute is not PUT or DELETE,
             // then we don't know what to do. Just ignore.
@@ -769,13 +767,18 @@ $(function() {
                 return;
             }
 
-            bootbox.dialog(msg,
-                [
-                    {
-                        "label": "OK",
-                        "class": "btn-danger",
-                        "callback": function()
-                        {
+            bootbox.dialog({
+                message: msg,
+                title: title,
+                buttons: {
+                    main: {
+                        label: "Cancel",
+                        className: "btn-default"
+                    },
+                    success: {
+                        label: "Ok",
+                        className: "btn-primary",
+                        callback: function() {
                             var form =
                                 $('<form>', {
                                     'method': 'POST',
@@ -791,18 +794,12 @@ $(function() {
 
                             form.append(hiddenInput).appendTo('body').submit();
                         }
-                    },
-                    {
-                        "label": "Cancel",
-                        "class": "btn-default"
                     }
-                ],
-                {
-                    "header": "Please Confirm"
-                });
+                }
+            });
         }
     };
 
-    laravel.initialize();
+    laravel.init();
 
 })();

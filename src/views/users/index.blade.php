@@ -71,7 +71,7 @@
                                         <li>
                                             <a href="{{ route('cpanel.users.destroy', array($user->id)) }}"
                                                data-method="delete"
-                                               data-modal-text="delete this User?">
+                                               data-message="delete this User?">
                                                 <i class="fa fa-trash-o"></i>&nbsp;Delete User
                                             </a>
                                         </li>
@@ -80,13 +80,13 @@
                                             @if ($user->isActivated())
                                             <a href="{{ route('cpanel.users.deactivate', array($user->id)) }}"
                                                data-method="put"
-                                               data-modal-text="Deactivate this User?">
+                                               data-message="Deactivate this User?">
                                                 <i class="fa fa-minus-circle"></i>&nbsp;Deactivate
                                             </a>
                                             @else
                                             <a href="{{ route('cpanel.users.activate', array($user->id)) }}"
                                                data-method="put"
-                                               data-modal-text="Activate this User?">
+                                               data-message="Activate this User?">
                                                 <i class="fa fa-check"></i>&nbsp;Activate
                                             </a>
                                             @endif
