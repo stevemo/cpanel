@@ -12,7 +12,7 @@
         Users
     </a>
 </li>
-<li class="active">Edit</li>
+<li class="active">Show</li>
 @stop
 
 @section('content')

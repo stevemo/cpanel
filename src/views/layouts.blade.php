@@ -10,6 +10,9 @@
     {{ HTML::style('packages/stevemo/cpanel/adminlte/css/font-awesome.min.css') }}
     <!-- Ionicons -->
     {{ HTML::style('packages/stevemo/cpanel/adminlte/css/ionicons.min.css') }}
+    <!-- Select2 3.4.5-->
+    {{ HTML::style('packages/stevemo/cpanel/adminlte/select2-3.4.5/select2.css') }}
+    {{ HTML::style('packages/stevemo/cpanel/adminlte/select2-3.4.5/select2-bootstrap.css') }}
     <!-- Theme style -->
     {{ HTML::style('packages/stevemo/cpanel/adminlte/css/adminlte.css') }}
 
@@ -145,6 +148,8 @@
 {{ HTML::script('packages/stevemo/cpanel/adminlte/js/jquery-1.10.2.js') }}
 <!-- Bootstrap -->
 {{ HTML::script('packages/stevemo/cpanel/adminlte/js/bootstrap.min.js') }}
+<!-- Select2 3.4.5-->
+{{ HTML::script('packages/stevemo/cpanel/adminlte/select2-3.4.5/select2.min.js') }}
 <!-- AdminLTE App -->
 {{ HTML::script('packages/stevemo/cpanel/adminlte/js/app.js') }}
 

@@ -2632,3 +2632,56 @@ Component: timeline
     background-size: 200px 20px;
   }
 }
+/*Utilities Styles
+------------------------------------*/
+/*Spaces*/
+.margin-bottom-5,
+.margin-bottom-10,
+.margin-bottom-20,
+.margin-bottom-20,
+.margin-bottom-25,
+.margin-bottom-30,
+.margin-bottom-35,
+.margin-bottom-40,
+.margin-bottom-50,
+.margin-bottom-60,
+.margin-top-10,
+.margin-top-20 {
+    clear:both;
+}
+.margin-bottom-5 {
+    margin-bottom:5px;
+}
+.margin-bottom-10 {
+    margin-bottom:10px;
+}
+.margin-bottom-20 {
+    margin-bottom:20px;
+}
+.margin-bottom-25 {
+    margin-bottom:25px;
+}
+.margin-bottom-30 {
+    margin-bottom:30px;
+}
+.margin-bottom-35 {
+    margin-bottom:35px;
+}
+.margin-bottom-40 {
+    margin-bottom:40px;
+}
+.margin-bottom-50 {
+    margin-bottom:50px;
+}
+.margin-bottom-60 {
+    margin-bottom:60px;
+}
+.margin-top-10 {
+    margin-top: 10px;
+}
+.margin-top-20 {
+    margin-top: 20px;
+}
+.margin-none {
+    margin: 0;
+}
