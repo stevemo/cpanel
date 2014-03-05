@@ -88,12 +88,12 @@
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu">
                 <li class="active">
-                    <a href="#">
+                    <a href="{{route('cpanel.home')}}">
                         <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{{route('cpanel.users.index')}}">
                         <i class="fa fa-user"></i>
                         <span>Users</span>
                     </a>

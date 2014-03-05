@@ -59,7 +59,7 @@ class UsersController extends BaseController {
     public function index()
     {
         $users = $this->users->findAll();
-        return View::make(Config::get('cpanel::views.users_index'))
+        return View::make('cpanel::users.index')
             ->with('users',$users);
     }
 
