@@ -101,14 +101,14 @@
                         <span>Users</span>
                     </a>
                 </li>
-                <li class="{{ Request::is($cpanel['prefix'].'/groups/*') ? 'active' : '' }}">
-                    <a href="#">
+                <li class="{{ Request::is($cpanel['prefix'].'/groups*') ? 'active' : '' }}">
+                    <a href="{{route('cpanel.groups.index')}}">
                         <i class="fa fa-group"></i>
                         <span>Groups</span>
                     </a>
                 </li>
-                <li class="{{ Request::is($cpanel['prefix'].'/permissions/*') ? 'active' : '' }}">
-                    <a href="#">
+                <li class="{{ Request::is($cpanel['prefix'].'/permissions*') ? 'active' : '' }}">
+                    <a href="{{route('cpanel.permissions.index')}}">
                         <i class="fa fa-ban"></i>
                         <span>Permissions</span>
                     </a>

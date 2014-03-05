@@ -1,57 +1,67 @@
-@extends(Config::get('cpanel::views.layout'))
+@extends('cpanel::layouts')
 
 @section('header')
-    <h3>
-        <i class="icon-group"></i>
-        Groups
-    </h3>
+<h1>Groups <small>Create a new group</small></h1>
 @stop
 
-@section('help')
-    <p class="lead">Groups</p>
-    <p>
-        Users can be placed into groups to manage permissions.
-    </p>
-    <br>
-     <p class="text-info">
-        For more info visit <a href="http://docs.cartalyst.com/sentry-2/permissions" target="_blank">Sentry website</a>
-    </p>
+@section('breadcrumb')
+@parent
+<li>
+    <a href="{{route('cpanel.groups.index')}}">
+        <i class="fa fa-users"></i>
+        Groups
+    </a>
+</li>
+<li class="active">Edit</li>
 @stop
 
 @section('content')
-
-{{ Former::horizontal_open(route('cpanel.groups.update', array($group->id)))->method('PUT') }}
-    <div class="row">
-        <div class="span12">
-            <div class="block">
-                <p class="block-heading">Edit "{{ $group->name }}" Group</p>
-                <div class="block-body">
-                    {{ Former::xlarge_text('name','Name')->value($group->name)->required() }}
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                        <a href="{{route('cpanel.groups.index')}}" class="btn">Cancel</a>
+<?php
+$option = array(
+    'route' => array('cpanel.groups.update',$group->id),
+    'class' => 'form-horizontal',
+    'method' => 'put'
+);
+?>
+{{ Form::model($group,$option) }}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Group Informations</h3>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="name">Name</label>
+                    <div class="col-md-4">
+                        {{Form::text('name',null,array('class'=>'form-control','placeholder'=>'Group Name'))}}
                     </div>
                 </div>
-            </div>
-
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="span12">
-            <div class="block">
-                <p class="block-heading">Group Permissions</p>
-                <div class="block-body">
-                    @include('cpanel::groups.permissions_form')
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                        <a href="{{route('cpanel.groups.index')}}" class="btn">Cancel</a>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-primary">Update</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-{{ Former::close() }}
-
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Group Permissions</h3>
+            </div>
+            <div class="panel-body">
+                @include('cpanel::groups.permissions_form')
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ Form::close() }}
 @stop

@@ -14,13 +14,18 @@
 
             <legend>Generic Permissions</legend>
             @foreach( $genericPermissions as $perm)
-                {{
-                    Former::select("permissions[$perm]",$perm)
-                        ->options(array('1' => 'Allow','0' => 'Deny'))
-                        ->value(array_key_exists($perm,$groupPermissions) ? $groupPermissions[$perm] : 0)
-                        ->class('select2')
-                        ->id(str_random(5))
-                }}
+            <div class="form-group">
+                <label for="permissions[$perm]" class="col-sm-2 control-label">{{$perm}}</label>
+                <div class="col-md-2">
+                    {{
+                        Form::select(
+                        "permissions[$perm]",
+                        array('1' => 'Allow','0' => 'Deny'),
+                        array_key_exists($perm,$groupPermissions) ? $groupPermissions[$perm] : 0,
+                        array('class'=>'select2 form-control','id'=>str_random(5)))
+                    }}
+                </div>
+            </div>
             @endforeach
         </div>
         <div class="tab-pane" id="module">
@@ -32,13 +37,18 @@
                 @foreach($modulePermissions as $module)
                     <legend>{{ $module['name'] }}</legend>
                     @foreach($module['permissions'] as $perm)
-                        {{
-                            Former::select("permissions[$perm]",$perm)
-                                ->options(array('1' => 'Allow','0' => 'Deny'))
-                                ->value(array_key_exists($perm,$groupPermissions) ? $groupPermissions[$perm] : 0)
-                                ->class('select2')
-                                ->id(str_random(5))
-                        }}
+                    <div class="form-group">
+                        <label for="permissions[$perm]" class="col-sm-2 control-label">{{$perm}}</label>
+                        <div class="col-md-2">
+                            {{
+                            Form::select(
+                            "permissions[$perm]",
+                            array('1' => 'Allow','0' => 'Deny'),
+                            array_key_exists($perm,$groupPermissions) ? $groupPermissions[$perm] : 0,
+                            array('class'=>'select2 form-control','id'=>str_random(5)))
+                            }}
+                        </div>
+                    </div>
                     @endforeach
                 @endforeach
             @endif
