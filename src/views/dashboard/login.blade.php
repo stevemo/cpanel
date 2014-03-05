@@ -29,6 +29,11 @@
                 {{ Session::get('login_error') }}
             </div>
             @endif
+            @if (  Session::has('success') )
+            <div class="alert alert-success">
+                {{ Session::get('success') }}
+            </div>
+            @endif
             <div class="form-group">
                 <input type="text" name="login_attribute" class="form-control" placeholder="{{{ ucfirst($login_attribute) }}}"/>
             </div>
@@ -42,7 +47,7 @@
         <div class="footer">
             <button type="submit" class="btn bg-olive btn-block">Sign me in</button>
             <p><a href="#">I forgot my password</a></p>
-            <a href="#" class="text-center">Register a new membership</a>
+            <a href="{{route('cpanel.register')}}" class="text-center">Register a new membership</a>
         </div>
     </form>
 </div>
