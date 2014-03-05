@@ -26,7 +26,7 @@ return array(
 
     'views' => array(
 
-        'layout' => 'cpanel::layouts',
+        'layout' => 'cpanel::adminlte.layouts',
 
         'dashboard' => 'cpanel::dashboard.index',
         'login'     => 'cpanel::dashboard.login',
