@@ -1,7 +1,5 @@
 <?php namespace Stevemo\Cpanel;
-//new
-use Stevemo\Cpanel\Services\CpanelService;
-//old
+
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\ServiceProvider;
 use Stevemo\Cpanel\Console\InstallCommand;
