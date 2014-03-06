@@ -46,7 +46,7 @@ class UsersPermissionsController extends BaseController {
             $genericPermissions = $this->permissions->generic();
             $modulePermissions = $this->permissions->module();
 
-            return View::make(Config::get('cpanel::views.users_permission'))
+            return View::make('cpanel::users.permission')
                 ->with('user',$user)
                 ->with('userPermissions',$userPermissions)
                 ->with('genericPermissions',$genericPermissions)

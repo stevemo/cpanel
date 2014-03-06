@@ -1,8 +1,14 @@
-@extends(Config::get('cpanel::views.layout'))
+@extends('cpanel::layouts')
 
 @section('header')
-    <h3>
-        <i class="icon-dashboard"></i>
+    <h1>
         Dashboard
-    </h3>
+    </h1>
+@stop
+
+@section('breadcrumb')
+<li class="active">
+    <i class="fa fa-dashboard"></i>
+    Dashboard
+</li>
 @stop

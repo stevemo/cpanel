@@ -243,14 +243,14 @@ Route::group(array('prefix' => Config::get('cpanel::prefix', 'admin')), function
 | Admin auth filter
 |--------------------------------------------------------------------------
 | You need to give your routes a name before using this filter.
-| I assume you are using resource. so the route for the UsersController index method
+| I assume you are ng resource. so the route for the UsersController index method
 | will be admin.users.index then the filter will look for permission on users.view
 | You can provide your own rule by passing a argument to the filter
 |
 */
 Route::filter('auth.cpanel', function($route, $request, $userRule = null)
 {
-    if (! Sentry::check())
+    if ( ! Sentry::check() )
     {
         Session::put('url.intended', URL::full());
         return Redirect::route('cpanel.login');

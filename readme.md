@@ -8,12 +8,11 @@ This package is currently under active development.
 
 ##Features
 * Cartalyst Sentry package
-* Anahkiasen Former package
-* Twitter Bootstrap 2.3.1
+* [AdminLTE](https://github.com/almasaeed2010/AdminLTE) - Free Premium Admin control Panel Theme That Is Based On Bootstrap 3.x
+* Twitter Bootstrap 3.1.0
 * Font-awesome 3.2.0
 * Users, Groups and Permissions out of the box.
 * Base controller for admin panel development
-* Most of the views can be replaced by your own in the config file
 
 ##Installation
 Begin by installing this package through Composer. Edit your project's `composer.json` file to require `stevemo/cpanel`.
@@ -32,14 +31,12 @@ You need to add the following service provider.
 Open `app/config/app.php`, and add a new items to the providers array.
 
 ```php
-Former\FormerServiceProvider
 Cartalyst\Sentry\SentryServiceProvider
 Stevemo\Cpanel\CpanelServiceProvider
 ```
 
 Then add the following Class Aliases
 ```php
-'Former' => 'Former\Facades\Former',
 'Sentry' => 'Cartalyst\Sentry\Facades\Laravel\Sentry',
 ```
 
@@ -51,7 +48,5 @@ To create a user simply do `php artisan cpanel:user`
 Done! Just go to [http://localhost/admin](http://localhost/admin) to access the admin panel.
 
 ##Missing
-* Send Activation code by email when user register
-* Password reset/reminder
-* unit test… started reading Laravel Testing decoded ;-)
+* unit test…
 * Documentation

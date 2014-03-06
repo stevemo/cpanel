@@ -1,47 +1,55 @@
-@extends(Config::get('cpanel::views.layout'))
+@extends('cpanel::layouts')
 
 @section('header')
-    <h3>
-        <i class="icon-ban-circle"></i>
-        Permissions
-    </h3>
+<h1>Permissions</h1>
 @stop
 
-@section('help')
-    <p class="lead">Module Permission</p>
-    <p>
-        Every keywords enter in the <strong>Permissions field</strong> will be prefixed with the
-        <strong>Module name Field</strong>.
-    </p>
-    <br/>
-    <p class="lead">Example</p>
-    <p>
-        <strong>Module name: </strong> blog
-    </p>
-    <p>
-        <strong>Permissions: </strong> view, create, delete and publish
-    </p>
-    <p>
-        <strong>Result:</strong> blog.view, blog.create, blog.delete and blog.publish
-    </p>
+@section('breadcrumb')
+@parent
+<li>
+    <a href="{{route('cpanel.permissions.index')}}">
+        <i class="fa fa-ban"></i> Permissions
+    </a>
+</li>
+<li class="active">Create</li>
 @stop
 
 @section('content')
-    <div class="row">
-        <div class="span12">
-            <div class="block">
-                <p class="block-heading">Create new permissions for a module</p>
-                <div class="block-body">
-                    {{ Former::horizontal_open(route('cpanel.permissions.store')) }}
-                    {{ Former::xlarge_text('name', 'Module Name')->required() }}
-                    {{ Former::xlarge_text('permissions')->id('permission-tags')->required() }}
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Create</button>
-                        <a href="{{ route('cpanel.permissions.index') }}" class="btn">Cancel</a>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Create new permissions for a module</h3>
+            </div>
+            <div class="panel-body">
+                <?php
+                $option = array(
+                    'route' => 'cpanel.permissions.store',
+                    'class' => 'form-horizontal'
+                );
+                ?>
+                {{ Form::open($option) }}
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="name">Module Name</label>
+                        <div class="col-md-4">
+                            {{ Form::text('name',null,array('class'=>'form-control','placeholder'=>'Module Name')) }}
+                        </div>
                     </div>
-                    {{ Former::close() }}
-                </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="name">Module Name</label>
+                        <div class="col-md-4">
+                            {{ Form::text('permissions',null,
+                                array('class'=>'form-control','placeholder'=>'Module Name','id'=>'permission-tags')) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary">Create</button>
+                        </div>
+                    </div>
+                {{ Form::close() }}
             </div>
         </div>
     </div>
+</div>
 @stop

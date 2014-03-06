@@ -1,26 +1,43 @@
-@extends(Config::get('cpanel::views.layout'))
+@extends('cpanel::layouts')
 
 @section('header')
-<h3>
-    <i class="icon-ban-circle"></i>
-    Users Permissions
-</h3>
+<h1>Users Permissions</h1>
+@stop
+
+@section('breadcrumb')
+@parent
+<li>
+    <a href="{{route('cpanel.users.index')}}">
+        <i class="fa fa-user"></i>
+        Users
+    </a>
+</li>
+<li class="active">Permissions</li>
 @stop
 
 @section('content')
 <div class="row">
-    <div class="span12">
-        <div class="block">
-            <p class="block-heading">Edit {{ $user->first_name }}&nbsp;{{ $user->last_name }}&nbsp;permissions</p>
-            <div class="block-body">
-                <p class="lead">Permissions set here will override groups permissions</p>
-                {{ Former::horizontal_open( route('cpanel.users.permissions',array($user->id) ))->method('PUT') }}
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Edit {{ $user->first_name }}&nbsp;{{ $user->last_name }}&nbsp;permissions</h3>
+            </div>
+            <div class="panel-body">
+                <?php
+                $option = array(
+                    'route' => array('cpanel.users.permissions',$user->id),
+                    'method' => 'put',
+                    'class' => 'form-horizontal'
+                );
+                ?>
+                {{ Form::open($option) }}
                 @include('cpanel::users.permissions_form')
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                    <a href="{{route('cpanel.users.index')}}" class="btn">Cancel</a>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
                 </div>
-                {{ Former::close() }}
+                {{ form::close() }}
             </div>
         </div>
     </div>

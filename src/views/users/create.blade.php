@@ -1,28 +1,36 @@
-@extends(Config::get('cpanel::views.layout'))
+@extends('cpanel::layouts')
 
 @section('header')
-    <h3>
-        <i class="icon-user"></i>
-        Users
-    </h3>
+<h1>Users</h1>
 @stop
 
-@section('help')
-    <p class="lead">Users</p>
-    <p>
-        From here you can create, edit or delete users. Also you can assign custom permissions to a single user.
-    </p>
+@section('breadcrumb')
+@parent
+<li>
+    <a href="{{route('cpanel.users.index')}}">
+        <i class="fa fa-user"></i>
+        Users
+    </a>
+</li>
+<li class="active">Create</li>
 @stop
 
 @section('content')
     <div class="row">
-        <div class="span12">
-            {{Former::horizontal_open( route('cpanel.users.store') )}}
+        <div class="col-lg-12">
+            <?php
+            $option = array(
+                'route' => 'cpanel.users.store',
+                'class' => 'form-horizontal'
+            );
+            ?>
+            {{ Form::open($option) }}
 
-            <div class="block">
-                <p class="block-heading">Create a new user</p>
-                <div class="block-body">
-
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Create a new user</h3>
+                </div>
+                <div class="panel-body">
                     <div class="tabbable">
 
                         <ul class="nav nav-tabs" id="myTab">
@@ -37,53 +45,92 @@
                         <div class="tab-content">
 
                             <div class="tab-pane active" id="credentials">
-                                <legend>User Informations</legend>
-                                {{ Former::xlarge_text('first_name', 'First Name')->required() }}
-                                {{ Former::xlarge_text('last_name', 'Last Name')->required() }}
-                                {{ Former::xlarge_text('email','Email')->required() }}
+                                <legend class="margin-top-10">User Informations</legend>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="first_name">First Name</label>
+                                    <div class="col-md-4">
+                                        {{ Form::text('first_name',null,array('class'=>'form-control','placeholder'=>'First Name')) }}
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="last_name">Last Name</label>
+                                    <div class="col-md-4">
+                                        {{ Form::text('last_name',null,array('class'=>'form-control','placeholder'=>'Last Name')) }}
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="email">Email</label>
+                                    <div class="col-md-4">
+                                        {{ Form::email('email',null,array('class'=>'form-control','placeholder'=>'Email')) }}
+                                    </div>
+                                </div>
 
                                 <legend>Password</legend>
-                                {{ Former::xlarge_password('password', 'Password')->required() }}
-                                {{ Former::xlarge_password('password_confirmation', 'Confirm Password')->required() }}
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="password">Password</label>
+                                    <div class="col-md-4">
+                                        {{ Form::password('password',array('class'=>'form-control','placeholder'=>'Password')) }}
+                                    </div>
+                                </div>
 
-                                <legend>Groups</legend>
-                                <div class="control-group">
-                                    <label for="groups[]" class="control-label">Groups</label>
-                                    <div class="controls">
-                                        <select id="groups" name="groups[]" class="select2" multiple="true">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="password_confirmation">Confirm Password</label>
+                                    <div class="col-md-4">
+                                        {{ Form::password('password_confirmation',array('class'=>'form-control','placeholder'=>'Confirm Password')) }}
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="groups[]" class="col-sm-2 control-label">Groups</label>
+                                    <div class="col-md-4">
+                                        <select id="groups" name="groups[]" class="select2 form-control" multiple="true">
                                             @foreach($groups as $group)
-                                                <option value="{{ $group->id }}">{{ $group->name }}</option>
+                                            @if( in_array( $group->id, Input::old('groups', array())) )
+                                            <option selected="selected" value="{{ $group->id }}">{{ $group->name }}</option>
+                                            @else
+                                            <option value="{{ $group->id }}">{{ $group->name }}</option>
+                                            @endif
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
 
                                 <legend>Options</legend>
-                                {{
-                                    Former::select('activate')
-                                        ->options(array('0' => 'No','1' => 'Yes'))
-                                        ->class('select2')
-                                }}
-
-                                <div class="form-actions">
-                                    <button type="submit" class="btn btn-primary">Create</button>
-                                    <a href="{{route('cpanel.users.index')}}" class="btn">Cancel</a>
+                                <div class="form-group">
+                                    <label for="activate" class="col-sm-2 control-label">Activate</label>
+                                    <div class="col-md-2">
+                                        {{
+                                        Form::select(
+                                        'permissions[superuser]',
+                                        array('0' => 'No','1' => 'Yes'),
+                                        null,
+                                        array('class'=>'select2 form-control'))
+                                        }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="tab-pane" id="permissions">
-                                <p class="lead">Permissions set here will override groups permissions</p>
+                                <p class="lead margin-top-10">Permissions set here will override groups permissions</p>
                                 @include('cpanel::users.permissions_form')
                             </div>
 
                         </div>
 
                     </div>
-
                 </div>
             </div>
 
-            {{Former::close()}}
+
+
+            {{Form::close()}}
         </div>
     </div>
 @stop

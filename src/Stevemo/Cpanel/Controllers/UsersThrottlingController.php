@@ -36,7 +36,7 @@ class UsersThrottlingController extends BaseController {
         {
             $throttle = $this->users->getUserThrottle($id);
             $user = $throttle->getUser();
-            return View::make(Config::get('cpanel::views.throttle_status'))
+            return View::make('cpanel::throttle.index')
                 ->with('user',$user)
                 ->with('throttle',$throttle);
         }

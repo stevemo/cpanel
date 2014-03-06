@@ -1,61 +1,51 @@
 @if ( Session::has('errors') )
-    <div class="row">
-        <div class="span12 margin-10-top">
-            <div class="alert alert-error ">
-                <button type="button" class="close" data-dismiss="alert">×</button>
-                <p>
-                    <strong>Form Validation Failed : </strong> Change a few things up and try submitting again.
-                </p>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        </div>
-    </div>
+<div class="alert alert-danger fade in">
+    <button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
+    <p>
+        <strong>Form Validation Failed : </strong> Change a few things up and try submitting again.
+    </p>
+    <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
 @endif
 
 @if ( Session::has('success') )
-    <div class="row">
-        <div class="span12">
-            <div class="alert alert-success margin-10-top">
-                <button type="button" class="close" data-dismiss="alert">×</button>
-                {{ Session::get('success') }}
-            </div>
-        </div>
-    </div>
+
+<div class="alert alert-success fade in">
+    <button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
+    <strong>Well done!</strong>
+    {{ Session::get('success') }}
+</div>
+
 @endif
 
 @if ( Session::has('warning') )
-    <div class="row">
-        <div class="span12">
-            <div class="alert alert-warning margin-10-top">
-                <button type="button" class="close" data-dismiss="alert">×</button>
-                {{ Session::get('warning') }}
-            </div>
-        </div>
-    </div>
+
+<div class="alert alert-warning fade in">
+    <button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
+    <strong>Warning!</strong>
+    {{ Session::get('warning') }}
+</div>
+
 @endif
 
-@if ( Session::has('error') )
-    <div class="row">
-        <div class="span12">
-            <div class="alert alert-error margin-10-top">
-                <button type="button" class="close" data-dismiss="alert">×</button>
-                {{ Session::get('error') }}
-            </div>
-        </div>
-    </div>
+@if ( Session::has('danger') )
+
+<div class="alert alert-danger fade in">
+    <button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
+    {{ Session::get('danger') }}
+</div>
+
 @endif
 
 @if ( Session::has('info') )
-    <div class="row">
-        <div class="span12">
-            <div class="alert alert-info margin-10-top">
-                <button type="button" class="close" data-dismiss="alert">×</button>
-                {{ Session::get('info') }}
-            </div>
-        </div>
-    </div>
+
+<div class="alert alert-info fade in">
+    <button class="close" aria-hidden="true" data-dismiss="alert" type="button">×</button>
+    {{ Session::get('info') }}
+</div>
+
 @endif

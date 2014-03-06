@@ -39,7 +39,7 @@ class PermissionsController extends BaseController {
     {
         $permissions = $this->permissions->all();
 
-        return View::make(Config::get('cpanel::views.permissions_index'))
+        return View::make('cpanel::permissions.index')
             ->with('permissions', $permissions);
     }
 
@@ -53,7 +53,7 @@ class PermissionsController extends BaseController {
      */
     public function create()
     {
-        return View::make( Config::get('cpanel::views.permissions_create'));
+        return View::make('cpanel::permissions.create');
     }
 
     /**
@@ -72,7 +72,7 @@ class PermissionsController extends BaseController {
 
         if ( $permission )
         {
-            return View::make( Config::get('cpanel::views.permissions_edit') )
+            return View::make( 'cpanel::permissions.edit' )
                 ->with('permission', $permission);
         }
         else
