@@ -33,7 +33,6 @@ class InstallCommand extends Command {
         $this->call('migrate', array('--env' => $this->option('env'), '--package' => 'cartalyst/sentry' ) );
         $this->call('migrate', array('--env' => $this->option('env'), '--package' => 'stevemo/cpanel' ) );
         $this->call('config:publish', array('package' => 'cartalyst/sentry' ) );
-        $this->call('config:publish', array('package' => 'anahkiasen/former' ) );
         $this->call('config:publish', array('package' => 'stevemo/cpanel' ) );
         $this->call('asset:publish', array('package' => 'stevemo/cpanel' ) );
 
