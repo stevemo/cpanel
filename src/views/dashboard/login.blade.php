@@ -46,7 +46,7 @@
         </div>
         <div class="footer">
             <button type="submit" class="btn bg-olive btn-block">Sign me in</button>
-            <p><a href="#">I forgot my password</a></p>
+            <p><a href="{{route('cpanel.password.forgot')}}">I forgot my password</a></p>
             <a href="{{route('cpanel.register')}}" class="text-center">Register a new membership</a>
         </div>
     </form>

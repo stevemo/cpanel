@@ -80,7 +80,7 @@ class UsersController extends BaseController {
             $user = $throttle->getUser();
             $permissions = $user->getMergedPermissions();
 
-            return View::make(Config::get('cpanel::views.users_show'))
+            return View::make('cpanel::users.show')
                 ->with('user',$user)
                 ->with('permissions',$permissions)
                 ->with('throttle',$throttle);
@@ -112,7 +112,7 @@ class UsersController extends BaseController {
         //Get Groups
         $groups = $this->groups->findAll();
 
-        return View::make(Config::get('cpanel::views.users_create'))
+        return View::make('cpanel::users.create')
             ->with('user',$user)
             ->with('userPermissions',$userPermissions)
             ->with('genericPermissions',$genericPermissions)
@@ -144,7 +144,7 @@ class UsersController extends BaseController {
             //get only the group id the user belong to
             $userGroupsId = array_pluck($user->getGroups()->toArray(), 'id');
 
-            return View::make(Config::get('cpanel::views.users_edit'))
+            return View::make('cpanel::users.edit')
                 ->with('user',$user)
                 ->with('groups',$groups)
                 ->with('userGroupsId',$userGroupsId)

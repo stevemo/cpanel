@@ -51,7 +51,7 @@ class GroupsController extends BaseController {
     public function index()
     {
         $groups = $this->groups->findAll();
-        return View::make(Config::get('cpanel::views.groups_index'), compact('groups'));
+        return View::make('cpanel::groups.index', compact('groups'));
     }
 
     /**
@@ -68,7 +68,7 @@ class GroupsController extends BaseController {
         $modulePermissions = $this->permissions->module();
         $groupPermissions = array();
 
-        return View::make(Config::get('cpanel::views.groups_create'))
+        return View::make('cpanel::groups.create')
             ->with('genericPermissions',$genericPermissions)
             ->with('modulePermissions',$modulePermissions)
             ->with('groupPermissions',$groupPermissions);
@@ -95,7 +95,7 @@ class GroupsController extends BaseController {
             $modulePermissions = $this->permissions->module();
 
 
-            return View::make(Config::get('cpanel::views.groups_edit'))
+            return View::make('cpanel::groups.edit')
                 ->with('group',$group)
                 ->with('genericPermissions',$genericPermissions)
                 ->with('modulePermissions',$modulePermissions)

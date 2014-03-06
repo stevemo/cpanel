@@ -66,7 +66,7 @@ class CpanelController extends BaseController {
     public function getRegister()
     {
         $login_attribute = Config::get('cartalyst/sentry::users.login_attribute');
-        return View::make(Config::get('cpanel::views.register'), compact('login_attribute'));
+        return View::make('cpanel::dashboard.register', compact('login_attribute'));
     }
 
     /**

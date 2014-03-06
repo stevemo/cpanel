@@ -37,7 +37,7 @@ class PasswordController extends BaseController {
      */
     public function getForgot()
     {
-        return View::make(Config::get('cpanel::views.password_forgot'));
+        return View::make('cpanel::password.forgot');
     }
 
     /**
@@ -54,7 +54,7 @@ class PasswordController extends BaseController {
         {
             $email = Input::get('email');
             $this->passForm->forgot($email);
-            return View::make(Config::get('cpanel::views.password_send'))
+            return View::make('cpanel::password.send')
                 ->with('email', $email);
         }
         catch (UserNotFoundException $e)
@@ -76,7 +76,7 @@ class PasswordController extends BaseController {
      */
     public function getReset($code)
     {
-        return View::make(Config::get('cpanel::views.password_reset'))
+        return View::make('cpanel::password.reset')
             ->with('code',$code);
     }
 
