@@ -32,9 +32,9 @@ You need to add the following service provider.
 Open `app/config/app.php`, and add a new items to the providers array.
 
 ```php
-Former\FormerServiceProvider
-Cartalyst\Sentry\SentryServiceProvider
-Stevemo\Cpanel\CpanelServiceProvider
+'Former\FormerServiceProvider',
+'Cartalyst\Sentry\SentryServiceProvider',
+'Stevemo\Cpanel\CpanelServiceProvider',
 ```
 
 Then add the following Class Aliases
