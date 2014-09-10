@@ -34,7 +34,7 @@
                 <div class="block-body">
                     {{ Former::horizontal_open(route('cpanel.permissions.store')) }}
                     {{ Former::xlarge_text('name', 'Module Name')->required() }}
-                    {{ Former::xlarge_text('permissions')->id('permission-tags')->required() }}
+                    {{ Former::xlarge_text('permissions', 'Permissions')->id('permission-tags')->required() }}
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">Create</button>
                         <a href="{{ route('cpanel.permissions.index') }}" class="btn">Cancel</a>
