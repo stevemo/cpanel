@@ -36,7 +36,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label" for="name">Module Name</label>
+                        <label class="col-sm-2 control-label" for="name">Permissions</label>
                         <div class="col-md-4">
                             {{ Form::text('permissions',null,
                                 array('class'=>'form-control','placeholder'=>'Module Name','id'=>'permission-tags')) }}
