@@ -3,7 +3,7 @@
 @section('header')
     <h3>
         <i class="icon-user"></i>
-        Users
+        {{Lang::get('cpanel::users.users')}}
     </h3>
 @stop
 
@@ -20,21 +20,21 @@
         <div class="span12">
 
             <div class="block">
-                <p class="block-heading">Users</p>
+                <p class="block-heading">{{Lang::get('cpanel::users.users')}}</p>
 
                 <div class="block-body">
 
                     <div class="btn-toolbar">
                         <a href="{{ route('cpanel.users.create') }}" class="btn btn-primary" rel="tooltip" title="Create New User">
                             <i class="icon-plus"></i>
-                            New User
+                            {{Lang::get('cpanel::users.new_user')}}
                         </a>
                     </div>
 
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Name</th>
+                                <th>{{Lang::get('cpanel::users.name')}}</th>
                                 <th>Email</th>
                                 <th>Active</th>
                                 <th>Joined</th>

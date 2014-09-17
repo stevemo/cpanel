@@ -1,7 +1,8 @@
 <?php
 
 return array(
-
+    'users'                      => 'Users',
+    'new_user'                   => 'New User',
     'logout'                     => 'Logout successful.',
     'register_success'           => 'Congratulation! You are now registered.',
     'create_success'             => 'User created.',

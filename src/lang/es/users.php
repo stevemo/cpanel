@@ -1,6 +1,8 @@
 <?php
 
 return array(
+    'users'                      => 'Usuarios',
+    'new_user'                   => 'Nuevo Usuario',
     'logout'                     => 'Sesión finalizada.',
     'register_success'           => '¡Bienvenido! Ya estás registrado.',
     'create_success'             => 'Usuario creado.',
@@ -13,4 +15,6 @@ return array(
     'activation_fail'            => 'Ha fallado la activación del usuario.',
     'deactivation_success'       => 'Usuario desactivado correctamente.',
     'password_reset_success'     => 'Password reset successfully',
+    'name'                       => Lang::get('cpanel::global.name'),
+    'email'                      => 'Correo electrónico',
 );

@@ -16,8 +16,9 @@ return array(
 
     //menu 2 type are available single or dropdown and it must be a route
     'menu' => array(
-        'Dashboard' => array('type' => 'single', 'route' => 'cpanel.home'),
-        'Users'     => array('type' => 'dropdown', 'links' => array(
+        Lang::get('cpanel::global.dashboard') => array('type' => 'single', 'route' => 'cpanel.home'),
+
+        Lang::get('cpanel::users.users') => array('type' => 'dropdown', 'links' => array(
             'Manage Users' => array('route' => 'cpanel.users.index'),
             'Groups'       => array('route' => 'cpanel.groups.index'),
             'Permissions'  => array('route' => 'cpanel.permissions.index')
