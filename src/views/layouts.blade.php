@@ -26,7 +26,7 @@
 <body class="skin-blue">
 
 <header class="header">
-    <a href="index.html" class="logo">{{ $cpanel['site_name'] }}</a>
+    <a href="{{route('cpanel.home')}}" class="logo">{{ $cpanel['site_name'] }}</a>
 
     <nav class="navbar navbar-static-top" role="navigation">
         <!-- Sidebar toggle button-->
