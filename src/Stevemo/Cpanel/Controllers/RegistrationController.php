@@ -15,4 +15,9 @@ class RegistrationController extends BaseController {
 	{
 		return View::make('cpanel::registration.create');
 	}
+
+	public function store()
+	{
+		$this->execute($this->getCommand('register'));
+	}
 } 
