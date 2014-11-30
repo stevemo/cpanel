@@ -1,7 +1,7 @@
 <?php
 Route::group([
 	'namespace' => 'Stevemo\Cpanel\Controllers',
-	'prefix' => Cofig::get('cpanel::prefix', 'admin')
+	'prefix' => Config::get('cpanel::prefix', 'admin')
 ], function()
 {
 
