@@ -61,7 +61,7 @@ class CpanelServiceProvider extends ServiceProvider {
 	}
 
 	/**
-	 * Register Registration route
+	 * Registration routes
 	 *
 	 * @author Steve Montambeault <http://stevemo.ca>
 	 *
@@ -74,12 +74,12 @@ class CpanelServiceProvider extends ServiceProvider {
 		$router->group($config, function($router)
 		{
 			$router->get('register', [
-				'as' => 'cpanel.register',
+				'as'   => 'cpanel.register',
 				'uses' => 'RegistrationController@create',
 			]);
-			
+
 			$router->post('register', [
-				'as' => 'cpanel.register',
+				'as'   => 'cpanel.register',
 				'uses' => 'RegistrationController@store',
 			]);
 		});
