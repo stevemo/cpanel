@@ -20,7 +20,7 @@ class CpanelServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		$this->package('stevemo/cpanel');
-        include __DIR__ .'/routes.php';
+		$this->registerRoutes();
 	}
 
 	/**
@@ -40,7 +40,49 @@ class CpanelServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return array('cpanel');
+		return ['cpanel'];
+	}
+
+	/**
+	 * Register Package Routes
+	 *
+	 * @author Steve Montambeault
+	 *
+	 */
+	private function registerRoutes()
+	{
+		$route = $this->app['router'];
+		$config = [
+			'namespace' => 'Stevemo\Cpanel\Http\Controllers',
+			'prefix' => $this->app['config']->get('cpanel::prefix','admin')
+		];
+
+		$this->RegistrationRoutes($route, $config);
+	}
+
+	/**
+	 * Register Registration route
+	 *
+	 * @author Steve Montambeault <http://stevemo.ca>
+	 *
+	 * @param \Illuminate\Routing\Router $router
+	 * @param array $config
+	 *
+	 */
+	private function RegistrationRoutes($router, $config)
+	{
+		$router->group($config, function($router)
+		{
+			$router->get('register', [
+				'as' => 'cpanel.register',
+				'uses' => 'RegistrationController@create',
+			]);
+			
+			$router->post('register', [
+				'as' => 'cpanel.register',
+				'uses' => 'RegistrationController@store',
+			]);
+		});
 	}
 
 }
