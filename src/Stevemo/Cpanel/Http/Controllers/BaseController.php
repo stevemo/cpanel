@@ -1,4 +1,4 @@
-<?php namespace Stevemo\Cpanel\Controllers;
+<?php namespace Stevemo\Cpanel\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use Laracasts\Commander\CommanderTrait;
