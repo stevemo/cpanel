@@ -20,7 +20,7 @@ class CpanelServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		$this->package('stevemo/cpanel');
-        //include __DIR__ .'/routes.php';
+        include __DIR__ .'/routes.php';
 	}
 
 	/**
