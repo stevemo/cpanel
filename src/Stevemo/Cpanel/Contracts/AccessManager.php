@@ -1,6 +1,6 @@
 <?php namespace Stevemo\Cpanel\Contracts;
 
-interface AccessRepository {
+interface AccessManager {
 
 	/**
 	 * Find the Access by ID
@@ -11,7 +11,7 @@ interface AccessRepository {
 	 *
 	 * @return \Stevemo\Cpanel\Contracts\AccessInterface
 	 *
-	 * @throws RoleNotFoundException
+	 * @throws \Stevemo\Cpanel\Exceptions\AccessNotFoundException
 	 */
 	public function findById($id);
 
@@ -32,7 +32,7 @@ interface AccessRepository {
 	 * @param string $name
 	 * @param array  $rules
 	 *
-	 * @return RoleInterface
+	 * @return \Stevemo\Cpanel\Contracts\AccessInterface
 	 */
 	public function create($name, array $rules);
 } 
