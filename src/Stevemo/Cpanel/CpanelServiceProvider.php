@@ -20,6 +20,7 @@ class CpanelServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		$this->package('stevemo/cpanel');
+		$this->registerContracts();
 		$this->registerRoutes();
 	}
 
@@ -33,14 +34,14 @@ class CpanelServiceProvider extends ServiceProvider {
         
 	}
 
-	/**
-	 * Get the services provided by the provider.
-	 *
-	 * @return array
-	 */
-	public function provides()
+	private function registerContracts()
 	{
-		return ['cpanel'];
+		$app = $this->app;
+
+		$this->app->bindShared('Stevemo\Cpanel\Contracts\AuthManager', function($app)
+		{
+			return new Auth($app->make('sentry'));
+		});
 	}
 
 	/**
@@ -83,6 +84,16 @@ class CpanelServiceProvider extends ServiceProvider {
 				'uses' => 'RegistrationController@store',
 			]);
 		});
+	}
+
+	/**
+	 * Get the services provided by the provider.
+	 *
+	 * @return array
+	 */
+	public function provides()
+	{
+		return ['cpanel'];
 	}
 
 }
