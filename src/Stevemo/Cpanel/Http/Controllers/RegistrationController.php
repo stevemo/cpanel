@@ -57,13 +57,17 @@ class RegistrationController extends BaseController {
 	 *
 	 * @author Steve Montambeault
 	 *
-	 * @param $token
+	 * @param $code
 	 *
 	 * @return \Illuminate\View\View
 	 */
-	public function edit($token)
+	public function edit($code)
 	{
-		return $this->view('cpanel::registration.edit', compact('token'));
+		return $this->view('cpanel::registration.edit', compact('code'));
 	}
-	
+
+	public function update($token)
+	{
+
+	}
 } 

@@ -14,17 +14,15 @@
                     @include('cpanel::partials.errors')
                     @include('flash::message')
 
-                    {{ Form::open(['route' => 'cpanel.put_activation']) }}
+                    {{ Form::open(['route' => ['cpanel.activation',$code], 'method' => 'PUT']) }}
 
-                        {{ Form::hidden('token',$token) }}
+                        {{ Form::hidden('code',$code) }}
 
-                        <!--  field -->
                         <div class="form-group">
                             {{ Form::label('email',trans('cpanel::registration.edit.label')) }}
                             {{ Form::email('email',null,['class'=>'form-control']) }}
                         </div>
 
-                        <!-- Trans('overseer::registration.activate_submit') field -->
                         <div class="form-group">
                             {{ Form::submit(trans('cpanel::registration.edit.submit'),['class'=>'btn btn-primary']) }}
                         </div>
