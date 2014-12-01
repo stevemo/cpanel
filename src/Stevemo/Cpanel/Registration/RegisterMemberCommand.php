@@ -18,44 +18,20 @@ class RegisterMemberCommand {
 	}
 
 	/**
-	 * @return mixed
+	 *
+	 *
+	 * @author Steve Montambeault
+	 *
+	 * @return array
 	 */
-	public function getEmail()
+	public function toArray()
 	{
-		return $this->email;
+		return [
+			'first_name' => $this->first_name,
+			'last_name'  => $this->last_name,
+			'email'      => $this->email,
+			'password'   => $this->password
+		];
 	}
-
-	/**
-	 * @return mixed
-	 */
-	public function getFirstName()
-	{
-		return $this->first_name;
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function getLastName()
-	{
-		return $this->last_name;
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function getPassword()
-	{
-		return $this->password;
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function getPasswordConfirmation()
-	{
-		return $this->password_confirmation;
-	}
-
 
 } 
