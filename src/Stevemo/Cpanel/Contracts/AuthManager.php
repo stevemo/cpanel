@@ -2,7 +2,7 @@
 
 use Cartalyst\Sentry\Users\UserInterface;
 
-interface Auth {
+interface AuthManager {
 
 	/**
 	 * Attempts to authenticate the given user
