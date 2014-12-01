@@ -31,7 +31,9 @@ class CpanelServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-        
+		$this->app['events']->listen(
+			'Cpanel.MemberHasRegistered','Stevemo\Cpanel\Listeners\MailerNotifier@whenMemberHasRegistered'
+		);
 	}
 
 	private function registerContracts()
@@ -82,6 +84,16 @@ class CpanelServiceProvider extends ServiceProvider {
 			$router->post('register', [
 				'as'   => 'cpanel.register',
 				'uses' => 'RegistrationController@store',
+			]);
+
+			$router->get('activation/{token}', [
+				'as' => 'cpanel.activation',
+				'uses' => 'RegistrationController@edit',
+			]);
+
+			$router->put('activation', [
+				'as' => 'cpanel.activation',
+				'uses' => 'RegistrationController@update',
 			]);
 		});
 	}

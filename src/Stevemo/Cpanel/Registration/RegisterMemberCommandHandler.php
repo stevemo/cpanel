@@ -31,7 +31,12 @@ class RegisterMemberCommandHandler implements CommandHandler {
 	{
 		$member = $this->auth->register($command->toArray(), false);
 
-		$this->dispatchEvent('Cpanel.MemberHasRegistered', [$member]);
+		$payload = $member->toArray();
+		$payload['password'] = $command->password;
+		$payload['fullname'] = $member->first_name . ' ' . $member->last_name;
+		$payload['code'] = $member->getActivationCode();
+
+		$this->dispatchEvent('Cpanel.MemberHasRegistered', [$payload]);
 
 		return $member;
 	}

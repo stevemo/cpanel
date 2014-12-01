@@ -21,4 +21,15 @@ return [
 		'second' => 'In order to activate your account, check your email and click on the link in that email.',
 		'third'  => 'If you do not see that email in your inbox shortly, look in your spam folder.',
 	],
+
+	//activation email view\emails.activation
+	'email' => [
+		'subject'  => 'Activate your account',
+		'greeting' => 'Dear :name',
+		'start'    => 'Please keep this email for your records. Your account information is as follows',
+		'email'    => 'Email',
+		'password' => 'Password',
+		'end'      => 'Your account is currently inactive. You cannot use it until you visit the following link',
+		'link'     => 'Activate now!',
+	],
 ];
