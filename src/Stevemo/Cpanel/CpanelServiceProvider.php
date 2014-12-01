@@ -87,12 +87,12 @@ class CpanelServiceProvider extends ServiceProvider {
 			]);
 
 			$router->get('activation/{token}', [
-				'as' => 'cpanel.activation',
+				'as'   => 'cpanel.activation',
 				'uses' => 'RegistrationController@edit',
 			]);
 
 			$router->put('activation', [
-				'as' => 'cpanel.activation',
+				'as'   => 'cpanel.put_activation',
 				'uses' => 'RegistrationController@update',
 			]);
 		});

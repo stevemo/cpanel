@@ -51,4 +51,19 @@ class RegistrationController extends BaseController {
 			return $this->redirectBackWithError($e->getMessage());
 		}
 	}
+
+	/**
+	 * Display the account activation page
+	 *
+	 * @author Steve Montambeault
+	 *
+	 * @param $token
+	 *
+	 * @return \Illuminate\View\View
+	 */
+	public function edit($token)
+	{
+		return $this->view('cpanel::registration.edit', compact('token'));
+	}
+	
 } 

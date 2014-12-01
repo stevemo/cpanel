@@ -21,7 +21,7 @@
 
 		<p>
 		    {{ trans('cpanel::registration.email.end') }}
-		    <a href="{{ route('cpanel.activation', $code) }}">{{ trans('cpanel::registration.email.link') }}</a>
+		    <a href="{{ route('cpanel.activation', [$code]) }}">{{ trans('cpanel::registration.email.link') }}</a>
 		</p>
 	</body>
 </html>

@@ -22,7 +22,7 @@ return [
 		'third'  => 'If you do not see that email in your inbox shortly, look in your spam folder.',
 	],
 
-	//activation email view\emails.activation
+	//activation email view\emails.activation.blade.php
 	'email' => [
 		'subject'  => 'Activate your account',
 		'greeting' => 'Dear :name',
@@ -31,5 +31,12 @@ return [
 		'password' => 'Password',
 		'end'      => 'Your account is currently inactive. You cannot use it until you visit the following link',
 		'link'     => 'Activate now!',
+	],
+
+	//views\registration\edit.blade.php
+	'edit' => [
+		'header' => 'Activate your account',
+		'label'  => 'Email',
+		'submit' => 'Activate',
 	],
 ];
